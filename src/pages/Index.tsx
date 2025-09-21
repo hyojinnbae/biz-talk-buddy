@@ -8,6 +8,7 @@ import { Comparison } from "@/components/Comparison";
 import { Pricing } from "@/components/Pricing";
 import { FAQ } from "@/components/FAQ";
 import { CTA } from "@/components/CTA";
+import { Contact } from "@/components/Contact";
 
 const Index = () => {
   return (
@@ -23,6 +24,7 @@ const Index = () => {
         <Pricing />
         <FAQ />
         <CTA />
+        <Contact />
       </main>
     </div>
   );
