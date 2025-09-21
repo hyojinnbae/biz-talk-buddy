@@ -36,38 +36,35 @@ export const Features = () => {
   return (
     <section id="features" className="py-20 bg-background">
       <div className="container mx-auto px-4">
-        <div className="text-center space-y-4 mb-16">
-          <h2 className="text-3xl lg:text-4xl font-bold">
-            3가지 핵심 기능
+        <div className="text-center space-y-6 mb-20">
+          <h2 className="text-4xl lg:text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+            핵심 기능
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             실무자가 실제로 필요한 핵심 기능에만 집중했습니다.
           </p>
+          <div className="w-24 h-1 bg-gradient-primary mx-auto rounded-full"></div>
         </div>
         
         <div className="grid lg:grid-cols-3 gap-8">
           {features.map((feature, index) => (
-            <Card 
+            <div 
               key={index}
-              className="p-8 hover:shadow-elegant transition-all duration-300 hover:scale-105 border-border relative"
+              className="relative p-8 rounded-2xl bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-2 border-primary/20 hover:border-primary/40 transition-all duration-500 hover:shadow-[0_20px_40px_rgba(var(--primary),0.15)] group"
             >
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <div className={`w-16 h-16 rounded-xl bg-muted flex items-center justify-center ${feature.color}`}>
-                    <feature.icon className="w-8 h-8" />
-                  </div>
-                  <span className="px-3 py-1 rounded-full bg-primary text-primary-foreground text-sm font-medium">
-                    ✅ {feature.badge}
-                  </span>
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="relative space-y-6">
+                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-primary-glow flex items-center justify-center shadow-lg ${feature.color}`}>
+                  <feature.icon className="w-8 h-8 text-primary-foreground" />
                 </div>
                 <div className="space-y-3">
-                  <h3 className="text-xl font-bold">{feature.title}</h3>
+                  <h3 className="text-2xl font-bold">{feature.title}</h3>
                   <p className="text-muted-foreground leading-relaxed">
                     {feature.description}
                   </p>
                 </div>
               </div>
-            </Card>
+            </div>
           ))}
         </div>
       </div>

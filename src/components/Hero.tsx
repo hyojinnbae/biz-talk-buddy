@@ -20,23 +20,31 @@ export const Hero = () => {
                 </span>
                 입이 안 떨어지나요?
               </h1>
+               <div className="space-y-3 text-muted-foreground">
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 rounded-full bg-primary"></div>
+                  <span>Zoom 콜 하듯 AI 코치와 영어 대화</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 rounded-full bg-primary"></div>
+                  <span>100% 커스터마이즈 내 실무 시뮬레이션</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 rounded-full bg-primary"></div>
+                  <span>실리콘밸리 현업 표현으로 대화</span>
+                </div>
+              </div>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                설득, 협상, 조율.<br />
-                말 한마디가 더 많은 기회를 가져다 줍니다.<br />
-                <br />
-                이제 PM·BD·마케터를 위한<br />
+                내 실무 상황을 직접 입력하고,<br />
                 실리콘밸리식 업무 영어 리허설을 시작해보세요.
               </p>
             </div>
             
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex justify-start">
               <Button variant="hero" size="lg" className="group">
-                <Play className="w-5 h-5" />
+                <Mic className="w-5 h-5" />
                 무료 대기자 등록하기
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Button>
-              <Button variant="outline" size="lg">
-                데모 보기
               </Button>
             </div>
             

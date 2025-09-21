@@ -73,10 +73,13 @@ export const Scenarios = () => {
       <div className="container mx-auto px-4">
         <div className="text-center space-y-4 mb-16">
           <h2 className="text-3xl lg:text-4xl font-bold">
-            시나리오 예시 카드
+            시나리오 갤러리
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            각 시나리오: 상황 설정 → AI와 대화 → 표현 복습까지 한 번에!
+            이런 것도 연습할 수 있어요
+          </p>
+          <p className="text-sm text-muted-foreground">
+            오늘 무엇을 연습할지 모르겠다면 → 갤러리에서 클릭 (베타 버전)
           </p>
         </div>
         
