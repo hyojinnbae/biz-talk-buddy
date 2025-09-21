@@ -1,5 +1,4 @@
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { 
   Handshake, 
@@ -7,8 +6,7 @@ import {
   Users, 
   Target, 
   MessageSquare, 
-  Briefcase,
-  Play
+  Briefcase
 } from "lucide-react";
 
 const scenarios = [
@@ -21,7 +19,7 @@ const scenarios = [
     description: "글로벌 파트너사와의 딜 협상 상황을 실전처럼 연습",
     participants: "You + US VP",
     duration: "15 min",
-    color: "bg-primary-subtle text-primary"
+    color: "bg-primary/10 text-primary"
   },
   {
     icon: Users,
@@ -32,7 +30,7 @@ const scenarios = [
     description: "글로벌 개발팀과의 프로젝트 일정 및 우선순위 조율",
     participants: "You + India Dev Team",
     duration: "20 min",
-    color: "bg-accent-subtle text-accent"
+    color: "bg-accent/10 text-accent"
   },
   {
     icon: Presentation,
@@ -43,7 +41,7 @@ const scenarios = [
     description: "캠페인 성과 분석 및 최적화 전략 제안",
     participants: "You + Global Marketing Director",
     duration: "18 min",
-    color: "bg-success-subtle text-success"
+    color: "bg-success/10 text-success"
   },
   {
     icon: Target,
@@ -54,7 +52,7 @@ const scenarios = [
     description: "시리즈 A 투자 유치를 위한 피칭 연습",
     participants: "You + VC Partner",
     duration: "30 min",
-    color: "bg-primary-subtle text-primary"
+    color: "bg-primary/10 text-primary"
   },
   {
     icon: MessageSquare,
@@ -65,7 +63,7 @@ const scenarios = [
     description: "글로벌 고객의 불만사항 해결 및 관계 회복",
     participants: "You + European Client",
     duration: "12 min",
-    color: "bg-accent-subtle text-accent"
+    color: "bg-accent/10 text-accent"
   }
 ];
 
@@ -86,14 +84,14 @@ export const Scenarios = () => {
           {scenarios.map((scenario, index) => (
             <Card 
               key={index}
-              className="p-6 hover:shadow-elegant transition-all duration-300 hover:scale-105 border-border group"
+              className="p-6 hover:shadow-elegant transition-all duration-300 hover:scale-[1.02] border-border bg-gradient-to-br from-background via-background to-muted/20"
             >
               <div className="space-y-4">
                 <div className="flex items-start justify-between">
                   <div className={`w-12 h-12 rounded-xl ${scenario.color} flex items-center justify-center`}>
                     <scenario.icon className="w-6 h-6" />
                   </div>
-                  <Badge variant="outline" className="text-xs">
+                  <Badge variant="outline" className="text-xs bg-background/80 backdrop-blur-sm">
                     {scenario.level}
                   </Badge>
                 </div>
@@ -104,7 +102,7 @@ export const Scenarios = () => {
                     <p className="text-sm text-primary font-medium">{scenario.role}</p>
                   </div>
                   
-                  <div className="p-3 rounded-lg bg-muted/50 border-l-4 border-primary">
+                  <div className="p-3 rounded-lg bg-primary/10 border-l-4 border-primary backdrop-blur-sm">
                     <p className="text-sm font-medium text-primary">"{scenario.example}"</p>
                   </div>
                   
@@ -123,24 +121,9 @@ export const Scenarios = () => {
                     </div>
                   </div>
                 </div>
-                
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300"
-                >
-                  <Play className="w-4 h-4" />
-                  리허설 시작
-                </Button>
               </div>
             </Card>
           ))}
-        </div>
-        
-        <div className="text-center mt-12">
-          <Button variant="hero" size="lg">
-            모든 시나리오 보기
-          </Button>
         </div>
       </div>
     </section>

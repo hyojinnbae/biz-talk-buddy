@@ -8,24 +8,26 @@ export const CTA = () => {
         <div className="max-w-3xl mx-auto space-y-8">
           <div className="space-y-4">
             <h2 className="text-3xl lg:text-4xl font-bold">
-              실무 영어, 이제 혼자서도 리허설처럼.
+              자신 있는 말 한마디가 기회를 만듭니다.
             </h2>
             <p className="text-lg opacity-90 leading-relaxed">
-              말을 미뤄왔던 그 순간,<br />
-              지금 AI와 연습해보세요.
+              설득하고 싶었던 순간,<br />
+              표현이 막혀 기회를 놓친 적 있으셨나요?<br />
+              이제는 실리콘밸리식 영어로 내 전문성을 정확히 전달하는 연습.<br />
+              혼자서도, 매일 15분이면 충분합니다.
             </p>
             <div className="mt-6 p-6 bg-secondary-foreground/10 rounded-lg text-sm space-y-2">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-accent rounded-full"></div>
-                <span>최초 50명에게 2개월 무료 구독권 제공</span>
+                <span>선착순 50명 – 2개월 무료 구독 제공</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-accent rounded-full"></div>
-                <span>"실리콘밸리 매니저의 표현을 내 것으로" – 한정 공개 표현팩</span>
+                <span>실리콘밸리 실무 표현 100선 공개</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-accent rounded-full"></div>
-                <span>글로벌 BD/PM/마케터 비공개 네트워킹 모임 초청</span>
+                <span>글로벌 실무자 네트워킹 초청</span>
               </div>
             </div>
           </div>
@@ -34,10 +36,12 @@ export const CTA = () => {
             <Button variant="accent" size="lg" className="group">
               <Mic className="w-5 h-5" />
               무료 대기자 등록하기
+              <span className="text-xs opacity-80 ml-2">더 많은 기회를 말로 만드는 연습</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Button>
             <Button variant="outline" size="lg" className="bg-secondary-foreground/10 border-secondary-foreground/20 text-secondary-foreground hover:bg-secondary-foreground/20">
-              직무별 실전 표현 100선 PDF 받기
+              📄 직무별 표현 100선 PDF 받기
+              <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </div>
           
