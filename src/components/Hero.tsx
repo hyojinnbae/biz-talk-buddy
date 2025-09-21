@@ -14,23 +14,25 @@ export const Hero = () => {
                 실무 영어 리허설 AI 코치
               </div>
               <h1 className="text-4xl lg:text-6xl font-bold leading-tight">
-                이메일, 문서는 되는데…
+                영어 이메일, 문서는 되는데…
                 <span className="block bg-gradient-hero bg-clip-text text-transparent">
-                  왜 회의만 하면
+                  왜 미팅만 하면
                 </span>
-                입이 막히나요?
+                입이 안 떨어지나요?
               </h1>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                실무는 결국 말로 설득하고, 말로 조율합니다.<br />
-                PM·BD·마케터를 위한 실리콘밸리식 영어 리허설.<br />
-                이제 실제 업무 상황을 AI와 말하며 연습하세요.
+                설득, 협상, 조율.<br />
+                말 한마디가 더 많은 기회를 가져다 줍니다.<br />
+                <br />
+                이제 PM·BD·마케터를 위한<br />
+                실리콘밸리식 업무 영어 리허설을 시작해보세요.
               </p>
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4">
               <Button variant="hero" size="lg" className="group">
                 <Play className="w-5 h-5" />
-                무료로 리허설 시작하기
+                무료 대기자 등록하기
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Button>
               <Button variant="outline" size="lg">

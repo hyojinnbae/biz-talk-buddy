@@ -25,7 +25,7 @@ const scenarios = [
   },
   {
     icon: Users,
-    title: "PM - 인도 개발팀과 일정 조율",
+    title: "PM - 인도 개발자와 일정 조율",
     example: "Let's make sure we're aligned on the timeline.",
     role: "Product Manager",
     level: "Advanced",
@@ -78,7 +78,7 @@ export const Scenarios = () => {
             시나리오 예시 카드
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            각 시나리오: 상황 선택 → 음성 대화 → 표현 복습까지 한 번에
+            각 시나리오: 상황 설정 → AI와 대화 → 표현 복습까지 한 번에!
           </p>
         </div>
         

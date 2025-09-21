@@ -11,19 +11,33 @@ export const CTA = () => {
               실무 영어, 이제 혼자서도 리허설처럼.
             </h2>
             <p className="text-lg opacity-90 leading-relaxed">
-              말 못 해서 놓쳤던 그 순간들.<br />
-              오늘부터는 AI와 함께 준비하세요.
+              말을 미뤄왔던 그 순간,<br />
+              지금 AI와 연습해보세요.
             </p>
+            <div className="mt-6 p-6 bg-secondary-foreground/10 rounded-lg text-sm space-y-2">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-accent rounded-full"></div>
+                <span>최초 50명에게 2개월 무료 구독권 제공</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-accent rounded-full"></div>
+                <span>"실리콘밸리 매니저의 표현을 내 것으로" – 한정 공개 표현팩</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-accent rounded-full"></div>
+                <span>글로벌 BD/PM/마케터 비공개 네트워킹 모임 초청</span>
+              </div>
+            </div>
           </div>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button variant="accent" size="lg" className="group">
               <Mic className="w-5 h-5" />
-              무료로 리허설 시작하기
+              무료 대기자 등록하기
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Button>
             <Button variant="outline" size="lg" className="bg-secondary-foreground/10 border-secondary-foreground/20 text-secondary-foreground hover:bg-secondary-foreground/20">
-              데모 예약하기
+              직무별 실전 표현 100선 PDF 받기
             </Button>
           </div>
           

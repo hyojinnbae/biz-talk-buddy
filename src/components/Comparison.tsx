@@ -9,15 +9,15 @@ const comparisonData = [
     isAdvantage: true
   },
   {
-    category: "실수 교정",
-    existing: "없음 또는 수업 후 피드백",
-    ours: "실시간 리프레이즈",
+    category: "표현 교정",
+    existing: "일반 회화 수준",
+    ours: "실무자 현업 표현으로 업그레이드",
     isAdvantage: true
   },
   {
     category: "상황 적합성",
-    existing: "일상 회화 위주",
-    ours: "직무 기반 실무 상황 시나리오",
+    existing: "일반 회화 위주",
+    ours: "실무 상황 시나리오",
     isAdvantage: true
   },
   {
@@ -27,9 +27,15 @@ const comparisonData = [
     isAdvantage: true
   },
   {
-    category: "심리적 부담",
-    existing: "외국인 튜터와 실시간 대화",
-    ours: "AI라 실수해도 부담 無",
+    category: "부담감",
+    existing: "사람과의 대화, 콜포비아",
+    ours: "AI라 부담 없음",
+    isAdvantage: true
+  },
+  {
+    category: "비용",
+    existing: "최소 월 30만원 상당",
+    ours: "기존 서비스 비 1/10",
     isAdvantage: true
   }
 ];

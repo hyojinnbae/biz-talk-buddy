@@ -11,7 +11,8 @@ export const Solution = () => {
               우리의 제안
             </div>
             <h2 className="text-3xl lg:text-4xl font-bold leading-tight">
-              이젠 내 업무 상황 그대로 리허설하세요.
+              실리콘밸리에서 실제 사용하는 영어 표현들로,<br />
+              내가 할 미팅을 미리 말해보는 연습.
             </h2>
           </div>
 
@@ -23,8 +24,8 @@ export const Solution = () => {
               <div className="space-y-3">
                 <h3 className="text-xl font-semibold">상황을 선택하거나 직접 입력하면</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  직무, 레벨, 회의 상대, 주제를 선택하거나 자유롭게 입력해서 
-                  실제 업무 상황과 동일한 시나리오를 만듭니다.
+                  직무 / 레벨 / 대화 상대 / 주제 선택<br />
+                  또는 자유 프롬프트 입력도 가능합니다.
                 </p>
               </div>
             </div>
@@ -34,10 +35,10 @@ export const Solution = () => {
                 <MessageSquare className="w-8 h-8" />
               </div>
               <div className="space-y-3">
-                <h3 className="text-xl font-semibold">AI가 실제 미팅처럼 시나리오를 만들고</h3>
+                <h3 className="text-xl font-semibold">AI가 회의 시나리오를 만들어주고</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  음성 대화로 연습하며, 내가 말한 문장을 
-                  즉시 더 자연스럽고 설득력 있는 표현으로 제안합니다.
+                  음성으로 말하고, 자연스럽게 리프레이즈를 받아요.<br />
+                  AI가 상대 역할, 내가 말한 문장을 더 자연스럽게 바꿔줍니다.
                 </p>
               </div>
             </div>
@@ -47,10 +48,10 @@ export const Solution = () => {
                 <FileText className="w-8 h-8" />
               </div>
               <div className="space-y-3">
-                <h3 className="text-xl font-semibold">더 나은 표현을 알려줍니다</h3>
+                <h3 className="text-xl font-semibold">다 끝나면?</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  대화 후엔 말한 내용과 표현 카드가 자동으로 정리돼요. 
-                  다음 회의에서 바로 쓸 수 있도록요.
+                  대화 로그 + 표현 카드가 자동으로 정리돼요.<br />
+                  자주 틀리는 문장 위주로 복습 가능합니다.
                 </p>
               </div>
             </div>
