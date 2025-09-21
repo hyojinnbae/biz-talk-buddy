@@ -84,7 +84,7 @@ export const Problem = () => {
                   
                   <p>그래서, 저도 여러분이 일반 회화 앱이 아닌</p>
                   
-                  <p><span className="font-semibold text-primary">'실무 영어 리허설 툴'을 가질 수 있도록 'Protalk AI'를 만들었습니다.</span></p>
+                  <p><span className="font-semibold text-primary">'실무 영어 리허설 툴'을 가질 수 있도록 'protalk'을 만들었습니다.</span></p>
                   
                   <p>여러분도 훈련에서 오는 <span className="font-semibold text-primary">자신감</span>, 그리고 영어로 자유롭게 말할 수 있는 능력에서 오는 <span className="font-semibold text-primary">더 넓은 세상</span>을 경험하게 될 것입니다.</p>
                 </div>

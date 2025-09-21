@@ -22,7 +22,7 @@ const Privacy = () => {
             <section>
               <h2 className="text-xl font-semibold text-foreground mb-4">1. 개인정보의 처리목적</h2>
               <div className="text-muted-foreground leading-relaxed space-y-2">
-                <p>Protalk AI(이하 "회사")는 다음의 목적을 위하여 개인정보를 처리합니다:</p>
+                <p>protalk(이하 "회사")는 다음의 목적을 위하여 개인정보를 처리합니다:</p>
                 <ul className="list-disc list-inside space-y-1 ml-4">
                   <li>서비스 제공에 관한 계약 이행 및 서비스 제공에 따른 요금정산</li>
                   <li>회원 관리: 회원제 서비스 이용에 따른 본인확인, 개인 식별, 불량회원의 부정 이용 방지와 비인가 사용 방지</li>

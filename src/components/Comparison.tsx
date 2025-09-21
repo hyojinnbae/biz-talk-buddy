@@ -61,7 +61,7 @@ export const Comparison = () => {
                   <tr>
                     <th className="text-left p-6 font-semibold">비교 항목</th>
                     <th className="text-left p-6 font-semibold">기존 서비스</th>
-                    <th className="text-left p-6 font-semibold bg-primary/5">Protalk AI</th>
+                    <th className="text-left p-6 font-semibold bg-primary/5">protalk</th>
                   </tr>
                 </thead>
                 <tbody>
