@@ -53,11 +53,11 @@ export const Features = () => {
       <div className="container mx-auto px-4">
         <div className="text-center space-y-4 mb-16">
           <h2 className="text-3xl lg:text-4xl font-bold">
-            Why ProTalk AI Works
+            ProTalk AI가 특별한 이유
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Unlike generic conversation apps or expensive tutors, we focus specifically 
-            on business communication that matters for your career.
+            일반 회화 앱이나 비싼 튜터와 달리, 
+            실무자 커리어에 직접 도움되는 비즈니스 커뮤니케이션에만 집중합니다.
           </p>
         </div>
         

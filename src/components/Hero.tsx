@@ -11,44 +11,44 @@ export const Hero = () => {
             <div className="space-y-4">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-subtle text-primary text-sm font-medium">
                 <Mic className="w-4 h-4" />
-                AI Business Communication Coach
+                실무 영어 리허설 AI 코치
               </div>
               <h1 className="text-4xl lg:text-6xl font-bold leading-tight">
-                Practice Real
+                실무자 영어,
                 <span className="block bg-gradient-hero bg-clip-text text-transparent">
-                  Business English
+                  튜터 없이도
                 </span>
-                with AI
+                실전 리허설처럼
               </h1>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                Rehearse meetings, negotiations, and presentations with AI. 
-                Get real-time feedback and Silicon Valley-level expressions to speak confidently in any business situation.
+                AI와 음성으로 롤플레이하며 실무 영어 회화 실전 감각을 키우는 리허설 툴.
+                직무 기반 시나리오로 회의하듯 연습하고, 리프레이즈와 표현카드로 즉시 복습하세요.
               </p>
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4">
               <Button variant="hero" size="lg" className="group">
                 <Play className="w-5 h-5" />
-                Start Free Rehearsal
+                무료 리허설 시작
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Button>
               <Button variant="outline" size="lg">
-                Watch Demo
+                데모 보기
               </Button>
             </div>
             
             <div className="flex items-center gap-8 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-success"></div>
-                20-minute sessions
+                혼자서도 실전처럼
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-success"></div>
-                No human judgment
+                심리적 부담 없이
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-success"></div>
-                Real scenarios
+                직무별 맞춤 시나리오
               </div>
             </div>
           </div>
