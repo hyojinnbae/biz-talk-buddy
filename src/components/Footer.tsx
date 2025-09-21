@@ -6,7 +6,7 @@ export const Footer = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
           <div className="text-center md:text-left">
-            <h3 className="text-lg font-semibold text-foreground">protalk</h3>
+            <h3 className="text-lg font-semibold text-foreground">Protalk</h3>
             <p className="text-sm text-muted-foreground mt-1">
               AI 기반 영어 회화 코치로 비즈니스 영어 실력을 향상시키세요
             </p>
@@ -30,7 +30,7 @@ export const Footer = () => {
         
         <div className="mt-6 pt-6 border-t text-center">
           <p className="text-xs text-muted-foreground">
-            © 2024 protalk. All rights reserved.
+            © 2024 Protalk. All rights reserved.
           </p>
         </div>
       </div>
