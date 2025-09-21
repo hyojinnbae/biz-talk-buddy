@@ -8,37 +8,37 @@ export const CTA = () => {
         <div className="max-w-3xl mx-auto space-y-8">
           <div className="space-y-4">
             <h2 className="text-3xl lg:text-4xl font-bold">
-              Ready to Transform Your Business Communication?
+              실무 영어, 이제 혼자서도 리허설처럼.
             </h2>
             <p className="text-lg opacity-90 leading-relaxed">
-              Join thousands of professionals who've boosted their confidence and career prospects 
-              with AI-powered business English practice. Start your first rehearsal today.
+              말 못 해서 놓쳤던 그 순간들.<br />
+              오늘부터는 AI와 함께 준비하세요.
             </p>
           </div>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button variant="accent" size="lg" className="group">
               <Mic className="w-5 h-5" />
-              Start Free Trial
+              무료로 리허설 시작하기
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Button>
             <Button variant="outline" size="lg" className="bg-secondary-foreground/10 border-secondary-foreground/20 text-secondary-foreground hover:bg-secondary-foreground/20">
-              Schedule Demo
+              데모 예약하기
             </Button>
           </div>
           
           <div className="flex items-center justify-center gap-8 text-sm opacity-80">
             <div className="flex items-center gap-2">
               <Users className="w-4 h-4" />
-              5,000+ professionals
+              1000+ 실무자들이 매일 연습 중
             </div>
             <div className="flex items-center gap-2">
               <Target className="w-4 h-4" />
-              90% confidence boost
+              15분 평균 리허설 시간
             </div>
             <div className="flex items-center gap-2">
               <Mic className="w-4 h-4" />
-              Free 7-day trial
+              7일 무료 체험 기간
             </div>
           </div>
         </div>

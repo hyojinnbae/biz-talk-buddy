@@ -13,63 +13,58 @@ import {
 
 const scenarios = [
   {
-    icon: Handshake,
-    title: "Deal Negotiation",
-    role: "BD / Sales",
-    level: "Advanced",
-    description: "Practice negotiating terms with US partners, handling objections, and closing deals confidently.",
-    participants: "You vs. Partner VP",
-    duration: "20 min",
+    icon: Briefcase,
+    title: "BD - 미국 파트너와 가격 협상",
+    example: "Can we revisit the pricing structure for Q4?",
+    role: "BD Manager",
+    level: "Intermediate",
+    description: "글로벌 파트너사와의 딜 협상 상황을 실전처럼 연습",
+    participants: "You + US VP",
+    duration: "15 min",
     color: "bg-primary-subtle text-primary"
   },
   {
-    icon: Presentation,
-    title: "KPI Review Meeting",
-    role: "PM / Marketing",
-    level: "Intermediate",
-    description: "Present quarterly results, explain variances, and discuss action plans with stakeholders.",
-    participants: "You vs. Global Team",
-    duration: "15 min",
+    icon: Users,
+    title: "PM - 인도 개발팀과 일정 조율",
+    example: "Let's make sure we're aligned on the timeline.",
+    role: "Product Manager",
+    level: "Advanced",
+    description: "글로벌 개발팀과의 프로젝트 일정 및 우선순위 조율",
+    participants: "You + India Dev Team",
+    duration: "20 min",
     color: "bg-accent-subtle text-accent"
   },
   {
-    icon: Users,
-    title: "Cross-Team Coordination",
-    role: "PM / Operations",
+    icon: Presentation,
+    title: "마케터 - 글로벌 캠페인 결과 공유",
+    example: "Here's how we performed against the KPIs.",
+    role: "Marketing Manager",
     level: "Intermediate",
-    description: "Align different teams on project priorities, resolve conflicts, and set clear expectations.",
-    participants: "You vs. Dev Team Lead",
-    duration: "20 min",
+    description: "캠페인 성과 분석 및 최적화 전략 제안",
+    participants: "You + Global Marketing Director",
+    duration: "18 min",
     color: "bg-success-subtle text-success"
   },
   {
     icon: Target,
-    title: "Strategic Planning",
-    role: "All Roles",
-    level: "Advanced",
-    description: "Discuss market opportunities, resource allocation, and long-term goals with leadership.",
-    participants: "You vs. C-Level",
-    duration: "25 min",
-    color: "bg-secondary text-secondary-foreground"
-  },
-  {
-    icon: MessageSquare,
-    title: "Client Feedback Session",
-    role: "Marketing / CS",
-    level: "Beginner",
-    description: "Handle difficult client feedback, propose solutions, and maintain professional relationships.",
-    participants: "You vs. Unhappy Client",
-    duration: "15 min",
+    title: "CEO - 해외 투자자 대상 피칭 리허설",
+    example: "We're currently raising a pre-Series A round.",
+    role: "Founder/CEO",
+    level: "Expert",
+    description: "시리즈 A 투자 유치를 위한 피칭 연습",
+    participants: "You + VC Partner",
+    duration: "30 min",
     color: "bg-primary-subtle text-primary"
   },
   {
-    icon: Briefcase,
-    title: "Partnership Proposal",
-    role: "BD / Strategy",
-    level: "Advanced",
-    description: "Pitch partnership opportunities, discuss mutual benefits, and handle complex questions.",
-    participants: "You vs. Potential Partner",
-    duration: "20 min",
+    icon: MessageSquare,
+    title: "CS - 유럽 고객 컴플레인 응대",
+    example: "We truly apologize for the inconvenience caused.",
+    role: "Customer Success",
+    level: "Intermediate",
+    description: "글로벌 고객의 불만사항 해결 및 관계 회복",
+    participants: "You + European Client",
+    duration: "12 min",
     color: "bg-accent-subtle text-accent"
   }
 ];
@@ -80,11 +75,10 @@ export const Scenarios = () => {
       <div className="container mx-auto px-4">
         <div className="text-center space-y-4 mb-16">
           <h2 className="text-3xl lg:text-4xl font-bold">
-            Practice Real Business Scenarios
+            시나리오 예시 카드
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Choose from professionally crafted scenarios designed by Silicon Valley experts. 
-            Each session is tailored to your role and experience level.
+            각 시나리오: 상황 선택 → 음성 대화 → 표현 복습까지 한 번에
           </p>
         </div>
         
@@ -106,8 +100,12 @@ export const Scenarios = () => {
                 
                 <div className="space-y-3">
                   <div>
-                    <h3 className="text-xl font-semibold mb-1">{scenario.title}</h3>
+                    <h3 className="text-lg font-bold mb-1">{scenario.title}</h3>
                     <p className="text-sm text-primary font-medium">{scenario.role}</p>
+                  </div>
+                  
+                  <div className="p-3 rounded-lg bg-muted/50 border-l-4 border-primary">
+                    <p className="text-sm font-medium text-primary">"{scenario.example}"</p>
                   </div>
                   
                   <p className="text-muted-foreground leading-relaxed text-sm">
@@ -116,11 +114,11 @@ export const Scenarios = () => {
                   
                   <div className="space-y-2 text-xs text-muted-foreground">
                     <div className="flex justify-between">
-                      <span>Participants:</span>
+                      <span>참가자:</span>
                       <span className="font-medium">{scenario.participants}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span>Duration:</span>
+                      <span>시간:</span>
                       <span className="font-medium">{scenario.duration}</span>
                     </div>
                   </div>
@@ -132,7 +130,7 @@ export const Scenarios = () => {
                   className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300"
                 >
                   <Play className="w-4 h-4" />
-                  Start Rehearsal
+                  리허설 시작
                 </Button>
               </div>
             </Card>
@@ -141,7 +139,7 @@ export const Scenarios = () => {
         
         <div className="text-center mt-12">
           <Button variant="hero" size="lg">
-            View All Scenarios
+            모든 시나리오 보기
           </Button>
         </div>
       </div>
