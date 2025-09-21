@@ -62,32 +62,31 @@ export const Problem = () => {
                 </div>
               </div>
               <div className="mt-4 p-6 rounded-lg bg-background border-l-4 border-primary space-y-4">
-                <h4 className="font-semibold text-foreground mb-3">외국인 동료 앞에서 얼어버리고 퇴근 길 기 죽던 나에게......</h4>
+                <h4 className="font-semibold text-foreground mb-3">외국인 동료 앞에서 얼어붙고, 퇴근 길에 기가 죽던 과거의 나에게......</h4>
                 
                 <div className="space-y-3 text-sm text-muted-foreground">
                   <p>저도 그랬습니다.</p>
                   
-                  <p>영어를 듣고 읽을 수 있는 줄 알았습니다. 막상 회의를 하니 입이 움직이지 않고, 머리가 하얘졌어요.</p>
+                  <p>영어를 듣고 읽을 수 있다고 생각했습니다. 막상 회의를 하니 입이 움직이지 않고, 머리가 하얘졌어요.</p>
                   
-                  <p><span className="font-semibold">'이 말은 틀린 문법이 아닐까?' 내가 지금 무슨 말을 하고 있는 거지?'</span> 자책만 남았죠.</p>
+                  <p><span className="font-semibold">'이 말은 틀린 문법이 아닐까?' '내가 지금 무슨 말을 하고 있는 거지?'</span> 자책만 남았죠.</p>
                   
-                  <p>전화 영어며 튜터링도 해봤습니다. 무려 7년간.</p>
+                  <p>전화 영어, 튜터링도 해봤습니다. 무려 7년간.</p>
                   
-                  <p>그런데 외국인 튜터와 나눈 대화는, 제가 진짜 써야 할 <span className="font-semibold text-primary">회의, 협상, 설득, 조율</span> 표현과는 거리가 멀었습니다.</p>
+                  <p>그런데 외국인 튜터와 나눈 대화는, 제가 실제로 써야 할 <span className="font-semibold text-primary">회의, 협상, 설득, 조율</span> 표현과는 거리가 멀었습니다.</p>
                   
-                  <p>그런데 지금 저는, 영어로 토론이 많다던 학업을 무사히 마쳤고,</p>
+                  <p>그런데 지금 저는 영어로 토론이 많기로 유명한 해외 학업 과정을 무사히 마쳤고,</p>
                   
-                  <p><span className="font-semibold text-primary">글로벌 BD로서 해외 시장에 진출하고 해외 업체와 파트너십을 체결하는 일을 하였습니다.</span></p>
+                  <p><span className="font-semibold text-primary">글로벌 BD로서 해외 시장 진출과 파트너십 체결 업무를 맡고 있습니다.</span></p>
                   
-                  <p>돌파구는 '무작정하는 영어 공부'가 아니었어요.</p>
+                  <p>돌파구는 '무작정하는 영어 공부'가 아니었어요.<br />
+                  <span className="font-semibold text-primary">바로 내 업무 상황에 딱 맞는 표현을 익히고, 실제로 연습하는 것이었습니다.</span></p>
                   
-                  <p><span className="font-semibold text-primary">바로, 내 업무 상황에 맞는 표현을 익히고 연습하는 것.</span></p>
+                  <p>그래서, 저도 여러분이 일반 회화 앱이 아닌</p>
                   
-                  <p>그래서, 당신도 회화 앱이 아닌</p>
+                  <p><span className="font-semibold text-primary">'실무 영어 리허설 툴'을 가질 수 있도록 'Protalk AI'를 만들었습니다.</span></p>
                   
-                  <p><span className="font-semibold text-primary">'실무 영어 리허설 툴'을 가질 수 있도록</span> 이 <span className="font-semibold text-primary">Protalk AI 코치</span>를 만들었습니다.</p>
-                  
-                  <p>여러분도 훈련에서 오는 <span className="font-semibold text-primary">자신감</span>과 영어 회화의 <span className="font-semibold text-primary">자유로움</span>에서 오는 <span className="font-semibold text-primary">더 넓은 세상</span>을 마주하게 될 것입니다.</p>
+                  <p>여러분도 훈련에서 오는 <span className="font-semibold text-primary">자신감</span>, 그리고 영어로 자유롭게 말할 수 있는 능력에서 오는 <span className="font-semibold text-primary">더 넓은 세상</span>을 경험하게 될 것입니다.</p>
                 </div>
               </div>
             </div>
