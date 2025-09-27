@@ -14,7 +14,253 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      cards: {
+        Row: {
+          category: string | null
+          context: string | null
+          created_at: string | null
+          example_usage: string | null
+          id: string
+          is_bookmarked: boolean | null
+          original_utterance: string
+          rephrased_expression: string
+          session_id: string
+          tip: string | null
+        }
+        Insert: {
+          category?: string | null
+          context?: string | null
+          created_at?: string | null
+          example_usage?: string | null
+          id?: string
+          is_bookmarked?: boolean | null
+          original_utterance: string
+          rephrased_expression: string
+          session_id: string
+          tip?: string | null
+        }
+        Update: {
+          category?: string | null
+          context?: string | null
+          created_at?: string | null
+          example_usage?: string | null
+          id?: string
+          is_bookmarked?: boolean | null
+          original_utterance?: string
+          rephrased_expression?: string
+          session_id?: string
+          tip?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cards_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string | null
+          email: string
+          english_level: number | null
+          id: string
+          last_login_at: string | null
+          name: string | null
+          role: string | null
+          social_login_provider: string | null
+          subscription_status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          english_level?: number | null
+          id: string
+          last_login_at?: string | null
+          name?: string | null
+          role?: string | null
+          social_login_provider?: string | null
+          subscription_status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          english_level?: number | null
+          id?: string
+          last_login_at?: string | null
+          name?: string | null
+          role?: string | null
+          social_login_provider?: string | null
+          subscription_status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      scenarios: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          difficulty_level: string | null
+          english_level_max: number | null
+          english_level_min: number | null
+          estimated_duration: number | null
+          id: string
+          is_active: boolean | null
+          prompt: string
+          role_target: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          difficulty_level?: string | null
+          english_level_max?: number | null
+          english_level_min?: number | null
+          estimated_duration?: number | null
+          id?: string
+          is_active?: boolean | null
+          prompt: string
+          role_target?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          difficulty_level?: string | null
+          english_level_max?: number | null
+          english_level_min?: number | null
+          estimated_duration?: number | null
+          id?: string
+          is_active?: boolean | null
+          prompt?: string
+          role_target?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      sessions: {
+        Row: {
+          cards_generated: boolean | null
+          created_at: string | null
+          duration_minutes: number | null
+          end_time: string | null
+          feedback: string | null
+          feedback_comment: string | null
+          id: string
+          scenario_id: string | null
+          start_time: string | null
+          status: string | null
+          transcript: Json | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          cards_generated?: boolean | null
+          created_at?: string | null
+          duration_minutes?: number | null
+          end_time?: string | null
+          feedback?: string | null
+          feedback_comment?: string | null
+          id?: string
+          scenario_id?: string | null
+          start_time?: string | null
+          status?: string | null
+          transcript?: Json | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          cards_generated?: boolean | null
+          created_at?: string | null
+          duration_minutes?: number | null
+          end_time?: string | null
+          feedback?: string | null
+          feedback_comment?: string | null
+          id?: string
+          scenario_id?: string | null
+          start_time?: string | null
+          status?: string | null
+          transcript?: Json | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sessions_scenario_id_fkey"
+            columns: ["scenario_id"]
+            isOneToOne: false
+            referencedRelation: "scenarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sessions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_progress: {
+        Row: {
+          created_at: string | null
+          favorite_scenario_ids: string[] | null
+          id: string
+          last_session_date: string | null
+          streak_days: number | null
+          total_cards_generated: number | null
+          total_duration_minutes: number | null
+          total_sessions: number | null
+          updated_at: string | null
+          user_id: string
+          weak_expression_categories: string[] | null
+        }
+        Insert: {
+          created_at?: string | null
+          favorite_scenario_ids?: string[] | null
+          id?: string
+          last_session_date?: string | null
+          streak_days?: number | null
+          total_cards_generated?: number | null
+          total_duration_minutes?: number | null
+          total_sessions?: number | null
+          updated_at?: string | null
+          user_id: string
+          weak_expression_categories?: string[] | null
+        }
+        Update: {
+          created_at?: string | null
+          favorite_scenario_ids?: string[] | null
+          id?: string
+          last_session_date?: string | null
+          streak_days?: number | null
+          total_cards_generated?: number | null
+          total_duration_minutes?: number | null
+          total_sessions?: number | null
+          updated_at?: string | null
+          user_id?: string
+          weak_expression_categories?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_progress_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
