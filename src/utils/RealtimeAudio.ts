@@ -77,109 +77,175 @@ export const encodeAudioForAPI = (float32Array: Float32Array): string => {
   return btoa(binary);
 };
 
-export class RealtimeChat {
-  private pc: RTCPeerConnection | null = null;
-  private dc: RTCDataChannel | null = null;
-  private audioEl: HTMLAudioElement;
-  private recorder: AudioRecorder | null = null;
+class AudioQueue {
+  private queue: Uint8Array[] = [];
+  private isPlaying = false;
+  private audioContext: AudioContext;
 
-  constructor(private onMessage: (message: any) => void) {
-    this.audioEl = document.createElement("audio");
-    this.audioEl.autoplay = true;
+  constructor(audioContext: AudioContext) {
+    this.audioContext = audioContext;
   }
 
-  async init(scenario?: any) {
+  async addToQueue(audioData: Uint8Array) {
+    this.queue.push(audioData);
+    if (!this.isPlaying) {
+      await this.playNext();
+    }
+  }
+
+  private async playNext() {
+    if (this.queue.length === 0) {
+      this.isPlaying = false;
+      return;
+    }
+
+    this.isPlaying = true;
+    const audioData = this.queue.shift()!;
+
     try {
-      // Get ephemeral token from our Supabase Edge Function
-      const response = await fetch("https://qgtcogpbqyjwgeanccto.supabase.co/functions/v1/realtime-session", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ 
-          scenario,
-          instructions: scenario ? 
-            `You are an AI English conversation coach. The user wants to practice this scenario: ${scenario.title}. 
-            Role: ${scenario.role_target}
-            Description: ${scenario.description}
-            Level: ${scenario.difficulty_level}
-            
-            Please conduct a realistic business English conversation based on this scenario. 
-            Speak naturally and provide helpful feedback when appropriate.` :
-            "You are an AI English conversation coach. Help users practice business English conversations."
-        })
-      });
-
-      const data = await response.json();
+      const wavData = this.createWavFromPCM(audioData);
+      const audioBuffer = await this.audioContext.decodeAudioData(wavData.buffer);
       
-      if (!data.success || !data.session?.client_secret?.value) {
-        throw new Error("Failed to get ephemeral token");
+      const source = this.audioContext.createBufferSource();
+      source.buffer = audioBuffer;
+      source.connect(this.audioContext.destination);
+      
+      source.onended = () => this.playNext();
+      source.start(0);
+    } catch (error) {
+      console.error('Error playing audio:', error);
+      this.playNext();
+    }
+  }
+
+  private createWavFromPCM(pcmData: Uint8Array): Uint8Array {
+    const int16Data = new Int16Array(pcmData.length / 2);
+    for (let i = 0; i < pcmData.length; i += 2) {
+      int16Data[i / 2] = (pcmData[i + 1] << 8) | pcmData[i];
+    }
+    
+    const wavHeader = new ArrayBuffer(44);
+    const view = new DataView(wavHeader);
+    
+    const writeString = (view: DataView, offset: number, string: string) => {
+      for (let i = 0; i < string.length; i++) {
+        view.setUint8(offset + i, string.charCodeAt(i));
       }
+    };
 
-      const EPHEMERAL_KEY = data.session.client_secret.value;
+    const sampleRate = 24000;
+    const numChannels = 1;
+    const bitsPerSample = 16;
+    const blockAlign = (numChannels * bitsPerSample) / 8;
+    const byteRate = sampleRate * blockAlign;
 
-      // Create peer connection
-      this.pc = new RTCPeerConnection();
+    writeString(view, 0, 'RIFF');
+    view.setUint32(4, 36 + int16Data.byteLength, true);
+    writeString(view, 8, 'WAVE');
+    writeString(view, 12, 'fmt ');
+    view.setUint32(16, 16, true);
+    view.setUint16(20, 1, true);
+    view.setUint16(22, numChannels, true);
+    view.setUint32(24, sampleRate, true);
+    view.setUint32(28, byteRate, true);
+    view.setUint16(32, blockAlign, true);
+    view.setUint16(34, bitsPerSample, true);
+    writeString(view, 36, 'data');
+    view.setUint32(40, int16Data.byteLength, true);
 
-      // Set up remote audio
-      this.pc.ontrack = e => this.audioEl.srcObject = e.streams[0];
+    const wavArray = new Uint8Array(wavHeader.byteLength + int16Data.byteLength);
+    wavArray.set(new Uint8Array(wavHeader), 0);
+    wavArray.set(new Uint8Array(int16Data.buffer), wavHeader.byteLength);
+    
+    return wavArray;
+  }
+}
 
-      // Add local audio track
-      const ms = await navigator.mediaDevices.getUserMedia({ audio: true });
-      this.pc.addTrack(ms.getTracks()[0]);
+let audioQueueInstance: AudioQueue | null = null;
 
-      // Set up data channel
-      this.dc = this.pc.createDataChannel("oai-events");
-      this.dc.addEventListener("message", (e) => {
-        const event = JSON.parse(e.data);
-        console.log("Received event:", event);
-        this.onMessage(event);
-      });
+export const playAudioData = async (audioContext: AudioContext, audioData: Uint8Array) => {
+  if (!audioQueueInstance) {
+    audioQueueInstance = new AudioQueue(audioContext);
+  }
+  await audioQueueInstance.addToQueue(audioData);
+};
 
-      // Create and set local description
-      const offer = await this.pc.createOffer();
-      await this.pc.setLocalDescription(offer);
+export class RealtimeChat {
+  private ws: WebSocket | null = null;
+  private audioContext: AudioContext | null = null;
+  private recorder: AudioRecorder | null = null;
 
-      // Connect to OpenAI's Realtime API
-      const baseUrl = "https://api.openai.com/v1/realtime";
-      const model = "gpt-4o-realtime-preview-2024-12-17";
-      const sdpResponse = await fetch(`${baseUrl}?model=${model}`, {
-        method: "POST",
-        body: offer.sdp,
-        headers: {
-          Authorization: `Bearer ${EPHEMERAL_KEY}`,
-          "Content-Type": "application/sdp"
-        },
-      });
+  constructor(
+    private onMessage: (message: any) => void,
+    private onSpeakingChange: (speaking: boolean) => void
+  ) {}
 
-      const answer = {
-        type: "answer" as RTCSdpType,
-        sdp: await sdpResponse.text(),
-      };
+  async init() {
+    try {
+      this.audioContext = new AudioContext({ sampleRate: 24000 });
       
-      await this.pc.setRemoteDescription(answer);
-      console.log("WebRTC connection established");
+      // WebSocket 연결
+      const wsUrl = `wss://qgtcogpbqyjwgeanccto.functions.supabase.co/realtime-session`;
+      this.ws = new WebSocket(wsUrl);
 
-      // Start recording
+      this.ws.onopen = () => {
+        console.log("✅ WebSocket 연결됨");
+      };
+
+      this.ws.onmessage = async (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          console.log("📨 받은 메시지:", data.type);
+          
+          this.onMessage(data);
+
+          if (data.type === 'response.audio.delta') {
+            const binaryString = atob(data.delta);
+            const bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+              bytes[i] = binaryString.charCodeAt(i);
+            }
+            await playAudioData(this.audioContext!, bytes);
+          } else if (data.type === 'response.audio.done') {
+            this.onSpeakingChange(false);
+          } else if (data.type === 'input_audio_buffer.speech_started') {
+            this.onSpeakingChange(true);
+          }
+        } catch (error) {
+          console.error("메시지 처리 오류:", error);
+        }
+      };
+
+      this.ws.onerror = (error) => {
+        console.error("WebSocket 오류:", error);
+      };
+
+      this.ws.onclose = () => {
+        console.log("WebSocket 연결 종료");
+      };
+
+      // 마이크 녹음 시작
       this.recorder = new AudioRecorder((audioData) => {
-        if (this.dc?.readyState === 'open') {
-          this.dc.send(JSON.stringify({
+        if (this.ws?.readyState === WebSocket.OPEN) {
+          this.ws.send(JSON.stringify({
             type: 'input_audio_buffer.append',
             audio: encodeAudioForAPI(audioData)
           }));
         }
       });
+      
       await this.recorder.start();
+      console.log("🎤 마이크 녹음 시작");
 
     } catch (error) {
-      console.error("Error initializing chat:", error);
+      console.error("초기화 오류:", error);
       throw error;
     }
   }
 
   async sendMessage(text: string) {
-    if (!this.dc || this.dc.readyState !== 'open') {
-      throw new Error('Data channel not ready');
+    if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
+      throw new Error('WebSocket not ready');
     }
 
     const event = {
@@ -196,13 +262,13 @@ export class RealtimeChat {
       }
     };
 
-    this.dc.send(JSON.stringify(event));
-    this.dc.send(JSON.stringify({type: 'response.create'}));
+    this.ws.send(JSON.stringify(event));
+    this.ws.send(JSON.stringify({ type: 'response.create' }));
   }
 
   disconnect() {
     this.recorder?.stop();
-    this.dc?.close();
-    this.pc?.close();
+    this.ws?.close();
+    this.audioContext?.close();
   }
 }

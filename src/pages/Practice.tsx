@@ -41,7 +41,7 @@ const Practice = () => {
     }
   };
 
-  const handleSessionEnd = (sessionData: any) => {
+  const handleSessionEnd = () => {
     // Navigate to results or back to scenario selection
     setSelectedScenario(null);
   };

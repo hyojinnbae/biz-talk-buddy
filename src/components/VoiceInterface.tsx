@@ -1,125 +1,89 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
 import { RealtimeChat } from '@/utils/RealtimeAudio';
-import { Mic, MicOff, Phone, PhoneOff, Volume2 } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/hooks/useAuth';
+import { Mic, MicOff, MessageSquare, Phone, PhoneOff, Volume2 } from 'lucide-react';
 
 interface VoiceInterfaceProps {
-  scenario?: any;
-  onSessionEnd?: (sessionData: any) => void;
+  scenario: {
+    id: string;
+    title: string;
+    description: string;
+    role_target: string;
+    prompt: string;
+  };
+  onSessionEnd: () => void;
 }
 
 const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd }) => {
   const { toast } = useToast();
-  const { user } = useAuth();
   const [isConnected, setIsConnected] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isUserSpeaking, setIsUserSpeaking] = useState(false);
-  const [conversation, setConversation] = useState<any[]>([]);
-  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [messages, setMessages] = useState<any[]>([]);
+  const [transcript, setTranscript] = useState('');
   const chatRef = useRef<RealtimeChat | null>(null);
 
   const handleMessage = (event: any) => {
-    console.log('Received message:', event);
+    console.log('받은 이벤트:', event);
     
-    // Handle different event types
-    if (event.type === 'response.audio.delta') {
-      setIsSpeaking(true);
-    } else if (event.type === 'response.audio.done') {
-      setIsSpeaking(false);
-    } else if (event.type === 'response.audio_transcript.delta') {
-      // Handle AI transcript
-      setConversation(prev => {
-        const lastMessage = prev[prev.length - 1];
-        if (lastMessage && lastMessage.role === 'assistant' && !lastMessage.completed) {
-          return [
-            ...prev.slice(0, -1),
-            { ...lastMessage, content: (lastMessage.content || '') + event.delta }
-          ];
-        } else {
-          return [...prev, { role: 'assistant', content: event.delta, completed: false }];
-        }
-      });
+    if (event.type === 'response.audio_transcript.delta') {
+      setTranscript(prev => prev + event.delta);
     } else if (event.type === 'response.audio_transcript.done') {
-      // Mark AI message as complete
-      setConversation(prev => {
-        const lastMessage = prev[prev.length - 1];
-        if (lastMessage && lastMessage.role === 'assistant') {
-          return [
-            ...prev.slice(0, -1),
-            { ...lastMessage, completed: true }
-          ];
-        }
-        return prev;
-      });
+      if (transcript) {
+        setMessages(prev => [...prev, { role: 'assistant', content: transcript }]);
+        setTranscript('');
+      }
     } else if (event.type === 'input_audio_buffer.speech_started') {
       setIsUserSpeaking(true);
     } else if (event.type === 'input_audio_buffer.speech_stopped') {
       setIsUserSpeaking(false);
+    } else if (event.type === 'response.audio.delta') {
+      setIsSpeaking(true);
+    } else if (event.type === 'response.audio.done') {
+      setIsSpeaking(false);
     }
   };
 
   const startConversation = async () => {
     try {
-      // Create session in database
-      const { data: session, error } = await supabase
-        .from('sessions')
-        .insert([{
-          user_id: user?.id,
-          scenario_id: scenario?.id,
-          status: '진행중'
-        }])
-        .select()
-        .single();
-
-      if (error) throw error;
-      setSessionId(session.id);
-
-      chatRef.current = new RealtimeChat(handleMessage);
-      await chatRef.current.init(scenario);
+      setIsConnecting(true);
+      
+      chatRef.current = new RealtimeChat(handleMessage, setIsSpeaking);
+      await chatRef.current.init();
+      
+      // 시나리오 컨텍스트 설정
+      setTimeout(async () => {
+        const contextMessage = `You are roleplaying in this scenario: ${scenario.title}. ${scenario.description}. Your role is: ${scenario.role_target}. Please start the conversation naturally and encourage the user to practice English.`;
+        await chatRef.current?.sendMessage(contextMessage);
+      }, 2000);
+      
       setIsConnected(true);
+      setIsConnecting(false);
       
       toast({
-        title: "연결됨",
-        description: "음성 대화가 시작되었습니다",
+        title: "연결 완료",
+        description: "음성 대화를 시작하세요!",
       });
     } catch (error) {
-      console.error('Error starting conversation:', error);
+      console.error('연결 오류:', error);
+      setIsConnecting(false);
       toast({
-        title: "오류",
-        description: error instanceof Error ? error.message : '대화를 시작할 수 없습니다',
+        title: "연결 실패",
+        description: error instanceof Error ? error.message : '연결에 실패했습니다',
         variant: "destructive",
       });
     }
   };
 
-  const endConversation = async () => {
-    try {
-      if (sessionId) {
-        // Update session in database
-        await supabase
-          .from('sessions')
-          .update({
-            status: '완료',
-            end_time: new Date().toISOString(),
-            transcript: conversation
-          })
-          .eq('id', sessionId);
-      }
-
-      chatRef.current?.disconnect();
-      setIsConnected(false);
-      setIsSpeaking(false);
-      setIsUserSpeaking(false);
-      
-      onSessionEnd?.({ sessionId, conversation });
-    } catch (error) {
-      console.error('Error ending conversation:', error);
-    }
+  const endConversation = () => {
+    chatRef.current?.disconnect();
+    setIsConnected(false);
+    setIsSpeaking(false);
+    setIsUserSpeaking(false);
+    onSessionEnd();
   };
 
   useEffect(() => {
@@ -129,82 +93,117 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
   }, []);
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6">
-      {scenario && (
-        <Card className="p-6">
-          <div className="flex items-start gap-4">
-            <Badge variant="outline">{scenario.difficulty_level}</Badge>
-            <div className="flex-1">
-              <h3 className="text-xl font-semibold mb-2">{scenario.title}</h3>
-              <p className="text-muted-foreground mb-3">{scenario.description}</p>
-              {scenario.role_target && (
-                <p className="text-sm">
-                  <span className="font-medium">역할:</span> {scenario.role_target}
-                </p>
-              )}
-            </div>
+    <div className="min-h-screen bg-gradient-subtle flex flex-col">
+      {/* 헤더 */}
+      <div className="bg-background/80 backdrop-blur-sm border-b p-4">
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-semibold">{scenario.title}</h1>
+            <p className="text-sm text-muted-foreground">{scenario.role_target}</p>
           </div>
-        </Card>
-      )}
+          <Button
+            variant="destructive"
+            size="sm"
+            onClick={endConversation}
+            className="flex items-center gap-2"
+          >
+            <PhoneOff className="w-4 h-4" />
+            종료
+          </Button>
+        </div>
+      </div>
 
-      <Card className="p-6">
-        <div className="text-center space-y-6">
-          <div className="flex items-center justify-center gap-4">
-            <div className={`w-16 h-16 rounded-full flex items-center justify-center transition-colors ${
-              isSpeaking ? 'bg-primary text-primary-foreground animate-pulse' : 'bg-muted'
-            }`}>
-              <Volume2 className="w-8 h-8" />
-            </div>
-            
-            <div className="text-2xl font-bold">
-              {!isConnected ? '준비됨' : isSpeaking ? 'AI 말하는 중...' : '듣고 있어요'}
-            </div>
-            
-            <div className={`w-16 h-16 rounded-full flex items-center justify-center transition-colors ${
-              isUserSpeaking ? 'bg-accent text-accent-foreground animate-pulse' : 'bg-muted'
-            }`}>
-              {isUserSpeaking ? <Mic className="w-8 h-8" /> : <MicOff className="w-8 h-8" />}
-            </div>
-          </div>
+      {/* 메인 컨텐츠 */}
+      <div className="flex-1 flex items-center justify-center p-6">
+        <div className="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* AI 아바타 영역 */}
+          <Card className="h-80 flex items-center justify-center bg-gradient-primary/10">
+            <CardContent className="text-center">
+              <div className={`w-24 h-24 rounded-full mx-auto mb-4 flex items-center justify-center ${
+                isSpeaking ? 'bg-gradient-primary animate-pulse' : 'bg-muted'
+              }`}>
+                <Volume2 className={`w-12 h-12 ${
+                  isSpeaking ? 'text-primary-foreground' : 'text-muted-foreground'
+                }`} />
+              </div>
+              <h3 className="font-semibold mb-2">AI 대화 상대</h3>
+              <p className="text-sm text-muted-foreground">
+                {isSpeaking ? '말하는 중...' : '듣고 있습니다'}
+              </p>
+            </CardContent>
+          </Card>
 
-          <div className="space-y-4">
+          {/* 사용자 영역 */}
+          <Card className="h-80 flex items-center justify-center">
+            <CardContent className="text-center">
+              <div className={`w-24 h-24 rounded-full mx-auto mb-4 flex items-center justify-center ${
+                isUserSpeaking ? 'bg-green-500 animate-pulse' : 'bg-muted'
+              }`}>
+                {isUserSpeaking ? (
+                  <Mic className="w-12 h-12 text-white" />
+                ) : (
+                  <MicOff className="w-12 h-12 text-muted-foreground" />
+                )}
+              </div>
+              <h3 className="font-semibold mb-2">나</h3>
+              <p className="text-sm text-muted-foreground">
+                {isUserSpeaking ? '말하는 중...' : '말해보세요'}
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
+      {/* 대화 상태 및 제어 */}
+      <div className="bg-background/80 backdrop-blur-sm border-t p-6">
+        <div className="max-w-6xl mx-auto">
+          {/* 실시간 텍스트 */}
+          {transcript && (
+            <Card className="mb-4">
+              <CardContent className="p-4">
+                <div className="flex items-start gap-3">
+                  <Volume2 className="w-5 h-5 text-primary mt-0.5" />
+                  <p className="text-sm">{transcript}</p>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* 연결 상태 */}
+          <div className="text-center">
             {!isConnected ? (
-              <Button onClick={startConversation} size="lg" className="gap-2">
-                <Phone className="w-5 h-5" />
-                대화 시작하기
+              <Button 
+                onClick={startConversation}
+                disabled={isConnecting}
+                size="lg"
+                className="bg-primary hover:bg-primary/90 text-white"
+              >
+                {isConnecting ? (
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    연결 중...
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <Phone className="w-4 h-4" />
+                    대화 시작
+                  </div>
+                )}
               </Button>
             ) : (
-              <Button onClick={endConversation} variant="destructive" size="lg" className="gap-2">
-                <PhoneOff className="w-5 h-5" />
-                대화 종료하기
-              </Button>
+              <div className="flex items-center justify-center gap-4">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                  연결됨
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  마이크를 통해 자유롭게 대화해보세요
+                </p>
+              </div>
             )}
           </div>
         </div>
-      </Card>
-
-      {conversation.length > 0 && (
-        <Card className="p-6">
-          <h3 className="font-semibold mb-4">대화 내용</h3>
-          <div className="space-y-3 max-h-64 overflow-y-auto">
-            {conversation.map((message, index) => (
-              <div
-                key={index}
-                className={`p-3 rounded-lg ${
-                  message.role === 'user' 
-                    ? 'bg-primary text-primary-foreground ml-8'
-                    : 'bg-muted mr-8'
-                }`}
-              >
-                <div className="text-sm font-medium mb-1">
-                  {message.role === 'user' ? '나' : 'AI 코치'}
-                </div>
-                <div>{message.content}</div>
-              </div>
-            ))}
-          </div>
-        </Card>
-      )}
+      </div>
     </div>
   );
 };
