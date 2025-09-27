@@ -1,3 +1,5 @@
+import { supabase } from "@/integrations/supabase/client";
+
 export class AudioRecorder {
   private stream: MediaStream | null = null;
   private audioContext: AudioContext | null = null;
@@ -58,27 +60,8 @@ export class AudioRecorder {
   }
 }
 
-export const encodeAudioForAPI = (float32Array: Float32Array): string => {
-  const int16Array = new Int16Array(float32Array.length);
-  for (let i = 0; i < float32Array.length; i++) {
-    const s = Math.max(-1, Math.min(1, float32Array[i]));
-    int16Array[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
-  }
-  
-  const uint8Array = new Uint8Array(int16Array.buffer);
-  let binary = '';
-  const chunkSize = 0x8000;
-  
-  for (let i = 0; i < uint8Array.length; i += chunkSize) {
-    const chunk = uint8Array.subarray(i, Math.min(i + chunkSize, uint8Array.length));
-    binary += String.fromCharCode.apply(null, Array.from(chunk));
-  }
-  
-  return btoa(binary);
-};
-
-class AudioQueue {
-  private queue: Uint8Array[] = [];
+export class AudioQueue {
+  private queue: ArrayBuffer[] = [];
   private isPlaying = false;
   private audioContext: AudioContext;
 
@@ -86,7 +69,7 @@ class AudioQueue {
     this.audioContext = audioContext;
   }
 
-  async addToQueue(audioData: Uint8Array) {
+  async addToQueue(audioData: ArrayBuffer) {
     this.queue.push(audioData);
     if (!this.isPlaying) {
       await this.playNext();
@@ -103,8 +86,7 @@ class AudioQueue {
     const audioData = this.queue.shift()!;
 
     try {
-      const wavData = this.createWavFromPCM(audioData);
-      const audioBuffer = await this.audioContext.decodeAudioData(wavData.buffer);
+      const audioBuffer = await this.audioContext.decodeAudioData(audioData.slice(0));
       
       const source = this.audioContext.createBufferSource();
       source.buffer = audioBuffer;
@@ -117,8 +99,90 @@ class AudioQueue {
       this.playNext();
     }
   }
+}
 
-  private createWavFromPCM(pcmData: Uint8Array): Uint8Array {
+export class RealtimeChat {
+  private ws: WebSocket | null = null;
+  private audioContext: AudioContext | null = null;
+  private audioQueue: AudioQueue | null = null;
+  private recorder: AudioRecorder | null = null;
+
+  constructor(
+    private onMessage: (message: any) => void,
+    private onSpeakingChange: (speaking: boolean) => void
+  ) {}
+
+  async init() {
+    try {
+      // Initialize audio context
+      this.audioContext = new AudioContext({
+        sampleRate: 24000,
+      });
+      this.audioQueue = new AudioQueue(this.audioContext);
+
+      // Connect to Supabase edge function WebSocket endpoint
+      const wsUrl = `wss://qgtcogpbqyjwgeanccto.supabase.co/functions/v1/realtime-session`;
+      this.ws = new WebSocket(wsUrl);
+
+      this.ws.onopen = () => {
+        console.log("Connected to realtime session");
+      };
+
+      this.ws.onmessage = async (event) => {
+        const data = JSON.parse(event.data);
+        console.log("Received message:", data.type);
+        
+        this.onMessage(data);
+
+        // Handle audio playback
+        if (data.type === 'response.audio.delta' && data.delta) {
+          const binaryString = atob(data.delta);
+          const arrayBuffer = new ArrayBuffer(binaryString.length);
+          const uint8Array = new Uint8Array(arrayBuffer);
+          
+          for (let i = 0; i < binaryString.length; i++) {
+            uint8Array[i] = binaryString.charCodeAt(i);
+          }
+          
+          // Convert PCM to playable audio
+          const wavBuffer = this.createWavFromPCM(uint8Array);
+          await this.audioQueue?.addToQueue(wavBuffer);
+        }
+
+        if (data.type === 'response.audio.delta') {
+          this.onSpeakingChange(true);
+        } else if (data.type === 'response.audio.done') {
+          this.onSpeakingChange(false);
+        }
+      };
+
+      this.ws.onerror = (error) => {
+        console.error("WebSocket 오류:", error);
+      };
+
+      this.ws.onclose = () => {
+        console.log("WebSocket 연결 종료");
+      };
+
+      // Start audio recording
+      this.recorder = new AudioRecorder((audioData) => {
+        if (this.ws?.readyState === WebSocket.OPEN) {
+          const base64Audio = this.encodeAudioData(audioData);
+          this.ws.send(JSON.stringify({
+            type: 'input_audio_buffer.append',
+            audio: base64Audio
+          }));
+        }
+      });
+
+      await this.recorder.start();
+    } catch (error) {
+      console.error('Failed to initialize realtime chat:', error);
+      throw error;
+    }
+  }
+
+  private createWavFromPCM(pcmData: Uint8Array): ArrayBuffer {
     const int16Data = new Int16Array(pcmData.length / 2);
     for (let i = 0; i < pcmData.length; i += 2) {
       int16Data[i / 2] = (pcmData[i + 1] << 8) | pcmData[i];
@@ -153,99 +217,36 @@ class AudioQueue {
     writeString(view, 36, 'data');
     view.setUint32(40, int16Data.byteLength, true);
 
-    const wavArray = new Uint8Array(wavHeader.byteLength + int16Data.byteLength);
-    wavArray.set(new Uint8Array(wavHeader), 0);
-    wavArray.set(new Uint8Array(int16Data.buffer), wavHeader.byteLength);
+    const wavArray = new ArrayBuffer(wavHeader.byteLength + int16Data.byteLength);
+    const wavView = new Uint8Array(wavArray);
+    wavView.set(new Uint8Array(wavHeader), 0);
+    wavView.set(new Uint8Array(int16Data.buffer), wavHeader.byteLength);
     
     return wavArray;
   }
-}
 
-let audioQueueInstance: AudioQueue | null = null;
-
-export const playAudioData = async (audioContext: AudioContext, audioData: Uint8Array) => {
-  if (!audioQueueInstance) {
-    audioQueueInstance = new AudioQueue(audioContext);
-  }
-  await audioQueueInstance.addToQueue(audioData);
-};
-
-export class RealtimeChat {
-  private ws: WebSocket | null = null;
-  private audioContext: AudioContext | null = null;
-  private recorder: AudioRecorder | null = null;
-
-  constructor(
-    private onMessage: (message: any) => void,
-    private onSpeakingChange: (speaking: boolean) => void
-  ) {}
-
-  async init() {
-    try {
-      this.audioContext = new AudioContext({ sampleRate: 24000 });
-      
-      // WebSocket 연결
-      const wsUrl = `wss://qgtcogpbqyjwgeanccto.functions.supabase.co/realtime-session`;
-      this.ws = new WebSocket(wsUrl);
-
-      this.ws.onopen = () => {
-        console.log("✅ WebSocket 연결됨");
-      };
-
-      this.ws.onmessage = async (event) => {
-        try {
-          const data = JSON.parse(event.data);
-          console.log("📨 받은 메시지:", data.type);
-          
-          this.onMessage(data);
-
-          if (data.type === 'response.audio.delta') {
-            const binaryString = atob(data.delta);
-            const bytes = new Uint8Array(binaryString.length);
-            for (let i = 0; i < binaryString.length; i++) {
-              bytes[i] = binaryString.charCodeAt(i);
-            }
-            await playAudioData(this.audioContext!, bytes);
-          } else if (data.type === 'response.audio.done') {
-            this.onSpeakingChange(false);
-          } else if (data.type === 'input_audio_buffer.speech_started') {
-            this.onSpeakingChange(true);
-          }
-        } catch (error) {
-          console.error("메시지 처리 오류:", error);
-        }
-      };
-
-      this.ws.onerror = (error) => {
-        console.error("WebSocket 오류:", error);
-      };
-
-      this.ws.onclose = () => {
-        console.log("WebSocket 연결 종료");
-      };
-
-      // 마이크 녹음 시작
-      this.recorder = new AudioRecorder((audioData) => {
-        if (this.ws?.readyState === WebSocket.OPEN) {
-          this.ws.send(JSON.stringify({
-            type: 'input_audio_buffer.append',
-            audio: encodeAudioForAPI(audioData)
-          }));
-        }
-      });
-      
-      await this.recorder.start();
-      console.log("🎤 마이크 녹음 시작");
-
-    } catch (error) {
-      console.error("초기화 오류:", error);
-      throw error;
+  private encodeAudioData(float32Array: Float32Array): string {
+    const int16Array = new Int16Array(float32Array.length);
+    for (let i = 0; i < float32Array.length; i++) {
+      const s = Math.max(-1, Math.min(1, float32Array[i]));
+      int16Array[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
     }
+    
+    const uint8Array = new Uint8Array(int16Array.buffer);
+    let binary = '';
+    const chunkSize = 0x8000;
+    
+    for (let i = 0; i < uint8Array.length; i += chunkSize) {
+      const chunk = uint8Array.subarray(i, Math.min(i + chunkSize, uint8Array.length));
+      binary += String.fromCharCode.apply(null, Array.from(chunk));
+    }
+    
+    return btoa(binary);
   }
 
   async sendMessage(text: string) {
     if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
-      throw new Error('WebSocket not ready');
+      throw new Error('WebSocket not connected');
     }
 
     const event = {
@@ -263,7 +264,7 @@ export class RealtimeChat {
     };
 
     this.ws.send(JSON.stringify(event));
-    this.ws.send(JSON.stringify({ type: 'response.create' }));
+    this.ws.send(JSON.stringify({type: 'response.create'}));
   }
 
   disconnect() {

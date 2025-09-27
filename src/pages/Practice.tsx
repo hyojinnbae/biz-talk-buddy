@@ -20,6 +20,7 @@ interface UserInfo {
   industry: string;
   customSituation?: string;
   customPartner?: string;
+  customIndustry?: string;
 }
 
 interface GeneratedScenario {
@@ -200,21 +201,22 @@ const Practice = () => {
                         <SelectValue placeholder="업계를 선택하세요" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="SaaS">SaaS</SelectItem>
-                        <SelectItem value="소비재">소비재</SelectItem>
+                        <SelectItem value="IT & SaaS">IT & SaaS</SelectItem>
+                        <SelectItem value="제조">제조</SelectItem>
                         <SelectItem value="헬스케어">헬스케어</SelectItem>
-                        <SelectItem value="B2B">B2B</SelectItem>
-                        <SelectItem value="핀테크">핀테크</SelectItem>
+                        <SelectItem value="금융">금융</SelectItem>
+                        <SelectItem value="무역 & 물류">무역 & 물류</SelectItem>
+                        <SelectItem value="소비재">소비재</SelectItem>
                         <SelectItem value="교육">교육</SelectItem>
-                        <SelectItem value="이커머스">이커머스</SelectItem>
-                        <SelectItem value="기타">기타</SelectItem>
+                        <SelectItem value="컨설팅 & 전문서비스">컨설팅 & 전문서비스</SelectItem>
+                        <SelectItem value="기타">기타 (직접 입력)</SelectItem>
                       </SelectContent>
                     </Select>
                     {userInfo.industry === '기타' && (
                       <Textarea
-                        placeholder="예: 건설 기술 스타트업"
-                        value={userInfo.customSituation || ''}
-                        onChange={(e) => setUserInfo(prev => ({ ...prev, customSituation: e.target.value }))}
+                        placeholder="예: 미디어 & 엔터테인먼트, 바이오테크, 항공우주, 스포츠 마케팅"
+                        value={userInfo.customIndustry || ''}
+                        onChange={(e) => setUserInfo(prev => ({ ...prev, customIndustry: e.target.value }))}
                       />
                     )}
                   </div>

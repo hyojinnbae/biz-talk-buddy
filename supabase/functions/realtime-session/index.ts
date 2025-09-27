@@ -12,126 +12,100 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  const { headers } = req;
-  const upgradeHeader = headers.get("upgrade") || "";
-
-  if (upgradeHeader.toLowerCase() !== "websocket") {
-    return new Response("Expected WebSocket connection", { status: 400 });
+  // Handle WebSocket upgrade
+  if (req.headers.get("upgrade") !== "websocket") {
+    return new Response("Expected websocket", { status: 400 });
   }
 
-  try {
-    const { socket, response } = Deno.upgradeWebSocket(req);
+  const { socket, response } = Deno.upgradeWebSocket(req);
+  let openaiWs: WebSocket | null = null;
+
+  socket.onopen = () => {
+    console.log("Client WebSocket connected");
     
-    console.log("🚀 WebSocket 연결 시작");
-    
-    let openAISocket: WebSocket | null = null;
-    let sessionCreated = false;
-
-    socket.onopen = () => {
-      console.log("✅ 클라이언트 WebSocket 연결됨");
-      
-      // OpenAI Realtime API WebSocket 연결
-      openAISocket = new WebSocket("wss://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2024-12-17", {
-        headers: {
-          "Authorization": `Bearer ${Deno.env.get('OPENAI_API_KEY')}`,
-          "OpenAI-Beta": "realtime=v1"
-        }
-      });
-
-      openAISocket.onopen = () => {
-        console.log("✅ OpenAI WebSocket 연결됨");
-      };
-
-      openAISocket.onmessage = (event) => {
-        try {
-          const data = JSON.parse(event.data);
-          console.log("📨 OpenAI에서 받은 메시지:", data.type);
-
-          // session.created 이벤트를 받으면 세션 설정 업데이트
-          if (data.type === 'session.created' && !sessionCreated) {
-            sessionCreated = true;
-            console.log("🎯 세션 생성됨, 설정 업데이트 중...");
-            
-            const sessionUpdate = {
-              type: "session.update",
-              session: {
-                modalities: ["text", "audio"],
-                instructions: "You are a helpful English conversation partner for business scenarios. Speak naturally and encourage the user to practice their English. Respond in English only and keep conversations professional yet friendly.",
-                voice: "alloy",
-                input_audio_format: "pcm16",
-                output_audio_format: "pcm16",
-                input_audio_transcription: {
-                  model: "whisper-1"
-                },
-                turn_detection: {
-                  type: "server_vad",
-                  threshold: 0.5,
-                  prefix_padding_ms: 300,
-                  silence_duration_ms: 1000
-                },
-                temperature: 0.8,
-                max_response_output_tokens: "inf"
-              }
-            };
-            
-            if (openAISocket) {
-              openAISocket.send(JSON.stringify(sessionUpdate));
-            }
-          }
-
-          // 클라이언트에게 메시지 전달
-          socket.send(event.data);
-        } catch (error) {
-          console.error("❌ OpenAI 메시지 처리 오류:", error);
-        }
-      };
-
-      openAISocket.onerror = (error) => {
-        console.error("❌ OpenAI WebSocket 오류:", error);
-        socket.send(JSON.stringify({ type: 'error', message: 'OpenAI connection error' }));
-      };
-
-      openAISocket.onclose = () => {
-        console.log("🔌 OpenAI WebSocket 연결 종료");
-        socket.close();
-      };
-    };
-
-    socket.onmessage = (event) => {
-      try {
-        const data = JSON.parse(event.data);
-        console.log("📤 클라이언트에서 받은 메시지:", data.type);
-        
-        if (openAISocket && openAISocket.readyState === WebSocket.OPEN) {
-          openAISocket.send(event.data);
-        }
-      } catch (error) {
-        console.error("❌ 클라이언트 메시지 처리 오류:", error);
+    // Connect to OpenAI Realtime API
+    const openaiUrl = "wss://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2024-12-17";
+    openaiWs = new WebSocket(openaiUrl, {
+      headers: {
+        "Authorization": `Bearer ${Deno.env.get('OPENAI_API_KEY')}`,
+        "OpenAI-Beta": "realtime=v1"
       }
-    };
-
-    socket.onclose = () => {
-      console.log("🔌 클라이언트 WebSocket 연결 종료");
-      if (openAISocket) {
-        openAISocket.close();
-      }
-    };
-
-    socket.onerror = (error) => {
-      console.error("❌ 클라이언트 WebSocket 오류:", error);
-      if (openAISocket) {
-        openAISocket.close();
-      }
-    };
-
-    return response;
-  } catch (error) {
-    console.error("❌ WebSocket 업그레이드 오류:", error);
-    return new Response(JSON.stringify({ 
-      error: error instanceof Error ? error.message : 'Unknown error' 
-    }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
-  }
+
+    openaiWs.onopen = () => {
+      console.log("Connected to OpenAI Realtime API");
+    };
+
+    openaiWs.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      console.log("OpenAI -> Client:", data.type);
+      
+      // Configure session after connection
+      if (data.type === 'session.created') {
+        const sessionConfig = {
+          type: 'session.update',
+          session: {
+            modalities: ['text', 'audio'],
+            instructions: `You are a professional English conversation partner for business practice. 
+            - Always lead the conversation naturally and professionally
+            - Use authentic Silicon Valley, Big Tech, and global enterprise expressions
+            - Maintain the roleplay scenario context throughout
+            - Keep responses concise but engaging
+            - Ask follow-up questions to continue the conversation
+            - Use industry-specific terminology appropriately`,
+            voice: 'alloy',
+            input_audio_format: 'pcm16',
+            output_audio_format: 'pcm16',
+            input_audio_transcription: {
+              model: 'whisper-1'
+            },
+            turn_detection: {
+              type: 'server_vad',
+              threshold: 0.5,
+              prefix_padding_ms: 300,
+              silence_duration_ms: 1000
+            },
+            temperature: 0.8,
+            max_response_output_tokens: 4096
+          }
+        };
+        
+        openaiWs?.send(JSON.stringify(sessionConfig));
+      }
+      
+      // Forward all events to client
+      socket.send(event.data);
+    };
+
+    openaiWs.onerror = (error) => {
+      console.error("OpenAI WebSocket error:", error);
+      socket.send(JSON.stringify({
+        type: 'error',
+        message: 'OpenAI connection failed'
+      }));
+    };
+
+    openaiWs.onclose = () => {
+      console.log("OpenAI WebSocket closed");
+      socket.close();
+    };
+  };
+
+  socket.onmessage = (event) => {
+    if (openaiWs && openaiWs.readyState === WebSocket.OPEN) {
+      console.log("Client -> OpenAI:", JSON.parse(event.data).type);
+      openaiWs.send(event.data);
+    }
+  };
+
+  socket.onerror = (error) => {
+    console.error("Client WebSocket error:", error);
+  };
+
+  socket.onclose = () => {
+    console.log("Client WebSocket closed");
+    openaiWs?.close();
+  };
+
+  return response;
 });

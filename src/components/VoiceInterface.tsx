@@ -56,7 +56,20 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
       
       // 시나리오 컨텍스트 설정
       setTimeout(async () => {
-        const contextMessage = `You are roleplaying in this scenario: ${scenario.title}. ${scenario.description}. Your role is: ${scenario.role_target}. Please start the conversation naturally and encourage the user to practice English.`;
+        const industry = scenario.description.includes('업계:') ? 
+          scenario.description.split('업계:')[1].split(',')[0].trim() : 'business';
+        
+        const contextMessage = `You are now roleplaying as a ${scenario.role_target} in a ${industry} company. 
+        We are in this scenario: ${scenario.title}. 
+        Start the conversation naturally by saying: "${scenario.prompt}"
+        
+        Keep the conversation flowing by:
+        - Using Silicon Valley and Big Tech terminology
+        - Leading with follow-up questions
+        - Incorporating industry-specific knowledge
+        - Using professional but conversational tone
+        - Speaking as if you're in a real business meeting`;
+        
         await chatRef.current?.sendMessage(contextMessage);
       }, 2000);
       
