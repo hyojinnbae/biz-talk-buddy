@@ -23,21 +23,35 @@ serve(async (req) => {
   socket.onopen = () => {
     console.log("Client WebSocket connected");
     
-    // Connect to OpenAI Realtime API with newer model
-    const openaiUrl = "wss://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2024-12-17";
+    // Connect to OpenAI Realtime API
+    const apiKey = Deno.env.get('OPENAI_API_KEY');
+    console.log("OPENAI_KEY_PREFIX:", apiKey ? apiKey.slice(0, 8) : 'undefined');
+
+    const openaiUrl = "wss://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2024-10-01";
+    console.log("OpenAI WS URL:", openaiUrl);
+
     openaiWs = new WebSocket(openaiUrl, [
       "realtime",
-      `openai-insecure-api-key.${Deno.env.get('OPENAI_API_KEY')}`,
+      `openai-insecure-api-key.${apiKey ?? ''}`,
       "openai-beta.realtime-v1"
     ]);
 
     openaiWs.onopen = () => {
-      console.log("Connected to OpenAI Realtime API");
+      console.log("Connected to OpenAI WS");
     };
 
     openaiWs.onmessage = (event) => {
       const data = JSON.parse(event.data);
       console.log("OpenAI -> Client:", data.type);
+
+      if (data.type === 'response.output_text.delta') {
+        try {
+          const preview = typeof data.delta === 'string' ? data.delta.slice(0, 100) : '';
+          console.log('OpenAI -> Client: response.output_text.delta', preview);
+        } catch (_) {
+          // ignore
+        }
+      }
       
       // Configure session after connection
       if (data.type === 'session.created') {
@@ -101,7 +115,11 @@ serve(async (req) => {
 
   socket.onmessage = (event) => {
     if (openaiWs && openaiWs.readyState === WebSocket.OPEN) {
-      console.log("Client -> OpenAI:", JSON.parse(event.data).type);
+      const parsed = JSON.parse(event.data);
+      console.log("Client -> OpenAI:", parsed.type);
+      if (parsed.type === 'response.create') {
+        console.log('Forwarding response.create to OpenAI');
+      }
       openaiWs.send(event.data);
     }
   };
