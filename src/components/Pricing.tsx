@@ -91,7 +91,7 @@ export const Pricing = () => {
                 <Button className="w-full" variant="default" size="lg" asChild>
                   <Link to="/auth">
                     <Users className="w-5 h-5 mr-2" />
-                    무료 대기자 등록하기
+                    지금 연습하기
                   </Link>
                 </Button>
               </div>

@@ -48,7 +48,7 @@ export const Header = () => {
                 <Link to="/auth">로그인</Link>
               </Button>
               <Button variant="hero" size="sm" asChild>
-                <Link to="/auth">무료 체험</Link>
+                <Link to="/auth">지금 연습하기</Link>
               </Button>
             </>
           )}

@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Play, Mic, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-business-meeting.jpg";
 
 export const Hero = () => {
@@ -41,10 +42,12 @@ export const Hero = () => {
             </div>
             
             <div className="flex justify-start">
-              <Button variant="hero" size="lg" className="group">
-                <Mic className="w-5 h-5" />
-                무료 대기자 등록하기
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <Button variant="hero" size="lg" className="group" asChild>
+                <Link to="/auth">
+                  <Mic className="w-5 h-5" />
+                  지금 연습하기
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Link>
               </Button>
             </div>
             

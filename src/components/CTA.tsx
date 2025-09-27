@@ -23,7 +23,7 @@ export const CTA = () => {
             <Button variant="accent" size="lg" className="group" asChild>
               <Link to="/auth">
                 <Mic className="w-5 h-5" />
-                무료 대기자 등록하기
+                지금 연습하기
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform ml-2" />
               </Link>
             </Button>
