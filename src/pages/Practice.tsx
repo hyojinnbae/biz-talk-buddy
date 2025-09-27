@@ -24,8 +24,8 @@ interface UserInfo {
 
 interface GeneratedScenario {
   title: string;
-  description: string;
-  partner: string;
+  counterpart: string;
+  openingLine: string;
 }
 
 const Practice = () => {
@@ -46,21 +46,38 @@ const Practice = () => {
   }, [user, navigate]);
 
   const generateScenarios = async () => {
+    if (!userInfo.job || !userInfo.level || !userInfo.industry) {
+      toast({
+        title: "정보 누락",
+        description: "모든 정보를 입력해주세요.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke('generate-scenarios', {
-        body: userInfo
+        body: {
+          jobRole: userInfo.job,
+          englishLevel: userInfo.level,
+          industry: userInfo.industry,
+        }
       });
 
       if (error) throw error;
 
-      setGeneratedScenarios(data.scenarios);
-      setCurrentStep('scenarios');
-      
-      toast({
-        title: "시나리오 생성 완료",
-        description: "맞춤 시나리오가 준비되었습니다!",
-      });
+      if (Array.isArray(data)) {
+        setGeneratedScenarios(data);
+        setCurrentStep('scenarios');
+        
+        toast({
+          title: "시나리오 생성 완료",
+          description: "맞춤 시나리오가 준비되었습니다!",
+        });
+      } else {
+        throw new Error('Invalid response format');
+      }
     } catch (error) {
       console.error('Error generating scenarios:', error);
       toast({
@@ -73,14 +90,14 @@ const Practice = () => {
     }
   };
 
-  const handleScenarioSelect = (scenario: GeneratedScenario & { greeting?: string }) => {
+  const handleScenarioSelect = (scenario: GeneratedScenario) => {
     const fullScenario = {
       id: Date.now().toString(),
       title: scenario.title,
-      description: scenario.description,
-      role_target: scenario.partner,
-      greeting: scenario.greeting || `Hello! Let's start our practice session about ${scenario.title.toLowerCase()}.`,
-      prompt: `당신은 ${scenario.partner}의 역할을 맡아 영어로 대화해주세요. 상황: ${scenario.description}. 사용자의 영어 레벨은 ${userInfo.level}입니다. 업계는 ${userInfo.industry}입니다. 첫 인사말: "${scenario.greeting || `Hello! Let's start our practice session about ${scenario.title.toLowerCase()}.`}" 자연스럽고 실무적인 대화를 이끌어주세요.`
+      description: `${scenario.title} - ${scenario.counterpart}와의 실무 대화`,
+      role_target: scenario.counterpart,
+      greeting: scenario.openingLine,
+      prompt: `당신은 ${scenario.counterpart}의 역할을 맡아 영어로 대화해주세요. 상황: ${scenario.title}. 사용자의 영어 레벨은 ${userInfo.level}입니다. 업계는 ${userInfo.industry}입니다. 첫 인사말: "${scenario.openingLine}" 자연스럽고 실무적인 대화를 이끌어주세요.`
     };
     setSelectedScenario(fullScenario);
     setCurrentStep('conversation');
@@ -284,7 +301,7 @@ const Practice = () => {
                           {scenario.title}
                         </h3>
                         <p className="text-muted-foreground text-sm leading-relaxed mb-3">
-                          {scenario.description}
+                          "{scenario.openingLine}"
                         </p>
                       </div>
                       
@@ -292,7 +309,7 @@ const Practice = () => {
                         <div className="flex items-center gap-2 text-sm">
                           <Users className="w-4 h-4" />
                           <span className="font-medium">대화 상대:</span>
-                          <span className="text-muted-foreground">{scenario.partner}</span>
+                          <span className="text-muted-foreground">{scenario.counterpart}</span>
                         </div>
                       </div>
                       
