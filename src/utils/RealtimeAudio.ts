@@ -102,7 +102,7 @@ export class AudioQueue {
 }
 
 export class RealtimeChat {
-  private ws: WebSocket | null = null;
+  public ws: WebSocket | null = null;
   private audioContext: AudioContext | null = null;
   private audioQueue: AudioQueue | null = null;
   private recorder: AudioRecorder | null = null;

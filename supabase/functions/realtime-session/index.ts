@@ -73,6 +73,18 @@ serve(async (req) => {
         };
         
         openaiWs?.send(JSON.stringify(sessionConfig));
+        
+        // Wait a moment then trigger AI to start the conversation
+        setTimeout(() => {
+          const firstResponse = {
+            type: 'response.create',
+            response: {
+              modalities: ['text', 'audio'],
+              instructions: 'Start the conversation now. Greet the user and begin the roleplay scenario naturally.'
+            }
+          };
+          openaiWs?.send(JSON.stringify(firstResponse));
+        }, 1000);
       }
       
       // Forward all events to client
