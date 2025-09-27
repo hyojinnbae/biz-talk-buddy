@@ -48,11 +48,13 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
   };
 
   const startConversation = async () => {
+    console.log('[VoiceInterface] startConversation clicked');
     try {
       setIsConnecting(true);
-      
+      console.log('[VoiceInterface] Initializing RealtimeChat...');
       chatRef.current = new RealtimeChat(handleMessage, setIsSpeaking);
       await chatRef.current.init();
+      console.log('[VoiceInterface] RealtimeChat initialized, sending kickoff...');
       
       // Build scenario kickoff message and trigger first response
       const industry = scenario.description.includes('업계:') ? 

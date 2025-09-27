@@ -114,6 +114,7 @@ export class RealtimeChat {
 
   async init() {
     try {
+      console.log('RealtimeChat.init: start');
       // Initialize audio context
       this.audioContext = new AudioContext({
         sampleRate: 24000,
