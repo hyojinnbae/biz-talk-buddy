@@ -63,16 +63,12 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
       setIsConnecting(true);
       console.log('[VoiceInterface] Initializing RealtimeChat...');
       chatRef.current = new RealtimeChat(handleMessage, setIsSpeaking);
-      await chatRef.current.init();
-      console.log('[VoiceInterface] RealtimeChat initialized, sending kickoff...');
       
-      // Build scenario kickoff message and trigger first response
-      const industry = scenario.description.includes('업계:') ? 
-        scenario.description.split('업계:')[1].split(',')[0].trim() : 'business';
-
-      const kickoff = `Title: ${scenario.title}\nUser Role: Business Development\nPartner Role: ${scenario.role_target} in ${industry}\n\nAlways start the conversation and lead it naturally. Keep replies short (2–3 sentences) and professional, like a Silicon Valley exec. After each user message, add a line starting with \"Rephrase:\" if their English sounds awkward.\n\nStart now by saying: \"${scenario.prompt}\"`;
-
-      await chatRef.current?.sendMessage(kickoff);
+      // Resume AudioContext on user gesture to avoid autoplay blocking
+      await chatRef.current.resumeAudioContext();
+      
+      await chatRef.current.init();
+      console.log('[VoiceInterface] RealtimeChat initialized successfully');
       
       setIsConnected(true);
       setIsConnecting(false);

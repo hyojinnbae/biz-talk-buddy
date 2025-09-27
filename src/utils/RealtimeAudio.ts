@@ -106,6 +106,7 @@ export class RealtimeChat {
   private audioContext: AudioContext | null = null;
   private audioQueue: AudioQueue | null = null;
   private recorder: AudioRecorder | null = null;
+  private sessionReady = false;
 
   constructor(
     private onMessage: (message: any) => void,
@@ -115,18 +116,15 @@ export class RealtimeChat {
   async init() {
     try {
       console.log('RealtimeChat.init: start');
-      // Initialize audio context
-      this.audioContext = new AudioContext({
-        sampleRate: 24000,
-      });
-      this.audioQueue = new AudioQueue(this.audioContext);
-
-      // Connect to Supabase edge function WebSocket endpoint
+      
+      // Connect directly to WebSocket proxy (no REST calls)
       const wsUrl = `wss://qgtcogpbqyjwgeanccto.functions.supabase.co/functions/v1/realtime-session`;
+      console.log('Connecting to WebSocket proxy:', wsUrl);
+      
       this.ws = new WebSocket(wsUrl);
 
       this.ws.onopen = () => {
-        console.log("Connected to realtime session");
+        console.log("Connected to realtime session proxy");
       };
 
       this.ws.onmessage = async (event) => {
@@ -135,6 +133,22 @@ export class RealtimeChat {
         
         this.onMessage(data);
 
+        // Handle session ready signal from backend
+        if (data.type === 'session.ready') {
+          this.sessionReady = true;
+          console.log('Session ready, sending initial response.create');
+          
+          // Send initial response.create to get AI to speak first
+          this.ws?.send(JSON.stringify({
+            type: "response.create",
+            response: {
+              modalities: ["text", "audio"],
+              instructions: "Start now by greeting the user and introducing the conversation scenario. Keep it brief and professional."
+            }
+          }));
+        }
+
+        // Handle audio output
         if ((data.type === 'response.audio.delta' || data.type === 'response.output_audio.delta') && data.delta) {
           const binaryString = atob(data.delta);
           const arrayBuffer = new ArrayBuffer(binaryString.length);
@@ -161,7 +175,7 @@ export class RealtimeChat {
         console.log("WebSocket 연결 종료");
       };
 
-      // Ensure socket is open before proceeding
+      // Wait for WebSocket connection
       await new Promise<void>((resolve, reject) => {
         if (this.ws?.readyState === WebSocket.OPEN) return resolve();
         const handleOpen = () => {
@@ -176,6 +190,14 @@ export class RealtimeChat {
         this.ws?.addEventListener('error', handleError as any);
         setTimeout(() => reject(new Error('WebSocket open timeout')), 10000);
       });
+
+      // Initialize audio context - will be resumed on first user gesture
+      this.audioContext = new AudioContext({
+        sampleRate: 24000,
+      });
+      this.audioQueue = new AudioQueue(this.audioContext);
+
+      // Initialize audio recorder
       this.recorder = new AudioRecorder((audioData) => {
         if (this.ws?.readyState === WebSocket.OPEN) {
           const base64Audio = this.encodeAudioData(audioData);
@@ -187,9 +209,17 @@ export class RealtimeChat {
       });
 
       await this.recorder.start();
+      console.log('RealtimeChat initialized successfully');
     } catch (error) {
       console.error('Failed to initialize realtime chat:', error);
       throw error;
+    }
+  }
+
+  async resumeAudioContext() {
+    if (this.audioContext?.state === 'suspended') {
+      console.log('Resuming AudioContext after user gesture');
+      await this.audioContext.resume();
     }
   }
 

@@ -23,8 +23,8 @@ serve(async (req) => {
   socket.onopen = () => {
     console.log("Client WebSocket connected");
     
-    // Connect to OpenAI Realtime API
-    const openaiUrl = "wss://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2024-10-01";
+    // Connect to OpenAI Realtime API with newer model
+    const openaiUrl = "wss://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2024-12-17";
     openaiWs = new WebSocket(openaiUrl, [
       "realtime",
       `openai-insecure-api-key.${Deno.env.get('OPENAI_API_KEY')}`,
@@ -71,7 +71,14 @@ serve(async (req) => {
           }
         };
         
+        console.log("Sending session.update to OpenAI");
         openaiWs?.send(JSON.stringify(sessionConfig));
+        
+        // Send session update confirmation to client
+        socket.send(JSON.stringify({
+          type: 'session.ready',
+          message: 'Session configured, ready for response.create'
+        }));
       }
       
       // Forward all events to client
