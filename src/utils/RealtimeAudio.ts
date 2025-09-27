@@ -120,18 +120,19 @@ export class RealtimeChat {
   constructor(
     private onMessage: (message: any) => void,
     private onSpeakingChange: (speaking: boolean) => void
-  ) {}
+  ) {
+    // Pre-create AudioContext so UI can resume it on first user gesture before any playback
+    this.audioContext = new AudioContext({ sampleRate: 24000 });
+    this.audioQueue = new AudioQueue(this.audioContext);
+    console.log('[RealtimeChat] AudioContext pre-created', { state: this.audioContext.state, sampleRate: this.audioContext.sampleRate });
+  }
 
   async init() {
     try {
       console.log('RealtimeChat.init: start');
       
-      // Create AudioContext upfront so we can resume on user gesture before playback
-      this.audioContext = new AudioContext({
-        sampleRate: 24000,
-      });
-      this.audioQueue = new AudioQueue(this.audioContext);
-      console.log('AudioContext created', { state: this.audioContext.state, sampleRate: this.audioContext.sampleRate });
+      // AudioContext pre-created in constructor; will be resumed by UI on user gesture
+      console.log('AudioContext already available', { state: this.audioContext?.state, sampleRate: this.audioContext?.sampleRate });
       
       // Connect directly to WebSocket proxy (no REST calls)
       const wsUrl = `wss://qgtcogpbqyjwgeanccto.functions.supabase.co/functions/v1/realtime-session`;
@@ -214,11 +215,8 @@ export class RealtimeChat {
         setTimeout(() => reject(new Error('WebSocket open timeout')), 10000);
       });
 
-      // Initialize audio context - will be resumed on first user gesture
-      this.audioContext = new AudioContext({
-        sampleRate: 24000,
-      });
-      this.audioQueue = new AudioQueue(this.audioContext);
+      // AudioContext already initialized in constructor; just ensure it's resumed before playback
+      console.log('AudioContext ready (init)', { state: this.audioContext?.state, sampleRate: this.audioContext?.sampleRate });
 
       // Initialize audio recorder
       this.recorder = new AudioRecorder((audioData) => {

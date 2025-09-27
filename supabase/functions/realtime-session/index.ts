@@ -122,7 +122,10 @@ serve(async (req) => {
       const parsed = JSON.parse(event.data);
       console.log("Client -> OpenAI:", parsed.type);
       if (parsed.type === 'response.create') {
-        console.log('Forwarding response.create to OpenAI');
+        try {
+          console.log('Forwarding response.create to OpenAI');
+          console.log('response.create payload (truncated):', JSON.stringify(parsed.response).slice(0, 300));
+        } catch (_) {}
       }
       openaiWs.send(event.data);
     }
