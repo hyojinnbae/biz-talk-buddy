@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { RealtimeChat } from '@/utils/RealtimeAudio';
+import { useAuth } from '@/hooks/useAuth';
 import { Mic, MicOff, MessageSquare, Phone, PhoneOff, Volume2 } from 'lucide-react';
 
 interface VoiceInterfaceProps {
@@ -25,6 +26,7 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
   const [messages, setMessages] = useState<any[]>([]);
   const [transcript, setTranscript] = useState('');
   const chatRef = useRef<RealtimeChat | null>(null);
+  const { user } = useAuth();
 
   const handleMessage = (event: any) => {
     console.log('받은 이벤트:', event);
@@ -48,7 +50,15 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
   };
 
   const startConversation = async () => {
+    // Debug: entry and state snapshot
+    console.log('startConversation called', { selectedScenario: scenario, userProfile: user });
     console.log('[VoiceInterface] startConversation clicked');
+    if (!scenario) {
+      console.warn('[VoiceInterface] selectedScenario is null/undefined');
+    }
+    if (!user) {
+      console.warn('[VoiceInterface] userProfile is null/undefined');
+    }
     try {
       setIsConnecting(true);
       console.log('[VoiceInterface] Initializing RealtimeChat...');
