@@ -61,17 +61,21 @@ export class AudioRecorder {
 }
 
 export class AudioQueue {
-  private queue: ArrayBuffer[] = [];
+  private queue: Float32Array[] = [];
   private isPlaying = false;
   private audioContext: AudioContext;
+  private gainNode: GainNode;
 
   constructor(audioContext: AudioContext) {
     this.audioContext = audioContext;
+    this.gainNode = this.audioContext.createGain();
+    this.gainNode.gain.value = 1.0;
+    this.gainNode.connect(this.audioContext.destination);
   }
 
-  async addToQueue(audioData: ArrayBuffer) {
-    console.log('[AudioQueue] enqueue bytes', audioData.byteLength, 'queueLen(before)=', this.queue.length);
-    this.queue.push(audioData);
+  async addToQueue(frame: Float32Array) {
+    console.log('[AudioQueue] enqueue samples', frame.length, 'queueLen(before)=', this.queue.length);
+    this.queue.push(frame);
     if (!this.isPlaying) {
       await this.playNext();
     }
@@ -86,22 +90,21 @@ export class AudioQueue {
     }
 
     this.isPlaying = true;
-    const audioData = this.queue.shift()!;
-    console.log('[AudioQueue] decoding bytes', audioData.byteLength);
-
+    const frame = this.queue.shift()!;
     try {
-      const audioBuffer = await this.audioContext.decodeAudioData(audioData.slice(0));
-      console.log('[AudioQueue] decoded buffer', { duration: audioBuffer.duration, sampleRate: audioBuffer.sampleRate });
+      const sampleRate = 24000;
+      const buffer = this.audioContext.createBuffer(1, frame.length, sampleRate);
+      buffer.copyToChannel(frame, 0, 0);
 
       const source = this.audioContext.createBufferSource();
-      source.buffer = audioBuffer;
-      source.connect(this.audioContext.destination);
-      
+      source.buffer = buffer;
+      source.connect(this.gainNode);
+
       source.onended = () => {
         console.log('[AudioQueue] chunk finished, playing next');
         this.playNext();
       };
-      console.log('[AudioQueue] playing audio chunk...');
+      console.log('[AudioQueue] playing audio chunk...', { samples: frame.length, sampleRate });
       source.start(0);
     } catch (error) {
       console.error('Error playing audio:', error);
@@ -198,9 +201,9 @@ export class RealtimeChat {
           for (let i = 0; i < binaryString.length; i++) {
             uint8Array[i] = binaryString.charCodeAt(i);
           }
-          const wavBuffer = this.createWavFromPCM(uint8Array);
-          console.log('[WS] queued WAV bytes', (wavBuffer as ArrayBuffer).byteLength);
-          await this.audioQueue?.addToQueue(wavBuffer);
+          const floatData = this.pcm16ToFloat32(uint8Array);
+          console.log('[WS] enqueue float samples', floatData.length);
+          await this.audioQueue?.addToQueue(floatData);
         }
 
         if (data.type === 'response.audio.delta' || data.type === 'response.output_audio.delta') {
@@ -263,6 +266,19 @@ export class RealtimeChat {
       console.log('Resuming AudioContext after user gesture');
       await this.audioContext.resume();
     }
+  }
+
+  private pcm16ToFloat32(pcmBytes: Uint8Array): Float32Array {
+    const sampleCount = pcmBytes.length / 2;
+    const out = new Float32Array(sampleCount);
+    for (let i = 0, j = 0; i < sampleCount; i++, j += 2) {
+      const lo = pcmBytes[j];
+      const hi = pcmBytes[j + 1];
+      let val = (hi << 8) | lo;
+      if (val & 0x8000) val = val - 0x10000; // sign
+      out[i] = val / 0x8000;
+    }
+    return out;
   }
 
   private createWavFromPCM(pcmData: Uint8Array): ArrayBuffer {
