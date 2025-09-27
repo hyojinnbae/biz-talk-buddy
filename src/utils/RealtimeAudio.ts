@@ -121,7 +121,7 @@ export class RealtimeChat {
       this.audioQueue = new AudioQueue(this.audioContext);
 
       // Connect to Supabase edge function WebSocket endpoint
-      const wsUrl = `wss://qgtcogpbqyjwgeanccto.functions.supabase.co/realtime-session`;
+      const wsUrl = `wss://qgtcogpbqyjwgeanccto.functions.supabase.co/functions/v1/realtime-session`;
       this.ws = new WebSocket(wsUrl);
 
       this.ws.onopen = () => {
