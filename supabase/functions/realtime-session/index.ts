@@ -27,7 +27,7 @@ serve(async (req) => {
     const apiKey = Deno.env.get('OPENAI_API_KEY');
     console.log("OPENAI_KEY_PREFIX:", apiKey ? apiKey.slice(0, 8) : 'undefined');
 
-    const openaiUrl = "wss://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2024-10-01";
+    const openaiUrl = "wss://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2024-12-17";
     console.log("OpenAI WS URL:", openaiUrl);
 
     openaiWs = new WebSocket(openaiUrl, [
@@ -48,9 +48,13 @@ serve(async (req) => {
         try {
           const preview = typeof data.delta === 'string' ? data.delta.slice(0, 100) : '';
           console.log('OpenAI -> Client: response.output_text.delta', preview);
-        } catch (_) {
-          // ignore
-        }
+        } catch (_) {}
+      }
+      if (data.type === 'response.audio.delta' || data.type === 'response.output_audio.delta') {
+        try {
+          const len = typeof data.delta === 'string' ? data.delta.length : 0;
+          console.log('OpenAI -> Client: response.audio.delta (base64 length)', len);
+        } catch (_) {}
       }
       
       // Configure session after connection

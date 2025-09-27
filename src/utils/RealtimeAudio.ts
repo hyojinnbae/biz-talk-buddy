@@ -70,6 +70,7 @@ export class AudioQueue {
   }
 
   async addToQueue(audioData: ArrayBuffer) {
+    console.log('[AudioQueue] enqueue bytes', audioData.byteLength, 'queueLen(before)=', this.queue.length);
     this.queue.push(audioData);
     if (!this.isPlaying) {
       await this.playNext();
@@ -77,22 +78,30 @@ export class AudioQueue {
   }
 
   private async playNext() {
+    console.log('[AudioQueue] playNext called, queueLen=', this.queue.length);
     if (this.queue.length === 0) {
       this.isPlaying = false;
+      console.log('[AudioQueue] queue empty, stopping');
       return;
     }
 
     this.isPlaying = true;
     const audioData = this.queue.shift()!;
+    console.log('[AudioQueue] decoding bytes', audioData.byteLength);
 
     try {
       const audioBuffer = await this.audioContext.decodeAudioData(audioData.slice(0));
-      
+      console.log('[AudioQueue] decoded buffer', { duration: audioBuffer.duration, sampleRate: audioBuffer.sampleRate });
+
       const source = this.audioContext.createBufferSource();
       source.buffer = audioBuffer;
       source.connect(this.audioContext.destination);
       
-      source.onended = () => this.playNext();
+      source.onended = () => {
+        console.log('[AudioQueue] chunk finished, playing next');
+        this.playNext();
+      };
+      console.log('[AudioQueue] playing audio chunk...');
       source.start(0);
     } catch (error) {
       console.error('Error playing audio:', error);
@@ -161,6 +170,8 @@ export class RealtimeChat {
 
         // Handle audio output
         if ((data.type === 'response.audio.delta' || data.type === 'response.output_audio.delta') && data.delta) {
+          const b64len = data.delta.length;
+          console.log('[WS] audio.delta received, base64 length=', b64len);
           const binaryString = atob(data.delta);
           const arrayBuffer = new ArrayBuffer(binaryString.length);
           const uint8Array = new Uint8Array(arrayBuffer);
@@ -168,6 +179,7 @@ export class RealtimeChat {
             uint8Array[i] = binaryString.charCodeAt(i);
           }
           const wavBuffer = this.createWavFromPCM(uint8Array);
+          console.log('[WS] queued WAV bytes', (wavBuffer as ArrayBuffer).byteLength);
           await this.audioQueue?.addToQueue(wavBuffer);
         }
 
@@ -212,6 +224,7 @@ export class RealtimeChat {
       this.recorder = new AudioRecorder((audioData) => {
         if (this.ws?.readyState === WebSocket.OPEN) {
           const base64Audio = this.encodeAudioData(audioData);
+          console.log('[Mic] sending input_audio_buffer.append, b64len=', base64Audio.length);
           this.ws.send(JSON.stringify({
             type: 'input_audio_buffer.append',
             audio: base64Audio
