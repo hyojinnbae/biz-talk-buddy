@@ -6,17 +6,156 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// Fallback generator used when OpenAI is unavailable (e.g., quota exceeded)
+function makeOpening(base: string, industry: string, level: number) {
+  const text = base.replace('{industry}', industry || 'our market');
+  switch (Number(level) || 3) {
+    case 1:
+      return `Hello. Let's talk about ${industry || 'the topic'} today.`;
+    case 2:
+      return text.replace(/Let’s|Let's/gi, "Let's").replace(/I'd like to/gi, 'I want to');
+    case 3:
+      return text;
+    case 4:
+      return text + ' I will keep it concise.';
+    case 5:
+      return text + ' I’d also like your perspective on potential risks.';
+    default:
+      return text;
+  }
+}
+
+function buildFallbackScenarios(jobRole: string, industry: string, englishLevel: number) {
+  const role = jobRole || '기타';
+  const ind = industry || 'SaaS';
+
+  let templates: { title: string; counterpart: string; base: string }[] = [];
+
+  if (role === 'CEO') {
+    templates = [
+      {
+        title: 'Investor Update Briefing',
+        counterpart: 'VC Partner',
+        base: "Thanks for joining. I'd like to walk you through our {industry} performance and runway.",
+      },
+      {
+        title: 'Board Strategy Review',
+        counterpart: 'Board Member',
+        base: "I'd like to review our {industry} strategy and key risks.",
+      },
+      {
+        title: 'Global Expansion Sync',
+        counterpart: 'Head of Global Sales',
+        base: "Can we align on our {industry} expansion priorities this quarter?",
+      },
+    ];
+  } else if (role === 'BD') {
+    templates = [
+      {
+        title: 'Partnership Terms Negotiation',
+        counterpart: 'Partner VP',
+        base: "I'd like to review the partnership terms and close gaps today.",
+      },
+      {
+        title: 'Renewal Contract Discussion',
+        counterpart: 'Contracts Manager',
+        base: 'Can we go over the renewal scope, pricing, and timeline?',
+      },
+      {
+        title: 'Co-marketing Opportunity Call',
+        counterpart: 'Business Lead',
+        base: 'Let\'s explore a co-marketing plan that benefits both teams.',
+      },
+    ];
+  } else if (role === 'PM/PO') {
+    templates = [
+      {
+        title: 'Feature Launch Briefing',
+        counterpart: 'Product Director',
+        base: "Let's review the {industry} feature launch scope and timeline.",
+      },
+      {
+        title: 'Sprint Planning Review',
+        counterpart: 'Engineering Lead',
+        base: "I'd like to align on this sprint's priorities and dependencies.",
+      },
+      {
+        title: 'Postmortem Discussion',
+        counterpart: 'CTO',
+        base: "Let's walk through what went wrong and what we can improve.",
+      },
+    ];
+  } else if (role === '마케터') {
+    templates = [
+      {
+        title: 'Campaign Performance Review',
+        counterpart: 'Marketing Director',
+        base: 'I\'d like to review campaign performance and next steps.',
+      },
+      {
+        title: 'Brand Messaging Alignment',
+        counterpart: 'Brand Manager',
+        base: 'Can we align on the messaging for our {industry} audience?',
+      },
+      {
+        title: 'Agency Brief Kickoff',
+        counterpart: 'Agency Account Lead',
+        base: "Thanks for joining. I'd like to kick off the creative brief.",
+      },
+    ];
+  } else {
+    templates = [
+      {
+        title: 'Client Onboarding Call',
+        counterpart: 'Client Manager',
+        base: "Thanks for joining. I'd like to confirm the onboarding plan.",
+      },
+      {
+        title: 'Weekly Project Sync',
+        counterpart: 'Project Lead',
+        base: "Let's align on this week's priorities and blockers.",
+      },
+      {
+        title: 'Risk And Mitigation Plan',
+        counterpart: 'Operations Lead',
+        base: 'I want to review key risks and our mitigation plan.',
+      },
+    ];
+  }
+
+  return templates.slice(0, 3).map(t => ({
+    title: t.title,
+    counterpart: t.counterpart,
+    openingLine: makeOpening(t.base, ind, englishLevel),
+  }));
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // Parse body first so we can always return a sensible fallback
+  let jobRole = '' as string;
+  let englishLevel = 3 as number;
+  let industry = '' as string;
   try {
-    const { jobRole, englishLevel, industry } = await req.json();
-    
+    const body = await req.json();
+    jobRole = body?.jobRole ?? body?.job ?? '';
+    englishLevel = Number(body?.englishLevel ?? body?.level ?? 3);
+    industry = body?.industry ?? '';
+  } catch (_) {
+    // ignore body parse errors; we'll use defaults
+  }
+
+  try {
     const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY');
     if (!OPENAI_API_KEY) {
-      throw new Error('OPENAI_API_KEY is not set');
+      // No key configured -> fallback
+      const fb = buildFallbackScenarios(jobRole, industry, englishLevel);
+      return new Response(JSON.stringify(fb), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
     const prompt = `
@@ -75,30 +214,41 @@ PM/PO: 제품 리뷰, 기능 논의, 개발 협의 → 개발 리드, 디자인 
     });
 
     if (!response.ok) {
-      throw new Error(`OpenAI API error: ${await response.text()}`);
+      const errText = await response.text();
+      console.error('OpenAI API non-200:', errText);
+      const fb = buildFallbackScenarios(jobRole, industry, englishLevel);
+      return new Response(JSON.stringify(fb), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
     const data = await response.json();
-    const content = data.choices[0].message.content;
-    
+    const content = data.choices?.[0]?.message?.content ?? '';
+
     try {
       const scenarios = JSON.parse(content);
-      return new Response(JSON.stringify(scenarios), {
+      if (Array.isArray(scenarios)) {
+        return new Response(JSON.stringify(scenarios), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+      // If content is not an array, fallback
+      const fb = buildFallbackScenarios(jobRole, industry, englishLevel);
+      return new Response(JSON.stringify(fb), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     } catch (parseError) {
       console.error('JSON parse error:', parseError);
       console.error('OpenAI response:', content);
-      return new Response(JSON.stringify({ error: 'Failed to parse AI response' }), {
-        status: 500,
+      const fb = buildFallbackScenarios(jobRole, industry, englishLevel);
+      return new Response(JSON.stringify(fb), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
-
   } catch (error) {
     console.error('Error in generate-scenarios function:', error);
-    return new Response(JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }), {
-      status: 500,
+    const fb = buildFallbackScenarios(jobRole, industry, englishLevel);
+    return new Response(JSON.stringify(fb), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }
