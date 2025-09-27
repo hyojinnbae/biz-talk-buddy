@@ -108,6 +108,18 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
     };
   }, [scenario?.title]);
 
+  // Debug: track state transitions for connection and UI conditions
+  useEffect(() => {
+    console.log('[VoiceInterface] state', {
+      isConnected,
+      isConnecting,
+      isSpeaking,
+      isUserSpeaking,
+      hasTranscript: !!transcript,
+      messagesCount: messages.length,
+    });
+  }, [isConnected, isConnecting, isSpeaking, isUserSpeaking, transcript, messages.length]);
+
   return (
     <div className="min-h-screen bg-gradient-subtle flex flex-col">
       {/* 헤더 */}
@@ -117,15 +129,32 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
             <h1 className="text-xl font-semibold">{scenario.title}</h1>
             <p className="text-sm text-muted-foreground">{scenario.role_target}</p>
           </div>
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={endConversation}
-            className="flex items-center gap-2"
-          >
-            <PhoneOff className="w-4 h-4" />
-            종료
-          </Button>
+          {(!isConnected) ? (
+            <Button
+              type="button"
+              variant="default"
+              size="sm"
+              onMouseDown={() => console.log('[VoiceInterface] Start button mousedown (header)')}
+              onClick={() => { console.log('[VoiceInterface] Start button clicked (header)'); startConversation(); }}
+              className="flex items-center gap-2"
+              data-testid="start-conversation-header"
+            >
+              <Phone className="w-4 h-4" />
+              대화 시작
+            </Button>
+          ) : (
+            <Button
+              type="button"
+              variant="destructive"
+              size="sm"
+              onClick={endConversation}
+              className="flex items-center gap-2"
+              data-testid="end-conversation-header"
+            >
+              <PhoneOff className="w-4 h-4" />
+              종료
+            </Button>
+          )}
         </div>
       </div>
 
@@ -189,10 +218,13 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
           <div className="text-center">
             {!isConnected ? (
               <Button 
-                onClick={() => { console.log('[VoiceInterface] Start button clicked'); startConversation(); }}
+                type="button"
+                onMouseDown={() => console.log('[VoiceInterface] Start button mousedown (footer)')}
+                onClick={() => { console.log('[VoiceInterface] Start button clicked (footer)'); startConversation(); }}
                 disabled={isConnecting}
                 size="lg"
                 className="bg-primary hover:bg-primary/90 text-white"
+                data-testid="start-conversation-footer"
               >
                 {isConnecting ? (
                   <div className="flex items-center gap-2">
