@@ -91,10 +91,12 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
   };
 
   useEffect(() => {
+    console.log('[VoiceInterface] mounted', { title: scenario?.title });
     return () => {
+      console.log('[VoiceInterface] unmount');
       chatRef.current?.disconnect();
     };
-  }, []);
+  }, [scenario?.title]);
 
   return (
     <div className="min-h-screen bg-gradient-subtle flex flex-col">
