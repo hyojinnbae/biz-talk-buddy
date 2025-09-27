@@ -236,28 +236,7 @@ const Practice = () => {
                     </div>
                   </div>
 
-                  {/* 추가 입력 (선택사항) */}
-                  <div className="space-y-4 pt-4 border-t">
-                    <div className="space-y-2">
-                      <Label htmlFor="customSituation">연습하고 싶은 상황 (선택사항)</Label>
-                      <Textarea
-                        id="customSituation"
-                        placeholder="예: 이번주 글로벌 파트너와 제휴 리포트 검토"
-                        value={userInfo.customSituation || ''}
-                        onChange={(e) => setUserInfo(prev => ({ ...prev, customSituation: e.target.value }))}
-                      />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="customPartner">대화 상대 (선택사항)</Label>
-                      <Textarea
-                        id="customPartner"
-                        placeholder="예: 본사 마케팅 디렉터"
-                        value={userInfo.customPartner || ''}
-                        onChange={(e) => setUserInfo(prev => ({ ...prev, customPartner: e.target.value }))}
-                      />
-                    </div>
-                  </div>
+                  {/* 추가 입력 제거 - 직무/업계/레벨만 사용 */}
 
                   <Button 
                     onClick={generateScenarios}
@@ -320,10 +299,10 @@ const Practice = () => {
                         </div>
                       </div>
                       
-                      <Button className="w-full" variant="outline">
-                        <Mic className="w-4 h-4 mr-2" />
-                        이 시나리오로 연습하기
-                      </Button>
+                        <Button className="w-full" variant="outline">
+                          <Mic className="w-4 h-4 mr-2" />
+                          지금 연습하기
+                        </Button>
                     </div>
                   </Card>
                 ))}
