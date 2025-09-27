@@ -43,7 +43,7 @@ export const Hero = () => {
             
             <div className="flex justify-start">
               <Button variant="hero" size="lg" className="group" asChild>
-                <Link to="/auth">
+                <Link to="/practice">
                   <Mic className="w-5 h-5" />
                   지금 연습하기
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
