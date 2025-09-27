@@ -142,11 +142,30 @@ export class RealtimeChat {
 
       this.ws.onopen = () => {
         console.log("Connected to realtime session proxy");
+        const initialResponse = {
+          type: "response.create",
+          response: {
+            conversation: "default",
+            modalities: ["text", "audio"],
+            audio: { voice: "alloy", format: "pcm16" },
+            instructions: "Start now. Say hello first."
+          }
+        };
+        console.log('WS opened, sending initial response.create', initialResponse);
+        try { this.ws?.send(JSON.stringify(initialResponse)); } catch (e) { console.error('Failed to send initial response.create on open', e); }
       };
 
       this.ws.onmessage = async (event) => {
         const data = JSON.parse(event.data);
         console.log("Received message:", data.type);
+
+        if (data.type === 'response.output_text.delta') {
+          const preview = typeof data.delta === 'string' ? data.delta.slice(0, 120) : '';
+          console.log('[WS] output_text.delta:', preview);
+        }
+        if (data.type === 'response.output_text.done') {
+          console.log('[WS] output_text.done');
+        }
         
         this.onMessage(data);
 
@@ -187,6 +206,7 @@ export class RealtimeChat {
         if (data.type === 'response.audio.delta' || data.type === 'response.output_audio.delta') {
           this.onSpeakingChange(true);
         } else if (data.type === 'response.audio.done' || data.type === 'response.output_audio.done') {
+          console.log('[WS] audio.done');
           this.onSpeakingChange(false);
         }
       };

@@ -27,7 +27,7 @@ serve(async (req) => {
     const apiKey = Deno.env.get('OPENAI_API_KEY');
     console.log("OPENAI_KEY_PREFIX:", apiKey ? apiKey.slice(0, 8) : 'undefined');
 
-    const openaiUrl = "wss://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2024-12-17";
+    const openaiUrl = "wss://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2024-10-01";
     console.log("OpenAI WS URL:", openaiUrl);
 
     openaiWs = new WebSocket(openaiUrl, [
