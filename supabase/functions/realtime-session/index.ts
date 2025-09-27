@@ -46,7 +46,6 @@ serve(async (req) => {
           session: {
             modalities: ['text', 'audio'],
             instructions: `You are a professional English conversation coach acting as a business counterpart.
-            
             1. Always start the conversation first and keep leading it naturally.
             2. Keep replies concise (2-3 sentences) and realistic, like a Silicon Valley tech executive.
             3. If the user's English sounds awkward or too literal, add a line starting with "Rephrase:" suggesting a more natural expression.
@@ -73,18 +72,6 @@ serve(async (req) => {
         };
         
         openaiWs?.send(JSON.stringify(sessionConfig));
-        
-        // Wait a moment then trigger AI to start the conversation
-        setTimeout(() => {
-          const firstResponse = {
-            type: 'response.create',
-            response: {
-              modalities: ['text', 'audio'],
-              instructions: 'Start the conversation now. Greet the user and begin the roleplay scenario naturally.'
-            }
-          };
-          openaiWs?.send(JSON.stringify(firstResponse));
-        }, 1000);
       }
       
       // Forward all events to client

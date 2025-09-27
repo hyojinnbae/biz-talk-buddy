@@ -102,7 +102,7 @@ export class AudioQueue {
 }
 
 export class RealtimeChat {
-  public ws: WebSocket | null = null;
+  private ws: WebSocket | null = null;
   private audioContext: AudioContext | null = null;
   private audioQueue: AudioQueue | null = null;
   private recorder: AudioRecorder | null = null;
@@ -121,7 +121,7 @@ export class RealtimeChat {
       this.audioQueue = new AudioQueue(this.audioContext);
 
       // Connect to Supabase edge function WebSocket endpoint
-      const wsUrl = `wss://qgtcogpbqyjwgeanccto.supabase.co/functions/v1/realtime-session`;
+      const wsUrl = `wss://qgtcogpbqyjwgeanccto.functions.supabase.co/realtime-session`;
       this.ws = new WebSocket(wsUrl);
 
       this.ws.onopen = () => {
@@ -134,24 +134,20 @@ export class RealtimeChat {
         
         this.onMessage(data);
 
-        // Handle audio playback
-        if (data.type === 'response.audio.delta' && data.delta) {
+        if ((data.type === 'response.audio.delta' || data.type === 'response.output_audio.delta') && data.delta) {
           const binaryString = atob(data.delta);
           const arrayBuffer = new ArrayBuffer(binaryString.length);
           const uint8Array = new Uint8Array(arrayBuffer);
-          
           for (let i = 0; i < binaryString.length; i++) {
             uint8Array[i] = binaryString.charCodeAt(i);
           }
-          
-          // Convert PCM to playable audio
           const wavBuffer = this.createWavFromPCM(uint8Array);
           await this.audioQueue?.addToQueue(wavBuffer);
         }
 
-        if (data.type === 'response.audio.delta') {
+        if (data.type === 'response.audio.delta' || data.type === 'response.output_audio.delta') {
           this.onSpeakingChange(true);
-        } else if (data.type === 'response.audio.done') {
+        } else if (data.type === 'response.audio.done' || data.type === 'response.output_audio.done') {
           this.onSpeakingChange(false);
         }
       };

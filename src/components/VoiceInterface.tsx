@@ -54,40 +54,13 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
       chatRef.current = new RealtimeChat(handleMessage, setIsSpeaking);
       await chatRef.current.init();
       
-      // Send scenario context to configure the AI
+      // Build scenario kickoff message and trigger first response
       const industry = scenario.description.includes('업계:') ? 
         scenario.description.split('업계:')[1].split(',')[0].trim() : 'business';
-      
-      const scenarioContext = {
-        type: 'conversation.item.create',
-        item: {
-          type: 'message',
-          role: 'system',
-          content: [
-            {
-              type: 'input_text',
-              text: `SCENARIO CONTEXT:
-              Title: ${scenario.title}
-              Your Role: ${scenario.role_target} in ${industry} industry
-              User Role: Business Development
-              Opening Line: "${scenario.prompt}"
-              
-              COACHING INSTRUCTIONS:
-              1. Start the conversation immediately using the opening line above
-              2. Keep replies short (2-3 sentences) and professional like a Silicon Valley executive
-              3. After each user response, if their English sounds awkward, add "Rephrase:" with a better version
-              4. Lead the conversation naturally with follow-up questions
-              5. Use authentic business terminology and expressions`
-            }
-          ]
-        }
-      };
-      
-      setTimeout(() => {
-        if (chatRef.current) {
-          chatRef.current.ws?.send(JSON.stringify(scenarioContext));
-        }
-      }, 500);
+
+      const kickoff = `Title: ${scenario.title}\nUser Role: Business Development\nPartner Role: ${scenario.role_target} in ${industry}\n\nAlways start the conversation and lead it naturally. Keep replies short (2–3 sentences) and professional, like a Silicon Valley exec. After each user message, add a line starting with \"Rephrase:\" if their English sounds awkward.\n\nStart now by saying: \"${scenario.prompt}\"`;
+
+      await chatRef.current?.sendMessage(kickoff);
       
       setIsConnected(true);
       setIsConnecting(false);
