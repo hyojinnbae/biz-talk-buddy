@@ -163,9 +163,6 @@ const Practice = () => {
                         <SelectItem value="BD">BD</SelectItem>
                         <SelectItem value="PM/PO">PM/PO</SelectItem>
                         <SelectItem value="마케터">마케터</SelectItem>
-                        <SelectItem value="디자이너">디자이너</SelectItem>
-                        <SelectItem value="CS">CS</SelectItem>
-                        <SelectItem value="인사">인사</SelectItem>
                         <SelectItem value="기타">기타</SelectItem>
                       </SelectContent>
                     </Select>
