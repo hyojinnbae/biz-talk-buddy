@@ -117,6 +117,13 @@ export class RealtimeChat {
     try {
       console.log('RealtimeChat.init: start');
       
+      // Create AudioContext upfront so we can resume on user gesture before playback
+      this.audioContext = new AudioContext({
+        sampleRate: 24000,
+      });
+      this.audioQueue = new AudioQueue(this.audioContext);
+      console.log('AudioContext created', { state: this.audioContext.state, sampleRate: this.audioContext.sampleRate });
+      
       // Connect directly to WebSocket proxy (no REST calls)
       const wsUrl = `wss://qgtcogpbqyjwgeanccto.functions.supabase.co/functions/v1/realtime-session`;
       console.log('Connecting to WebSocket proxy:', wsUrl);
@@ -139,13 +146,17 @@ export class RealtimeChat {
           console.log('Session ready, sending initial response.create');
           
           // Send initial response.create to get AI to speak first
-          this.ws?.send(JSON.stringify({
+          const initialResponse = {
             type: "response.create",
             response: {
+              conversation: "default",
               modalities: ["text", "audio"],
-              instructions: "Start now by greeting the user and introducing the conversation scenario. Keep it brief and professional."
+              audio: { voice: "alloy", format: "pcm16" },
+              instructions: "Start now. Say hello first."
             }
-          }));
+          };
+          console.log('Sending response.create to proxy', initialResponse);
+          this.ws?.send(JSON.stringify(initialResponse));
         }
 
         // Handle audio output
