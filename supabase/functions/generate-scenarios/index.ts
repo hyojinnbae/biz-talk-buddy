@@ -123,7 +123,8 @@ function buildFallbackScenarios(jobRole: string, industry: string, englishLevel:
     ];
   }
 
-  return templates.slice(0, 3).map(t => ({
+  const shuffled = [...templates].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, 3).map(t => ({
     title: t.title,
     counterpart: t.counterpart,
     openingLine: makeOpening(t.base, ind, englishLevel),
