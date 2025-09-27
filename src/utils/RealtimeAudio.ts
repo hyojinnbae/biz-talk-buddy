@@ -164,7 +164,21 @@ export class RealtimeChat {
         console.log("WebSocket 연결 종료");
       };
 
-      // Start audio recording
+      // Ensure socket is open before proceeding
+      await new Promise<void>((resolve, reject) => {
+        if (this.ws?.readyState === WebSocket.OPEN) return resolve();
+        const handleOpen = () => {
+          this.ws?.removeEventListener('open', handleOpen as any);
+          resolve();
+        };
+        const handleError = () => {
+          this.ws?.removeEventListener('error', handleError as any);
+          reject(new Error('WebSocket connection failed'));
+        };
+        this.ws?.addEventListener('open', handleOpen as any);
+        this.ws?.addEventListener('error', handleError as any);
+        setTimeout(() => reject(new Error('WebSocket open timeout')), 10000);
+      });
       this.recorder = new AudioRecorder((audioData) => {
         if (this.ws?.readyState === WebSocket.OPEN) {
           const base64Audio = this.encodeAudioData(audioData);

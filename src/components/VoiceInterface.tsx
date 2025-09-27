@@ -54,25 +54,23 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
       chatRef.current = new RealtimeChat(handleMessage, setIsSpeaking);
       await chatRef.current.init();
       
-      // 시나리오 컨텍스트 설정
-      setTimeout(async () => {
-        const industry = scenario.description.includes('업계:') ? 
-          scenario.description.split('업계:')[1].split(',')[0].trim() : 'business';
-        
-        const contextMessage = `You are a professional English conversation coach acting as ${scenario.role_target} in a ${industry} company. 
-        Scenario: ${scenario.title}
-        User role: Business Development
-        
-        1. Always start the conversation first and keep leading it naturally.
-        2. Keep replies concise (2-3 sentences) and realistic, like a Silicon Valley tech executive.
-        3. If the user's English sounds awkward or too literal, add a line starting with "Rephrase:" suggesting a more natural expression.
-        4. Keep the tone supportive, encouraging, and slightly professional.
-        5. Use authentic Silicon Valley, Big Tech, and global enterprise expressions.
-        
-        Start the conversation now by saying: "${scenario.prompt}"`;
-        
-        await chatRef.current?.sendMessage(contextMessage);
-      }, 2000);
+      // 시나리오 컨텍스트 설정 - 연결 직후 즉시 시작
+      const industry = scenario.description.includes('업계:') ? 
+        scenario.description.split('업계:')[1].split(',')[0].trim() : 'business';
+      
+      const contextMessage = `You are a professional English conversation coach acting as ${scenario.role_target} in a ${industry} company. 
+      Scenario: ${scenario.title}
+      User role: Business Development
+      
+      1. Always start the conversation first and keep leading it naturally.
+      2. Keep replies concise (2-3 sentences) and realistic, like a Silicon Valley tech executive.
+      3. If the user's English sounds awkward or too literal, add a line starting with "Rephrase:" suggesting a more natural expression.
+      4. Keep the tone supportive, encouraging, and slightly professional.
+      5. Use authentic Silicon Valley, Big Tech, and global enterprise expressions.
+      
+      Start the conversation now by saying: "${scenario.prompt}"`;
+      
+      await chatRef.current?.sendMessage(contextMessage);
       
       setIsConnected(true);
       setIsConnecting(false);
