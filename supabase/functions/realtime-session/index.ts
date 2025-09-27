@@ -24,7 +24,7 @@ serve(async (req) => {
     console.log("Client WebSocket connected");
     
     // Connect to OpenAI Realtime API
-    const openaiUrl = "wss://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2024-12-17";
+    const openaiUrl = "wss://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2024-10-01";
     openaiWs = new WebSocket(openaiUrl, [
       "realtime",
       `openai-insecure-api-key.${Deno.env.get('OPENAI_API_KEY')}`,
