@@ -92,6 +92,17 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
 
   useEffect(() => {
     console.log('[VoiceInterface] mounted', { title: scenario?.title });
+    // Auto-start to bypass click issues and verify wiring
+    setTimeout(() => {
+      try {
+        console.log('[VoiceInterface] auto-starting conversation');
+        // Safeguard: call if defined
+        // @ts-ignore
+        startConversation && startConversation();
+      } catch (e) {
+        console.error('[VoiceInterface] auto-start error', e);
+      }
+    }, 0);
     return () => {
       console.log('[VoiceInterface] unmount');
       chatRef.current?.disconnect();
