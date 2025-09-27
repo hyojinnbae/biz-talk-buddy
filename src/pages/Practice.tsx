@@ -2,60 +2,112 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
 import VoiceInterface from '@/components/VoiceInterface';
-import { ArrowLeft, Clock, Users, Target } from 'lucide-react';
+import { ArrowLeft, Target, Users, Mic } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+
+type Step = 'userInfo' | 'scenarios' | 'conversation';
+
+interface UserInfo {
+  job: string;
+  level: number;
+  customSituation?: string;
+  customPartner?: string;
+}
+
+interface GeneratedScenario {
+  title: string;
+  description: string;
+  partner: string;
+}
 
 const Practice = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [scenarios, setScenarios] = useState<any[]>([]);
+  const { toast } = useToast();
+  const [currentStep, setCurrentStep] = useState<Step>('userInfo');
+  const [userInfo, setUserInfo] = useState<UserInfo>({ job: '', level: 1 });
+  const [generatedScenarios, setGeneratedScenarios] = useState<GeneratedScenario[]>([]);
   const [selectedScenario, setSelectedScenario] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (!user) {
       navigate('/auth');
       return;
     }
-    
-    fetchScenarios();
   }, [user, navigate]);
 
-  const fetchScenarios = async () => {
+  const generateScenarios = async () => {
+    setIsLoading(true);
     try {
-      const { data, error } = await supabase
-        .from('scenarios')
-        .select('*')
-        .eq('is_active', true)
-        .order('created_at', { ascending: false });
+      const { data, error } = await supabase.functions.invoke('generate-scenarios', {
+        body: userInfo
+      });
 
       if (error) throw error;
-      setScenarios(data || []);
+
+      setGeneratedScenarios(data.scenarios);
+      setCurrentStep('scenarios');
+      
+      toast({
+        title: "시나리오 생성 완료",
+        description: "맞춤 시나리오가 준비되었습니다!",
+      });
     } catch (error) {
-      console.error('Error fetching scenarios:', error);
+      console.error('Error generating scenarios:', error);
+      toast({
+        title: "오류",
+        description: "시나리오 생성에 실패했습니다. 다시 시도해주세요.",
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }
   };
 
+  const handleScenarioSelect = (scenario: GeneratedScenario) => {
+    const fullScenario = {
+      id: Date.now().toString(),
+      title: scenario.title,
+      description: scenario.description,
+      role_target: scenario.partner,
+      prompt: `당신은 ${scenario.partner}의 역할을 맡아 영어로 대화해주세요. 상황: ${scenario.description}. 사용자의 영어 레벨은 ${userInfo.level}입니다. 자연스럽고 실무적인 대화를 이끌어주세요.`
+    };
+    setSelectedScenario(fullScenario);
+    setCurrentStep('conversation');
+  };
+
   const handleSessionEnd = () => {
-    // Navigate to results or back to scenario selection
     setSelectedScenario(null);
+    setCurrentStep('userInfo');
+  };
+
+  const goBack = () => {
+    if (currentStep === 'scenarios') {
+      setCurrentStep('userInfo');
+    } else if (currentStep === 'conversation') {
+      setCurrentStep('scenarios');
+    }
   };
 
   if (!user) return null;
 
-  if (selectedScenario) {
+  // 음성 회화 중일 때
+  if (currentStep === 'conversation' && selectedScenario) {
     return (
       <div className="min-h-screen bg-background pt-20">
         <div className="container mx-auto px-4">
           <div className="mb-6">
             <Button 
               variant="ghost" 
-              onClick={() => setSelectedScenario(null)}
+              onClick={goBack}
               className="gap-2"
             >
               <ArrowLeft className="w-4 h-4" />
@@ -75,75 +127,176 @@ const Practice = () => {
   return (
     <div className="min-h-screen bg-background pt-20">
       <div className="container mx-auto px-4 py-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h1 className="text-3xl lg:text-4xl font-bold mb-4">
-              연습 시나리오 선택
-            </h1>
-            <p className="text-lg text-muted-foreground">
-              실무 상황에 맞는 시나리오를 선택하고 AI 코치와 영어 대화를 연습하세요
-            </p>
-          </div>
+        <div className="max-w-4xl mx-auto">
+          
+          {/* Step 1: 유저 정보 입력 */}
+          {currentStep === 'userInfo' && (
+            <>
+              <div className="text-center mb-8">
+                <h1 className="text-3xl lg:text-4xl font-bold mb-4">
+                  맞춤 영어 회화 연습
+                </h1>
+                <p className="text-lg text-muted-foreground">
+                  직무와 레벨에 맞는 실무 상황을 추천해드립니다
+                </p>
+              </div>
 
-          {isLoading ? (
-            <div className="text-center py-12">
-              <div className="text-muted-foreground">시나리오를 불러오는 중...</div>
-            </div>
-          ) : scenarios.length === 0 ? (
-            <div className="text-center py-12">
-              <div className="text-muted-foreground">아직 사용 가능한 시나리오가 없습니다.</div>
-            </div>
-          ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {scenarios.map((scenario) => (
-                <Card key={scenario.id} className="p-6 hover:shadow-lg transition-shadow cursor-pointer"
-                      onClick={() => setSelectedScenario(scenario)}>
-                  <div className="space-y-4">
-                    <div className="flex items-start justify-between">
-                      <Badge variant="outline">{scenario.difficulty_level}</Badge>
-                      {scenario.estimated_duration && (
-                        <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                          <Clock className="w-4 h-4" />
-                          {scenario.estimated_duration}분
-                        </div>
-                      )}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Users className="w-5 h-5" />
+                    기본 정보 입력
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  {/* 직무 선택 */}
+                  <div className="space-y-2">
+                    <Label htmlFor="job">직무</Label>
+                    <Select value={userInfo.job} onValueChange={(value) => setUserInfo(prev => ({ ...prev, job: value }))}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="직무를 선택하세요" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="CEO">CEO</SelectItem>
+                        <SelectItem value="BD">BD</SelectItem>
+                        <SelectItem value="PM/PO">PM/PO</SelectItem>
+                        <SelectItem value="마케터">마케터</SelectItem>
+                        <SelectItem value="기타">기타</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {userInfo.job === '기타' && (
+                      <Textarea
+                        placeholder="예: 고객 CS 팀장"
+                        value={userInfo.customSituation || ''}
+                        onChange={(e) => setUserInfo(prev => ({ ...prev, customSituation: e.target.value }))}
+                      />
+                    )}
+                  </div>
+
+                  {/* 영어 레벨 선택 */}
+                  <div className="space-y-2">
+                    <Label>영어 레벨</Label>
+                    <div className="grid gap-3">
+                      {[
+                        { level: 1, desc: "영어 말하기 거의 못 함. 단어로만 대화 가능" },
+                        { level: 2, desc: "짧은 문장은 말할 수 있음. 대화는 어려움" },
+                        { level: 3, desc: "읽기/듣기/쓰기는 잘 되나, 말할 땐 자주 막힘" },
+                        { level: 4, desc: "말은 되지만 표현이 딱딱하거나 부정확함" },
+                        { level: 5, desc: "말은 잘 되며, 더 자연스럽고 전문적인 표현을 원함" }
+                      ].map(({ level, desc }) => (
+                        <Card 
+                          key={level}
+                          className={`p-3 cursor-pointer transition-colors ${
+                            userInfo.level === level ? 'border-primary bg-primary/5' : 'hover:bg-muted/50'
+                          }`}
+                          onClick={() => setUserInfo(prev => ({ ...prev, level }))}
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center text-sm font-medium ${
+                              userInfo.level === level ? 'border-primary bg-primary text-primary-foreground' : 'border-muted-foreground'
+                            }`}>
+                              {level}
+                            </div>
+                            <p className="text-sm">{desc}</p>
+                          </div>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* 추가 입력 (선택사항) */}
+                  <div className="space-y-4 pt-4 border-t">
+                    <div className="space-y-2">
+                      <Label htmlFor="customSituation">연습하고 싶은 상황 (선택사항)</Label>
+                      <Textarea
+                        id="customSituation"
+                        placeholder="예: 이번주 글로벌 파트너와 제휴 리포트 검토"
+                        value={userInfo.customSituation || ''}
+                        onChange={(e) => setUserInfo(prev => ({ ...prev, customSituation: e.target.value }))}
+                      />
                     </div>
                     
-                    <div>
-                      <h3 className="text-xl font-semibold mb-2">{scenario.title}</h3>
-                      <p className="text-muted-foreground text-sm leading-relaxed">
-                        {scenario.description}
-                      </p>
+                    <div className="space-y-2">
+                      <Label htmlFor="customPartner">대화 상대 (선택사항)</Label>
+                      <Textarea
+                        id="customPartner"
+                        placeholder="예: 본사 마케팅 디렉터"
+                        value={userInfo.customPartner || ''}
+                        onChange={(e) => setUserInfo(prev => ({ ...prev, customPartner: e.target.value }))}
+                      />
                     </div>
-                    
-                    {scenario.role_target && (
+                  </div>
+
+                  <Button 
+                    onClick={generateScenarios}
+                    disabled={!userInfo.job || !userInfo.level || isLoading}
+                    className="w-full"
+                    size="lg"
+                  >
+                    {isLoading ? "시나리오 생성 중..." : "맞춤 시나리오 생성하기"}
+                  </Button>
+                </CardContent>
+              </Card>
+            </>
+          )}
+
+          {/* Step 2: AI 추천 시나리오 선택 */}
+          {currentStep === 'scenarios' && (
+            <>
+              <div className="mb-6 flex items-center gap-4">
+                <Button variant="ghost" onClick={goBack} className="gap-2">
+                  <ArrowLeft className="w-4 h-4" />
+                  정보 수정하기
+                </Button>
+              </div>
+              
+              <div className="text-center mb-8">
+                <h1 className="text-3xl lg:text-4xl font-bold mb-4">
+                  추천 시나리오 선택
+                </h1>
+                <p className="text-lg text-muted-foreground">
+                  {userInfo.job} · 레벨 {userInfo.level}에 맞는 시나리오입니다
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                {generatedScenarios.map((scenario, index) => (
+                  <Card 
+                    key={index} 
+                    className="p-6 hover:shadow-lg transition-shadow cursor-pointer group"
+                    onClick={() => handleScenarioSelect(scenario)}
+                  >
+                    <div className="space-y-4">
+                      <div className="flex items-start justify-between">
+                        <Badge variant="outline">실무 상황</Badge>
+                      </div>
+                      
+                      <div>
+                        <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
+                          {scenario.title}
+                        </h3>
+                        <p className="text-muted-foreground text-sm leading-relaxed mb-3">
+                          {scenario.description}
+                        </p>
+                      </div>
+                      
                       <div className="pt-2 border-t border-border">
                         <div className="flex items-center gap-2 text-sm">
                           <Users className="w-4 h-4" />
-                          <span className="font-medium">역할:</span>
-                          <span className="text-muted-foreground">{scenario.role_target}</span>
+                          <span className="font-medium">대화 상대:</span>
+                          <span className="text-muted-foreground">{scenario.partner}</span>
                         </div>
                       </div>
-                    )}
-                    
-                    {scenario.tags && scenario.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-2">
-                        {scenario.tags.slice(0, 3).map((tag: string, index: number) => (
-                          <Badge key={index} variant="secondary" className="text-xs">
-                            {tag}
-                          </Badge>
-                        ))}
-                      </div>
-                    )}
-                    
-                    <Button className="w-full" variant="outline">
-                      <Target className="w-4 h-4 mr-2" />
-                      이 시나리오로 연습하기
-                    </Button>
-                  </div>
-                </Card>
-              ))}
-            </div>
+                      
+                      <Button className="w-full" variant="outline">
+                        <Mic className="w-4 h-4 mr-2" />
+                        이 시나리오로 연습하기
+                      </Button>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </>
           )}
         </div>
       </div>
