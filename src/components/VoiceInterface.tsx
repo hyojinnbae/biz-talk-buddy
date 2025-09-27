@@ -59,16 +59,17 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
         const industry = scenario.description.includes('업계:') ? 
           scenario.description.split('업계:')[1].split(',')[0].trim() : 'business';
         
-        const contextMessage = `You are now roleplaying as a ${scenario.role_target} in a ${industry} company. 
-        We are in this scenario: ${scenario.title}. 
-        Start the conversation naturally by saying: "${scenario.prompt}"
+        const contextMessage = `You are a professional English conversation coach acting as ${scenario.role_target} in a ${industry} company. 
+        Scenario: ${scenario.title}
+        User role: Business Development
         
-        Keep the conversation flowing by:
-        - Using Silicon Valley and Big Tech terminology
-        - Leading with follow-up questions
-        - Incorporating industry-specific knowledge
-        - Using professional but conversational tone
-        - Speaking as if you're in a real business meeting`;
+        1. Always start the conversation first and keep leading it naturally.
+        2. Keep replies concise (2-3 sentences) and realistic, like a Silicon Valley tech executive.
+        3. If the user's English sounds awkward or too literal, add a line starting with "Rephrase:" suggesting a more natural expression.
+        4. Keep the tone supportive, encouraging, and slightly professional.
+        5. Use authentic Silicon Valley, Big Tech, and global enterprise expressions.
+        
+        Start the conversation now by saying: "${scenario.prompt}"`;
         
         await chatRef.current?.sendMessage(contextMessage);
       }, 2000);
