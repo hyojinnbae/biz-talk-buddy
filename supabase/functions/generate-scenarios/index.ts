@@ -12,7 +12,7 @@ serve(async (req) => {
   }
 
   try {
-    const { job, level, customSituation, customPartner } = await req.json();
+    const { job, level, industry, customSituation, customPartner } = await req.json();
     
     const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY');
     if (!OPENAI_API_KEY) {
@@ -23,11 +23,12 @@ serve(async (req) => {
 [USER INPUT]
 - 직무: ${job}
 - 영어 레벨: ${level}
+- 업계: ${industry}
 - 직접 입력한 상황: ${customSituation || '없음'}
 - 직접 입력한 상대: ${customPartner || '없음'}
 
 [GOAL]
-아래 정보를 기반으로, 이 사용자를 위한 영어 회화 연습 상황을 추천해줘.
+아래 정보를 기반으로, 이 사용자를 위한 영어 회화 연습 상황 3개를 추천해줘.
 
 [RESPONSE FORMAT]
 JSON 형태로만 응답해줘:
@@ -36,15 +37,22 @@ JSON 형태로만 응답해줘:
     {
       "title": "4~5단어 시나리오 제목",
       "description": "상황 설명",
-      "partner": "상대방 직책"
+      "partner": "상대방 직책",
+      "greeting": "AI가 먼저 할 인사말 (영어)"
     },
     {
       "title": "4~5단어 시나리오 제목",
       "description": "상황 설명", 
-      "partner": "상대방 직책"
+      "partner": "상대방 직책",
+      "greeting": "AI가 먼저 할 인사말 (영어)"
+    },
+    {
+      "title": "4~5단어 시나리오 제목",
+      "description": "상황 설명", 
+      "partner": "상대방 직책",
+      "greeting": "AI가 먼저 할 인사말 (영어)"
     }
-  ],
-  "greeting": "AI가 먼저 할 인사말 (영어)"
+  ]
 }
 
 직무별 참고:
@@ -61,7 +69,7 @@ JSON 형태로만 응답해줘:
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4',
+        model: 'gpt-4o-mini',
         messages: [
           { role: 'system', content: '당신은 영어 회화 연습을 위한 시나리오를 추천하는 전문가입니다. 사용자의 직무와 레벨에 맞는 실무 상황을 제안해주세요.' },
           { role: 'user', content: prompt }

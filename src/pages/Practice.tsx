@@ -17,6 +17,7 @@ type Step = 'userInfo' | 'scenarios' | 'conversation';
 interface UserInfo {
   job: string;
   level: number;
+  industry: string;
   customSituation?: string;
   customPartner?: string;
 }
@@ -32,7 +33,7 @@ const Practice = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState<Step>('userInfo');
-  const [userInfo, setUserInfo] = useState<UserInfo>({ job: '', level: 1 });
+  const [userInfo, setUserInfo] = useState<UserInfo>({ job: '', level: 1, industry: '' });
   const [generatedScenarios, setGeneratedScenarios] = useState<GeneratedScenario[]>([]);
   const [selectedScenario, setSelectedScenario] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -72,13 +73,14 @@ const Practice = () => {
     }
   };
 
-  const handleScenarioSelect = (scenario: GeneratedScenario) => {
+  const handleScenarioSelect = (scenario: GeneratedScenario & { greeting?: string }) => {
     const fullScenario = {
       id: Date.now().toString(),
       title: scenario.title,
       description: scenario.description,
       role_target: scenario.partner,
-      prompt: `당신은 ${scenario.partner}의 역할을 맡아 영어로 대화해주세요. 상황: ${scenario.description}. 사용자의 영어 레벨은 ${userInfo.level}입니다. 자연스럽고 실무적인 대화를 이끌어주세요.`
+      greeting: scenario.greeting || `Hello! Let's start our practice session about ${scenario.title.toLowerCase()}.`,
+      prompt: `당신은 ${scenario.partner}의 역할을 맡아 영어로 대화해주세요. 상황: ${scenario.description}. 사용자의 영어 레벨은 ${userInfo.level}입니다. 업계는 ${userInfo.industry}입니다. 첫 인사말: "${scenario.greeting || `Hello! Let's start our practice session about ${scenario.title.toLowerCase()}.`}" 자연스럽고 실무적인 대화를 이끌어주세요.`
     };
     setSelectedScenario(fullScenario);
     setCurrentStep('conversation');
@@ -161,12 +163,42 @@ const Practice = () => {
                         <SelectItem value="BD">BD</SelectItem>
                         <SelectItem value="PM/PO">PM/PO</SelectItem>
                         <SelectItem value="마케터">마케터</SelectItem>
+                        <SelectItem value="디자이너">디자이너</SelectItem>
+                        <SelectItem value="CS">CS</SelectItem>
+                        <SelectItem value="인사">인사</SelectItem>
                         <SelectItem value="기타">기타</SelectItem>
                       </SelectContent>
                     </Select>
                     {userInfo.job === '기타' && (
                       <Textarea
                         placeholder="예: 고객 CS 팀장"
+                        value={userInfo.customSituation || ''}
+                        onChange={(e) => setUserInfo(prev => ({ ...prev, customSituation: e.target.value }))}
+                      />
+                    )}
+                  </div>
+
+                  {/* 업계 선택 */}
+                  <div className="space-y-2">
+                    <Label htmlFor="industry">업계</Label>
+                    <Select value={userInfo.industry} onValueChange={(value) => setUserInfo(prev => ({ ...prev, industry: value }))}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="업계를 선택하세요" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="SaaS">SaaS</SelectItem>
+                        <SelectItem value="소비재">소비재</SelectItem>
+                        <SelectItem value="헬스케어">헬스케어</SelectItem>
+                        <SelectItem value="B2B">B2B</SelectItem>
+                        <SelectItem value="핀테크">핀테크</SelectItem>
+                        <SelectItem value="교육">교육</SelectItem>
+                        <SelectItem value="이커머스">이커머스</SelectItem>
+                        <SelectItem value="기타">기타</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {userInfo.industry === '기타' && (
+                      <Textarea
+                        placeholder="예: 건설 기술 스타트업"
                         value={userInfo.customSituation || ''}
                         onChange={(e) => setUserInfo(prev => ({ ...prev, customSituation: e.target.value }))}
                       />
@@ -229,7 +261,7 @@ const Practice = () => {
 
                   <Button 
                     onClick={generateScenarios}
-                    disabled={!userInfo.job || !userInfo.level || isLoading}
+                    disabled={!userInfo.job || !userInfo.level || !userInfo.industry || isLoading}
                     className="w-full"
                     size="lg"
                   >
@@ -255,11 +287,11 @@ const Practice = () => {
                   추천 시나리오 선택
                 </h1>
                 <p className="text-lg text-muted-foreground">
-                  {userInfo.job} · 레벨 {userInfo.level}에 맞는 시나리오입니다
+                  {userInfo.job} · {userInfo.industry} · 레벨 {userInfo.level}에 맞는 시나리오입니다
                 </p>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {generatedScenarios.map((scenario, index) => (
                   <Card 
                     key={index} 
