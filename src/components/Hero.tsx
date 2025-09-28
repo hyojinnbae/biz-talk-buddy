@@ -15,9 +15,10 @@ export const Hero = () => {
                 실무 영어 리허설 AI 코치
               </div>
               <h1 className="text-4xl lg:text-6xl font-bold leading-tight">
-                단순한 '영어 회화'가 아닙니다.
+                프로는 말투에서도 설득력을 만든다.
                 <span className="block bg-gradient-hero bg-clip-text text-transparent">
-                  글로벌 실무자의 '영향력 있는 영어' 훈련입니다.
+                  현장에서 바로 통하는 실무 영어 리허설로,<br />
+                  표현의 완성도와 리더십을 키워보세요.
                 </span>
               </h1>
                <div className="space-y-3 text-muted-foreground">
