@@ -14,11 +14,8 @@ export const Hero = () => {
                 <Mic className="w-4 h-4" />
                 실무 영어 리허설 AI 코치
               </div>
-              <h1 className="text-4xl lg:text-6xl font-bold leading-tight">
-                프로는 말투에서도 설득력을 만든다.
-                <span className="block bg-gradient-hero bg-clip-text text-transparent">
-                  현장에서 바로 통하는 실무 영어 리허설
-                </span>
+              <h1 className="text-4xl lg:text-6xl font-bold leading-tight bg-gradient-hero bg-clip-text text-transparent">
+                현장에서 바로 통하는 실무 영어 리허설
               </h1>
                <div className="space-y-3 text-muted-foreground">
                  <div className="flex items-center gap-3">
