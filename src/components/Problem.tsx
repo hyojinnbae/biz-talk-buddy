@@ -62,7 +62,7 @@ export const Problem = () => {
                 </div>
               </div>
               <div className="mt-4 p-6 rounded-lg bg-background border-l-4 border-primary space-y-4">
-                <h4 className="font-semibold text-foreground mb-3">외국인 동료 앞에서 얼어붙고, 퇴근 길에 기가 죽던 과거의 나에게......</h4>
+                <h4 className="font-semibold text-foreground mb-3">외국인 동료 앞에서 얼어붙고 기죽어 퇴근하던 과거의 나에게</h4>
                 
                 <div className="space-y-3 text-sm text-muted-foreground">
                   <p>저도 그랬습니다.</p>
@@ -75,9 +75,7 @@ export const Problem = () => {
                   
                   <p>그런데 외국인 튜터와 나눈 대화는, 제가 실제로 써야 할 <span className="font-semibold text-primary">회의, 협상, 설득, 조율</span> 표현과는 거리가 멀었습니다.</p>
                   
-                  <p>그런데 지금 저는 영어로 토론이 많기로 유명한 해외 학업 과정을 무사히 마쳤고,</p>
-                  
-                  <p><span className="font-semibold text-primary">글로벌 BD로서 해외 시장 진출과 파트너십 체결 업무를 맡고 있습니다.</span></p>
+                   <p><span className="font-semibold text-primary">그런데 지금 저는 글로벌 BD로서 해외 시장에 진출해 글로벌 파트너십 체결하는 업무를 하고 있습니다.</span></p>
                   
                   <p>돌파구는 '무작정하는 영어 공부'가 아니었어요.<br />
                   <span className="font-semibold text-primary">바로 내 업무 상황에 딱 맞는 표현을 익히고, 실제로 연습하는 것이었습니다.</span></p>

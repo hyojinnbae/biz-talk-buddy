@@ -50,7 +50,7 @@ export const Comparison = () => {
               기존 서비스와 차별점
             </h2>
             <p className="text-lg text-muted-foreground">
-              실무 중심, 루틴 중심, 피드백 중심 → 오직 BD·PM·마케터를 위한 말하기 훈련 도구
+              실무 중심, 루틴 중심, 피드백을 통한 내 직무용 말하기 훈련 도구
             </p>
           </div>
 

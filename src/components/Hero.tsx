@@ -15,25 +15,24 @@ export const Hero = () => {
                 실무 영어 리허설 AI 코치
               </div>
               <h1 className="text-4xl lg:text-6xl font-bold leading-tight">
-                영어 이메일, 문서는 되는데…
+                단순한 '영어 회화'가 아닙니다.
                 <span className="block bg-gradient-hero bg-clip-text text-transparent">
-                  왜 미팅만 하면
+                  글로벌 실무자의 '영향력 있는 영어' 훈련입니다.
                 </span>
-                입이 안 떨어지나요?
               </h1>
                <div className="space-y-3 text-muted-foreground">
-                <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-primary"></div>
-                  <span>Zoom 콜 하듯 AI 코치와 영어 대화</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-primary"></div>
-                  <span>100% 커스터마이즈 내 실무 시뮬레이션</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-primary"></div>
-                  <span>실리콘밸리 현업 표현으로 대화</span>
-                </div>
+                 <div className="flex items-center gap-3">
+                   <div className="w-2 h-2 rounded-full bg-primary"></div>
+                   <span>실전과 같은 환경에서 실시간 회화</span>
+                 </div>
+                 <div className="flex items-center gap-3">
+                   <div className="w-2 h-2 rounded-full bg-primary"></div>
+                   <span>내 직무·레벨에 맞춘 시나리오</span>
+                 </div>
+                 <div className="flex items-center gap-3">
+                   <div className="w-2 h-2 rounded-full bg-primary"></div>
+                   <span>실리콘밸리 현업 표현 100% 반영</span>
+                 </div>
               </div>
               <p className="text-lg text-muted-foreground leading-relaxed">
                 내 실무 상황을 직접 입력하고,<br />

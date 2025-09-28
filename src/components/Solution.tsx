@@ -11,8 +11,8 @@ export const Solution = () => {
               우리의 제안
             </div>
             <h2 className="text-3xl lg:text-4xl font-bold leading-tight">
-              실리콘밸리에서 실제 사용하는 영어 표현들로,<br />
-              내가 할 미팅을 미리 말해보는 연습.
+              실리콘밸리 실제 사용하는 현업 영어 표현들을<br />
+              나도 미리 말해보는 연습.
             </h2>
           </div>
 
