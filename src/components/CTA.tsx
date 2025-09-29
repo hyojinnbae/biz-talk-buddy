@@ -12,10 +12,11 @@ export const CTA = () => {
               자신 있는 말 한마디가 기회를 만듭니다.
             </h2>
             <p className="text-lg opacity-90 leading-relaxed">
-              설득하고 싶었던 순간,<br />
-              표현이 막혀 기회를 놓친 적 있으셨나요?<br />
-              이제는 실리콘밸리식 영어로 내 전문성을 정확히 전달하는 연습.<br />
-              혼자서도, 매일 15분이면 충분합니다.
+              대화를 주도하고 싶었던 순간,<br />
+              내 표현이 더 프로페셔널했다면.. 하는 생각해보신 적 있으셨나요?<br /><br />
+              내 전문성을 업그레이드하는 연습.<br /><br />
+              실제 글로벌 미팅 대화로 매일 15분,<br />
+              회의 주도력과 설득력을 훈련하세요.
             </p>
           </div>
           
@@ -29,20 +30,6 @@ export const CTA = () => {
             </Button>
           </div>
           
-          <div className="flex items-center justify-center gap-8 text-sm opacity-80">
-            <div className="flex items-center gap-2">
-              <Users className="w-4 h-4" />
-              1000+ 실무자들이 매일 연습 중
-            </div>
-            <div className="flex items-center gap-2">
-              <Target className="w-4 h-4" />
-              15분 평균 리허설 시간
-            </div>
-            <div className="flex items-center gap-2">
-              <Mic className="w-4 h-4" />
-              7일 무료 체험 기간
-            </div>
-          </div>
         </div>
       </div>
     </section>

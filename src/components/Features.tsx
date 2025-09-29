@@ -41,7 +41,7 @@ export const Features = () => {
             핵심 기능
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            실무자가 실제로 필요한 핵심 기능에만 집중했습니다.
+            실무자, 관리자가 실제로 필요한 핵심 기능에만 집중했습니다.
           </p>
           <div className="w-24 h-1 bg-gradient-primary mx-auto rounded-full"></div>
         </div>

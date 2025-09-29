@@ -37,9 +37,6 @@ export const FAQ = () => {
             <h2 className="text-3xl lg:text-4xl font-bold">
               자주 묻는 질문
             </h2>
-            <p className="text-lg text-muted-foreground">
-              실무자들이 가장 궁금해하는 질문들에 답해드립니다.
-            </p>
           </div>
 
           <Accordion type="single" collapsible className="space-y-4">

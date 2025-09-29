@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import VoiceInterface from '@/components/VoiceInterface';
-import { ArrowLeft, Target, Users, Mic } from 'lucide-react';
+import { ArrowLeft, Target, Users, Mic, Home } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 type Step = 'userInfo' | 'scenarios' | 'conversation';
@@ -154,6 +154,17 @@ const Practice = () => {
           {/* Step 1: 유저 정보 입력 */}
           {currentStep === 'userInfo' && (
             <>
+              <div className="mb-6">
+                <Button 
+                  variant="ghost" 
+                  onClick={() => navigate('/')}
+                  className="gap-2"
+                >
+                  <Home className="w-4 h-4" />
+                  홈으로 돌아가기
+                </Button>
+              </div>
+              
               <div className="text-center mb-8">
                 <h1 className="text-3xl lg:text-4xl font-bold mb-4">
                   맞춤 영어 회화 연습
@@ -288,42 +299,56 @@ const Practice = () => {
                 </p>
               </div>
 
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {generatedScenarios.map((scenario, index) => (
-                  <Card 
-                    key={index} 
-                    className="p-6 hover:shadow-lg transition-shadow cursor-pointer group"
-                    onClick={() => handleScenarioSelect(scenario)}
-                  >
-                    <div className="space-y-4">
-                      <div className="flex items-start justify-between">
-                        <Badge variant="outline">실무 상황</Badge>
-                      </div>
-                      
-                      <div>
-                        <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
-                          {scenario.title}
-                        </h3>
-                        <p className="text-muted-foreground text-sm leading-relaxed mb-3">
-                          "{scenario.openingLine}"
-                        </p>
-                      </div>
-                      
-                      <div className="pt-2 border-t border-border">
-                        <div className="flex items-center gap-2 text-sm">
-                          <Users className="w-4 h-4" />
-                          <span className="font-medium">대화 상대:</span>
-                          <span className="text-muted-foreground">{scenario.counterpart}</span>
+              <div className="space-y-6">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {generatedScenarios.map((scenario, index) => (
+                    <Card 
+                      key={index} 
+                      className="p-6 hover:shadow-lg transition-shadow cursor-pointer group"
+                      onClick={() => handleScenarioSelect(scenario)}
+                    >
+                      <div className="space-y-4">
+                        <div className="flex items-start justify-between">
+                          <Badge variant="outline">실무 상황</Badge>
                         </div>
+                        
+                        <div>
+                          <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
+                            {scenario.title}
+                          </h3>
+                          <p className="text-muted-foreground text-sm leading-relaxed mb-3">
+                            "{scenario.openingLine}"
+                          </p>
+                        </div>
+                        
+                        <div className="pt-2 border-t border-border">
+                          <div className="flex items-center gap-2 text-sm">
+                            <Users className="w-4 h-4" />
+                            <span className="font-medium">대화 상대:</span>
+                            <span className="text-muted-foreground">{scenario.counterpart}</span>
+                          </div>
+                        </div>
+                        
+                          <Button className="w-full" variant="outline">
+                            <Mic className="w-4 h-4 mr-2" />
+                            지금 연습하기
+                          </Button>
                       </div>
-                      
-                        <Button className="w-full" variant="outline">
-                          <Mic className="w-4 h-4 mr-2" />
-                          지금 연습하기
-                        </Button>
-                    </div>
-                  </Card>
-                ))}
+                    </Card>
+                  ))}
+                </div>
+                
+                <div className="text-center">
+                  <Button 
+                    onClick={generateScenarios}
+                    disabled={isLoading}
+                    variant="outline"
+                    className="gap-2"
+                  >
+                    <Target className="w-4 h-4" />
+                    {isLoading ? "새 시나리오 생성 중..." : "다른 시나리오 보기"}
+                  </Button>
+                </div>
               </div>
             </>
           )}

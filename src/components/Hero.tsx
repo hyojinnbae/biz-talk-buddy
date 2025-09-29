@@ -26,15 +26,15 @@ export const Hero = () => {
                    <div className="w-2 h-2 rounded-full bg-primary"></div>
                    <span>내 직무·레벨에 맞춘 시나리오</span>
                  </div>
-                 <div className="flex items-center gap-3">
-                   <div className="w-2 h-2 rounded-full bg-primary"></div>
-                   <span>실리콘밸리 현업 표현 100% 반영</span>
-                 </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 rounded-full bg-primary"></div>
+                    <span>Fortune 500 미팅 수준 대화</span>
+                  </div>
               </div>
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                내 실무 상황을 직접 입력하고,<br />
-                실리콘밸리식 업무 영어 리허설을 시작해보세요.
-              </p>
+               <p className="text-lg text-muted-foreground leading-relaxed">
+                 매일 내 상황 맞춤 시나리오 연습으로<br />
+                 자신감과 전문성을 함께 성장시키세요.
+               </p>
             </div>
             
             <div className="flex justify-start">

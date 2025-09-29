@@ -159,14 +159,25 @@ serve(async (req) => {
       });
     }
 
+    // Add randomness to prompt to get different scenarios each time
+    const randomSeed = Math.floor(Math.random() * 10000);
+    const scenarioTypes = [
+      "긴급 상황 대응", "성과 검토", "전략 수립", "문제 해결", "협상", 
+      "보고", "브레인스토밍", "갈등 조정", "의사결정", "계획 수립"
+    ];
+    const randomType = scenarioTypes[Math.floor(Math.random() * scenarioTypes.length)];
+    
     const prompt = `
 [USER INPUT]
 - 직무: ${jobRole}
 - 영어 레벨: ${englishLevel}
 - 업계: ${industry}
+- 랜덤 시드: ${randomSeed}
+- 상황 유형 힌트: ${randomType}
 
 [GOAL]
-이 사용자를 위한 영어 회화 연습 상황 3개를 추천해줘. 직무와 업계를 연결해서 실무적이고 현실적인 시나리오를 만들어줘.
+이 사용자를 위한 새로운 영어 회화 연습 상황 3개를 추천해줘. 직무와 업계를 연결해서 실무적이고 현실적인 시나리오를 만들어줘.
+매번 다른 시나리오를 제공하기 위해 다양한 상황(${randomType} 등)을 고려해줘.
 
 [RESPONSE FORMAT]
 JSON 배열 형태로만 응답해줘:
@@ -189,13 +200,14 @@ JSON 배열 형태로만 응답해줘:
 ]
 
 [직무별 시나리오 가이드]
-CEO: 투자자 미팅, 전략 검토, 보드 미팅 → VC 파트너, 이사회 멤버, 글로벌 팀장
-BD: 파트너십 협상, 계약 논의, 제휴 미팅 → 파트너사 VP, 비즈니스 리더, 계약 담당자
-PM/PO: 제품 리뷰, 기능 논의, 개발 협의 → 개발 리드, 디자인 팀장, 제품 디렉터
-마케터: 캠페인 보고, 성과 분석, 브랜드 논의 → 마케팅 디렉터, 브랜드 매니저, 광고 대행사
+CEO: 투자자 미팅, 전략 검토, 보드 미팅, 위기 관리, M&A 논의 → VC 파트너, 이사회 멤버, 글로벌 팀장, 인수 대상 CEO
+BD: 파트너십 협상, 계약 논의, 제휴 미팅, 신규 파트너 발굴, 갱신 협상 → 파트너사 VP, 비즈니스 리더, 계약 담당자, 채널 파트너
+PM/PO: 제품 리뷰, 기능 논의, 개발 협의, 로드맵 계획, 고객 피드백 → 개발 리드, 디자인 팀장, 제품 디렉터, 고객 성공 매니저
+마케터: 캠페인 보고, 성과 분석, 브랜드 논의, 예산 검토, 채널 확장 → 마케팅 디렉터, 브랜드 매니저, 광고 대행사, 인플루언서
 
 각 시나리오는 선택한 업계(${industry})에 맞게 구체적으로 만들어줘.
 영어 레벨 ${englishLevel}에 맞는 적절한 난이도로 openingLine을 작성해줘.
+매번 새로운 시나리오를 제공하여 사용자가 다양한 상황을 연습할 수 있도록 해줘.
 `;
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -210,7 +222,7 @@ PM/PO: 제품 리뷰, 기능 논의, 개발 협의 → 개발 리드, 디자인 
           { role: 'system', content: '당신은 영어 회화 연습을 위한 시나리오를 추천하는 전문가입니다. 사용자의 직무와 레벨에 맞는 실무 상황을 제안하고, JSON 배열만 응답해주세요.' },
           { role: 'user', content: prompt }
         ],
-        temperature: 0.7,
+        temperature: 0.9,
       }),
     });
 

@@ -61,32 +61,6 @@ export const Problem = () => {
                   <p className="text-muted-foreground">영어 중요성의 이유는 승진 등 커리어 발전 및 해외 파트너와의 원활한 소통</p>
                 </div>
               </div>
-              <div className="mt-4 p-6 rounded-lg bg-background border-l-4 border-primary space-y-4">
-                <h4 className="font-semibold text-foreground mb-3">외국인 동료 앞에서 얼어붙고 기죽어 퇴근하던 과거의 나에게</h4>
-                
-                <div className="space-y-3 text-sm text-muted-foreground">
-                  <p>저도 그랬습니다.</p>
-                  
-                  <p>영어를 듣고 읽을 수 있다고 생각했습니다. 막상 회의를 하니 입이 움직이지 않고, 머리가 하얘졌어요.</p>
-                  
-                  <p><span className="font-semibold">'이 말은 틀린 문법이 아닐까?' '내가 지금 무슨 말을 하고 있는 거지?'</span> 자책만 남았죠.</p>
-                  
-                  <p>전화 영어, 튜터링도 해봤습니다. 무려 7년간.</p>
-                  
-                  <p>그런데 외국인 튜터와 나눈 대화는, 제가 실제로 써야 할 <span className="font-semibold text-primary">회의, 협상, 설득, 조율</span> 표현과는 거리가 멀었습니다.</p>
-                  
-                   <p><span className="font-semibold text-primary">그런데 지금 저는 글로벌 BD로서 해외 시장에 진출해 글로벌 파트너십 체결하는 업무를 하고 있습니다.</span></p>
-                  
-                  <p>돌파구는 '무작정하는 영어 공부'가 아니었어요.<br />
-                  <span className="font-semibold text-primary">바로 내 업무 상황에 딱 맞는 표현을 익히고, 실제로 연습하는 것이었습니다.</span></p>
-                  
-                  <p>그래서, 저도 여러분이 일반 회화 앱이 아닌</p>
-                  
-                  <p><span className="font-semibold text-primary">'실무 영어 리허설 툴'을 가질 수 있도록 'Protalk'을 만들었습니다.</span></p>
-                  
-                  <p>여러분도 훈련에서 오는 <span className="font-semibold text-primary">자신감</span>, 그리고 영어로 자유롭게 말할 수 있는 능력에서 오는 <span className="font-semibold text-primary">더 넓은 세상</span>을 경험하게 될 것입니다.</p>
-                </div>
-              </div>
             </div>
 
             <div className="p-8 rounded-2xl bg-gradient-primary text-primary-foreground text-center">
