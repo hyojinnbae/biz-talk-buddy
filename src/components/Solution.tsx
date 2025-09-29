@@ -11,7 +11,7 @@ export const Solution = () => {
               우리의 제안
             </div>
             <h2 className="text-3xl lg:text-4xl font-bold leading-tight">
-              실제 업무 미팅을 그대로 재현해 연습하세요
+                실제 업무 미팅을 그대로 재현해 연습하세요
             </h2>
           </div>
 

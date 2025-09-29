@@ -5,6 +5,7 @@ import { useToast } from '@/hooks/use-toast';
 import { RealtimeChat } from '@/utils/RealtimeAudio';
 import { useAuth } from '@/hooks/useAuth';
 import { Mic, MicOff, MessageSquare, Phone, PhoneOff, Volume2 } from 'lucide-react';
+import { VideoCallInterface } from './VideoCallInterface';
 
 interface VoiceInterfaceProps {
   scenario: {
@@ -27,6 +28,7 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
   const [transcript, setTranscript] = useState('');
   const chatRef = useRef<RealtimeChat | null>(null);
   const { user } = useAuth();
+  const [showVideoCall, setShowVideoCall] = useState(false);
 
   const handleMessage = (event: any) => {
     console.log('받은 이벤트:', event);
@@ -72,6 +74,7 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
       
       setIsConnected(true);
       setIsConnecting(false);
+      setShowVideoCall(true);
       
       toast({
         title: "연결 완료",
@@ -93,6 +96,7 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
     setIsConnected(false);
     setIsSpeaking(false);
     setIsUserSpeaking(false);
+    setShowVideoCall(false);
     onSessionEnd();
   };
 
@@ -115,6 +119,10 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
       messagesCount: messages.length,
     });
   }, [isConnected, isConnecting, isSpeaking, isUserSpeaking, transcript, messages.length]);
+
+  if (showVideoCall && isConnected) {
+    return <VideoCallInterface scenario={scenario} onEndCall={endConversation} />;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-subtle flex flex-col">

@@ -38,6 +38,8 @@ const Practice = () => {
   const [generatedScenarios, setGeneratedScenarios] = useState<GeneratedScenario[]>([]);
   const [selectedScenario, setSelectedScenario] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showCustomInput, setShowCustomInput] = useState(false);
+  const [customScenario, setCustomScenario] = useState('');
 
   useEffect(() => {
     if (!user) {
@@ -110,6 +112,20 @@ const Practice = () => {
   const handleSessionEnd = () => {
     setSelectedScenario(null);
     setCurrentStep('userInfo');
+  };
+
+  const handleCustomScenarioSubmit = () => {
+    if (customScenario.trim()) {
+      const customScenarioObj = {
+        id: 'custom',
+        title: '직접 입력한 시나리오',
+        description: customScenario,
+        role_target: '맞춤 상대방',
+        prompt: `당신은 다음 상황에서 대화 상대방 역할을 맡아 영어로 대화해주세요. 상황: ${customScenario}. 사용자의 영어 레벨은 ${userInfo.level}입니다. 자연스럽고 실무적인 대화를 이끌어주세요.`
+      };
+      setSelectedScenario(customScenarioObj);
+      setCurrentStep('conversation');
+    }
   };
 
   const goBack = () => {
@@ -339,7 +355,7 @@ const Practice = () => {
                   ))}
                 </div>
                 
-                <div className="text-center">
+                <div className="flex justify-center gap-4">
                   <Button 
                     onClick={generateScenarios}
                     disabled={isLoading}
@@ -349,7 +365,42 @@ const Practice = () => {
                     <Target className="w-4 h-4" />
                     {isLoading ? "새 시나리오 생성 중..." : "다른 시나리오 보기"}
                   </Button>
+                  <Button 
+                    onClick={() => setShowCustomInput(!showCustomInput)}
+                    variant="outline"
+                    className="gap-2"
+                  >
+                    직접 입력하기
+                  </Button>
                 </div>
+
+                {showCustomInput && (
+                  <div className="mt-8">
+                    <Card className="p-6">
+                      <div className="space-y-4">
+                        <h3 className="text-lg font-semibold">직접 시나리오 입력</h3>
+                        <p className="text-sm text-muted-foreground">
+                          예: 미국 인플루언서와 홍보 캠페인 조건 논의
+                        </p>
+                        <Textarea
+                          value={customScenario}
+                          onChange={(e) => setCustomScenario(e.target.value)}
+                          placeholder="연습하고 싶은 상황을 자세히 설명해주세요..."
+                          className="resize-none h-24"
+                        />
+                        <Button 
+                          onClick={handleCustomScenarioSubmit}
+                          disabled={!customScenario.trim()}
+                          className="w-full"
+                          size="lg"
+                        >
+                          <Mic className="w-4 h-4 mr-2" />
+                          지금 연습하기
+                        </Button>
+                      </div>
+                    </Card>
+                  </div>
+                )}
               </div>
             </>
           )}
