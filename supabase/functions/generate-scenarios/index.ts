@@ -13,13 +13,13 @@ function makeOpening(base: string, industry: string, level: number) {
     case 1:
       return `Hello. Let's talk about ${industry || 'the topic'} today.`;
     case 2:
-      return text.replace(/Let’s|Let's/gi, "Let's").replace(/I'd like to/gi, 'I want to');
+      return text.replace(/Let's|Let's/gi, "Let's").replace(/I'd like to/gi, 'I want to');
     case 3:
       return text;
     case 4:
       return text + ' I will keep it concise.';
     case 5:
-      return text + ' I’d also like your perspective on potential risks.';
+      return text + " I'd also like your perspective on potential risks.";
     default:
       return text;
   }
@@ -33,93 +33,118 @@ function buildFallbackScenarios(jobRole: string, industry: string, englishLevel:
 
   if (role === 'CEO') {
     templates = [
-      {
-        title: 'Investor Update Briefing',
-        counterpart: 'VC Partner',
-        base: "Thanks for joining. I'd like to walk you through our {industry} performance and runway.",
-      },
-      {
-        title: 'Board Strategy Review',
-        counterpart: 'Board Member',
-        base: "I'd like to review our {industry} strategy and key risks.",
-      },
-      {
-        title: 'Global Expansion Sync',
-        counterpart: 'Head of Global Sales',
-        base: "Can we align on our {industry} expansion priorities this quarter?",
-      },
+      { title: 'Investor Update Briefing', counterpart: 'VC Partner', base: "Thanks for joining. I'd like to walk you through our {industry} performance and runway." },
+      { title: 'Board Strategy Review', counterpart: 'Board Member', base: "I'd like to review our {industry} strategy and key risks." },
+      { title: 'Global Expansion Sync', counterpart: 'Head of Global Sales', base: "Can we align on our {industry} expansion priorities this quarter?" },
+      { title: 'Funding Round Planning', counterpart: 'CFO', base: "Let's discuss the funding timeline and key investor meetings." },
+      { title: 'Strategic Partnership Review', counterpart: 'Partner CEO', base: "I'd like to explore how our {industry} solutions can complement each other." },
+      { title: 'Crisis Management Call', counterpart: 'PR Director', base: "We need to address this situation quickly and transparently." },
+      { title: 'Acquisition Target Discussion', counterpart: 'Target Company CEO', base: "I'd like to explore potential synergies between our companies." },
+      { title: 'Board Compensation Review', counterpart: 'Compensation Committee', base: "Let's review the executive compensation framework." },
+      { title: 'IPO Readiness Meeting', counterpart: 'Investment Banker', base: "I want to understand our path to going public." },
+      { title: 'Quarterly Results Call', counterpart: 'Analyst', base: "Thank you for joining our Q3 earnings call." },
+      { title: 'Vision Alignment Session', counterpart: 'Co-founder', base: "Let's make sure we're aligned on our long-term vision." },
+      { title: 'Regulatory Compliance Review', counterpart: 'Legal Counsel', base: "I need to understand our compliance requirements in {industry}." },
+      { title: 'Key Account Escalation', counterpart: 'Enterprise Client CEO', base: "I wanted to personally address your concerns." },
+      { title: 'Innovation Lab Review', counterpart: 'CTO', base: "Let's discuss the R&D roadmap for next year." },
+      { title: 'Culture Transformation Meeting', counterpart: 'Chief People Officer', base: "How do we maintain our culture as we scale?" },
+      { title: 'Exit Strategy Discussion', counterpart: 'Board Chair', base: "I'd like to explore our strategic options." },
+      { title: 'Market Entry Strategy', counterpart: 'Regional Director', base: "What's our approach for the {industry} market in Asia?" },
+      { title: 'Talent Acquisition Summit', counterpart: 'Head of Talent', base: "How do we attract top-tier talent in this competitive market?" },
+      { title: 'ESG Initiative Planning', counterpart: 'Sustainability Director', base: "Let's discuss our environmental and social impact goals." },
+      { title: 'Technology Roadmap Review', counterpart: 'Chief Innovation Officer', base: "I want to ensure our tech stack supports our growth plans." }
     ];
   } else if (role === 'BD') {
     templates = [
-      {
-        title: 'Partnership Terms Negotiation',
-        counterpart: 'Partner VP',
-        base: "I'd like to review the partnership terms and close gaps today.",
-      },
-      {
-        title: 'Renewal Contract Discussion',
-        counterpart: 'Contracts Manager',
-        base: 'Can we go over the renewal scope, pricing, and timeline?',
-      },
-      {
-        title: 'Co-marketing Opportunity Call',
-        counterpart: 'Business Lead',
-        base: 'Let\'s explore a co-marketing plan that benefits both teams.',
-      },
+      { title: 'Partnership Terms Negotiation', counterpart: 'Partner VP', base: "I'd like to review the partnership terms and close gaps today." },
+      { title: 'Renewal Contract Discussion', counterpart: 'Contracts Manager', base: 'Can we go over the renewal scope, pricing, and timeline?' },
+      { title: 'Co-marketing Opportunity Call', counterpart: 'Business Lead', base: 'Let\'s explore a co-marketing plan that benefits both teams.' },
+      { title: 'Channel Partner Onboarding', counterpart: 'Channel Manager', base: "Welcome to our partner program. Let's discuss the enablement process." },
+      { title: 'Revenue Share Negotiation', counterpart: 'Finance Director', base: "I'd like to finalize the revenue sharing model." },
+      { title: 'Integration Roadmap Planning', counterpart: 'Technical Lead', base: "Let's align on the technical integration timeline." },
+      { title: 'Go-to-Market Strategy', counterpart: 'Marketing VP', base: "How do we position this partnership in the market?" },
+      { title: 'Performance Review Meeting', counterpart: 'Partner Success Manager', base: "Let's review our partnership KPIs and next steps." },
+      { title: 'Competitive Response Strategy', counterpart: 'Product Manager', base: "How do we respond to the competitive threat in {industry}?" },
+      { title: 'Territory Planning Session', counterpart: 'Sales Director', base: "Let's define the territory boundaries and coverage." },
+      { title: 'Deal Structure Workshop', counterpart: 'Legal Counsel', base: "I need to understand the legal implications of this deal structure." },
+      { title: 'Customer Success Alignment', counterpart: 'Customer Success Director', base: "How do we ensure smooth customer handoffs?" },
+      { title: 'Pricing Strategy Discussion', counterpart: 'Pricing Manager', base: "What's our pricing approach for this new market segment?" },
+      { title: 'Alliance Management Review', counterpart: 'Alliance Director', base: "Let's evaluate our current partner portfolio." },
+      { title: 'Enterprise Deal Structuring', counterpart: 'Enterprise Sales VP', base: "How do we structure this multi-million dollar deal?" },
+      { title: 'International Expansion Planning', counterpart: 'Global VP', base: "What's our strategy for entering the European market?" },
+      { title: 'Technology Partnership Evaluation', counterpart: 'Engineering VP', base: "Let's assess the technical feasibility of this integration." },
+      { title: 'Vendor Management Review', counterpart: 'Procurement Director', base: "I'd like to optimize our vendor relationships." },
+      { title: 'Market Research Discussion', counterpart: 'Research Analyst', base: "What does the data tell us about this market opportunity?" },
+      { title: 'Compliance Requirements Meeting', counterpart: 'Compliance Officer', base: "What are the regulatory requirements for this partnership?" }
     ];
   } else if (role === 'PM/PO') {
     templates = [
-      {
-        title: 'Feature Launch Briefing',
-        counterpart: 'Product Director',
-        base: "Let's review the {industry} feature launch scope and timeline.",
-      },
-      {
-        title: 'Sprint Planning Review',
-        counterpart: 'Engineering Lead',
-        base: "I'd like to align on this sprint's priorities and dependencies.",
-      },
-      {
-        title: 'Postmortem Discussion',
-        counterpart: 'CTO',
-        base: "Let's walk through what went wrong and what we can improve.",
-      },
+      { title: 'Feature Launch Briefing', counterpart: 'Product Director', base: "Let's review the {industry} feature launch scope and timeline." },
+      { title: 'Sprint Planning Review', counterpart: 'Engineering Lead', base: "I'd like to align on this sprint's priorities and dependencies." },
+      { title: 'Postmortem Discussion', counterpart: 'CTO', base: "Let's walk through what went wrong and what we can improve." },
+      { title: 'User Research Synthesis', counterpart: 'UX Researcher', base: "What are the key insights from our latest user interviews?" },
+      { title: 'Roadmap Prioritization Meeting', counterpart: 'VP of Product', base: "Let's align on our Q4 product priorities." },
+      { title: 'Technical Debt Review', counterpart: 'Engineering Manager', base: "How do we balance new features with technical debt?" },
+      { title: 'Customer Feedback Analysis', counterpart: 'Customer Success Manager', base: "What are customers saying about the new feature?" },
+      { title: 'Competitive Analysis Discussion', counterpart: 'Market Research Manager', base: "How does our product compare to the competition?" },
+      { title: 'API Strategy Planning', counterpart: 'Platform Engineer', base: "Let's discuss our API roadmap and developer experience." },
+      { title: 'Performance Optimization Review', counterpart: 'Performance Engineer', base: "What are our current bottlenecks and how do we address them?" },
+      { title: 'A/B Test Results Review', counterpart: 'Data Analyst', base: "Let's analyze the results of our latest experiments." },
+      { title: 'Security Requirements Planning', counterpart: 'Security Engineer', base: "What security considerations do we need for this feature?" },
+      { title: 'Mobile Strategy Discussion', counterpart: 'Mobile Lead', base: "How do we optimize the mobile experience?" },
+      { title: 'Data Analytics Planning', counterpart: 'Analytics Manager', base: "What metrics should we track for this new feature?" },
+      { title: 'Integration Planning Meeting', counterpart: 'Integration Engineer', base: "Let's discuss the third-party integration requirements." },
+      { title: 'Accessibility Review Session', counterpart: 'Accessibility Expert', base: "How do we ensure our product is accessible to all users?" },
+      { title: 'Design System Discussion', counterpart: 'Design System Lead', base: "Let's align on the design components for this feature." },
+      { title: 'Localization Planning Meeting', counterpart: 'Localization Manager', base: "What's our approach for international markets?" },
+      { title: 'Beta Testing Strategy', counterpart: 'QA Manager', base: "How do we structure our beta testing program?" },
+      { title: 'Product Analytics Deep Dive', counterpart: 'Senior Data Scientist', base: "Let's analyze user behavior patterns in our {industry} segment." }
     ];
   } else if (role === '마케터') {
     templates = [
-      {
-        title: 'Campaign Performance Review',
-        counterpart: 'Marketing Director',
-        base: 'I\'d like to review campaign performance and next steps.',
-      },
-      {
-        title: 'Brand Messaging Alignment',
-        counterpart: 'Brand Manager',
-        base: 'Can we align on the messaging for our {industry} audience?',
-      },
-      {
-        title: 'Agency Brief Kickoff',
-        counterpart: 'Agency Account Lead',
-        base: "Thanks for joining. I'd like to kick off the creative brief.",
-      },
+      { title: 'Campaign Performance Review', counterpart: 'Marketing Director', base: 'I\'d like to review campaign performance and next steps.' },
+      { title: 'Brand Messaging Alignment', counterpart: 'Brand Manager', base: 'Can we align on the messaging for our {industry} audience?' },
+      { title: 'Agency Brief Kickoff', counterpart: 'Agency Account Lead', base: "Thanks for joining. I'd like to kick off the creative brief." },
+      { title: 'Content Strategy Planning', counterpart: 'Content Manager', base: "Let's develop our content calendar for Q4." },
+      { title: 'Social Media Strategy Review', counterpart: 'Social Media Manager', base: "How do we improve our social media engagement?" },
+      { title: 'Event Marketing Planning', counterpart: 'Events Manager', base: "Let's plan our presence at the upcoming {industry} conference." },
+      { title: 'Email Marketing Optimization', counterpart: 'Email Marketing Specialist', base: "How can we improve our email open and click rates?" },
+      { title: 'SEO Strategy Discussion', counterpart: 'SEO Manager', base: "What's our approach for improving organic search rankings?" },
+      { title: 'Influencer Partnership Review', counterpart: 'Influencer Manager', base: "Let's evaluate our current influencer partnerships." },
+      { title: 'Marketing Automation Setup', counterpart: 'Marketing Operations Manager', base: "How do we optimize our lead nurturing workflows?" },
+      { title: 'Customer Journey Mapping', counterpart: 'CX Manager', base: "Let's map out the customer experience touchpoints." },
+      { title: 'Competitive Messaging Review', counterpart: 'Competitive Intelligence Analyst', base: "How do we differentiate our messaging from competitors?" },
+      { title: 'PR Strategy Planning', counterpart: 'PR Manager', base: "What's our media relations strategy for the product launch?" },
+      { title: 'Marketing Budget Review', counterpart: 'Finance Manager', base: "Let's review our marketing spend allocation and ROI." },
+      { title: 'Lead Generation Strategy', counterpart: 'Demand Generation Manager', base: "How do we increase qualified leads from {industry}?" },
+      { title: 'Partnership Marketing Planning', counterpart: 'Partner Marketing Manager', base: "Let's develop co-marketing campaigns with our partners." },
+      { title: 'Video Marketing Strategy', counterpart: 'Video Producer', base: "What's our video content strategy for the next quarter?" },
+      { title: 'Conversion Rate Optimization', counterpart: 'CRO Specialist', base: "How can we improve our landing page conversion rates?" },
+      { title: 'Market Segmentation Analysis', counterpart: 'Market Research Analyst', base: "Let's analyze our target market segments in {industry}." },
+      { title: 'Brand Partnership Negotiation', counterpart: 'Brand Partnership Manager', base: "I'd like to discuss the co-branding opportunity." }
     ];
   } else {
     templates = [
-      {
-        title: 'Client Onboarding Call',
-        counterpart: 'Client Manager',
-        base: "Thanks for joining. I'd like to confirm the onboarding plan.",
-      },
-      {
-        title: 'Weekly Project Sync',
-        counterpart: 'Project Lead',
-        base: "Let's align on this week's priorities and blockers.",
-      },
-      {
-        title: 'Risk And Mitigation Plan',
-        counterpart: 'Operations Lead',
-        base: 'I want to review key risks and our mitigation plan.',
-      },
+      { title: 'Client Onboarding Call', counterpart: 'Client Manager', base: "Thanks for joining. I'd like to confirm the onboarding plan." },
+      { title: 'Weekly Project Sync', counterpart: 'Project Lead', base: "Let's align on this week's priorities and blockers." },
+      { title: 'Risk And Mitigation Plan', counterpart: 'Operations Lead', base: 'I want to review key risks and our mitigation plan.' },
+      { title: 'Process Improvement Meeting', counterpart: 'Operations Manager', base: "How can we streamline our current workflows?" },
+      { title: 'Quality Assurance Review', counterpart: 'QA Lead', base: "Let's discuss our quality standards and testing procedures." },
+      { title: 'Vendor Selection Meeting', counterpart: 'Procurement Manager', base: "I'd like to evaluate our vendor options for this project." },
+      { title: 'Training Program Planning', counterpart: 'Training Manager', base: "What training do our team members need?" },
+      { title: 'Budget Planning Session', counterpart: 'Finance Manager', base: "Let's plan our departmental budget for next year." },
+      { title: 'Team Performance Review', counterpart: 'HR Manager', base: "I'd like to discuss our team's performance metrics." },
+      { title: 'Technology Implementation', counterpart: 'IT Manager', base: "Let's discuss the new system implementation timeline." },
+      { title: 'Customer Support Strategy', counterpart: 'Support Manager', base: "How do we improve our customer satisfaction scores?" },
+      { title: 'Compliance Audit Preparation', counterpart: 'Compliance Officer', base: "Let's prepare for the upcoming audit." },
+      { title: 'Change Management Planning', counterpart: 'Change Manager', base: "How do we manage the organizational changes?" },
+      { title: 'Performance Metrics Review', counterpart: 'Analytics Manager', base: "Let's review our KPIs and performance indicators." },
+      { title: 'Stakeholder Alignment Meeting', counterpart: 'Department Head', base: "I want to ensure all stakeholders are aligned." },
+      { title: 'Resource Allocation Planning', counterpart: 'Resource Manager', base: "How do we optimally allocate our resources?" },
+      { title: 'Crisis Response Planning', counterpart: 'Risk Manager', base: "Let's develop our crisis response procedures." },
+      { title: 'Innovation Workshop', counterpart: 'Innovation Lead', base: "How can we foster more innovation in our processes?" },
+      { title: 'Cross-functional Collaboration', counterpart: 'Team Lead', base: "Let's improve collaboration between our departments." },
+      { title: 'Strategic Initiative Review', counterpart: 'Strategy Manager', base: "Let's evaluate our strategic initiatives' progress." }
     ];
   }
 

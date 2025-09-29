@@ -50,15 +50,15 @@ export const Hero = () => {
             <div className="flex items-center gap-8 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-success"></div>
-                가격 협상
+                혼자서도 실전처럼
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-success"></div>
-                프로젝트 조율
+                심리적 부담 없이
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-success"></div>
-                발표 리허설
+                협상, 조율, 발표 등 맞춤 시나리오
               </div>
             </div>
           </div>
