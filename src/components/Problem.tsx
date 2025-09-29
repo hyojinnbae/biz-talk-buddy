@@ -21,9 +21,9 @@ export const Problem = () => {
               <div className="w-12 h-12 rounded-xl bg-destructive/10 flex items-center justify-center text-destructive">
                 <Users className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-semibold">이메일과 문서는 어떻게든 되는데</h3>
+              <h3 className="text-lg font-semibold">이메일과 문서는 잘 되는데</h3>
               <p className="text-muted-foreground">
-                텍스트로는 완벽한데 말로 하면 버벅거리고 표현이 어색해집니다.
+                텍스트로는 완벽한데 말로 하면 괜히 긴장되고 표현이 어색한지 불안합니다.
               </p>
             </div>
 
@@ -65,8 +65,11 @@ export const Problem = () => {
 
             <div className="p-8 rounded-2xl bg-gradient-primary text-primary-foreground text-center">
               <h3 className="text-2xl font-bold mb-4">영어 실력이 부족한 게 아닙니다.</h3>
-              <p className="text-lg opacity-90">
+              <p className="text-lg opacity-90 mb-4">
                 효과적인 방법으로 연습할 기회가 없었을 뿐이에요.
+              </p>
+              <p className="text-lg opacity-90 font-semibold">
+                Protalk는 이를 해결하는 직무 맞춤형 AI 영어 시뮬레이션입니다.
               </p>
             </div>
           </div>

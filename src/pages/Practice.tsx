@@ -63,6 +63,7 @@ const Practice = () => {
           jobRole: userInfo.job,
           englishLevel: userInfo.level,
           industry: userInfo.industry,
+          customSituation: userInfo.customSituation,
         }
       });
 
@@ -189,17 +190,17 @@ const Practice = () => {
                       <SelectTrigger>
                         <SelectValue placeholder="직무를 선택하세요" />
                       </SelectTrigger>
-                      <SelectContent>
+                       <SelectContent>
                         <SelectItem value="CEO">CEO</SelectItem>
                         <SelectItem value="BD">BD</SelectItem>
                         <SelectItem value="PM/PO">PM/PO</SelectItem>
                         <SelectItem value="마케터">마케터</SelectItem>
-                        <SelectItem value="기타">기타</SelectItem>
+                        <SelectItem value="기타(직접 입력)">기타(직접 입력)</SelectItem>
                       </SelectContent>
                     </Select>
-                    {userInfo.job === '기타' && (
+                    {userInfo.job === '기타(직접 입력)' && (
                       <Textarea
-                        placeholder="예: 고객 CS 팀장"
+                        placeholder="예: 해외 인플루언서와 첫 마케팅 미팅"
                         value={userInfo.customSituation || ''}
                         onChange={(e) => setUserInfo(prev => ({ ...prev, customSituation: e.target.value }))}
                       />
@@ -222,10 +223,10 @@ const Practice = () => {
                         <SelectItem value="소비재">소비재</SelectItem>
                         <SelectItem value="교육">교육</SelectItem>
                         <SelectItem value="컨설팅 & 전문서비스">컨설팅 & 전문서비스</SelectItem>
-                        <SelectItem value="기타">기타 (직접 입력)</SelectItem>
+                        <SelectItem value="기타(직접 입력)">기타(직접 입력)</SelectItem>
                       </SelectContent>
                     </Select>
-                    {userInfo.industry === '기타' && (
+                    {userInfo.industry === '기타(직접 입력)' && (
                       <Textarea
                         placeholder="예: 미디어 & 엔터테인먼트, 바이오테크, 항공우주, 스포츠 마케팅"
                         value={userInfo.customIndustry || ''}

@@ -140,11 +140,13 @@ serve(async (req) => {
   let jobRole = '' as string;
   let englishLevel = 3 as number;
   let industry = '' as string;
+  let customSituation = '' as string;
   try {
     const body = await req.json();
     jobRole = body?.jobRole ?? body?.job ?? '';
     englishLevel = Number(body?.englishLevel ?? body?.level ?? 3);
     industry = body?.industry ?? '';
+    customSituation = body?.customSituation ?? '';
   } catch (_) {
     // ignore body parse errors; we'll use defaults
   }
@@ -167,9 +169,12 @@ serve(async (req) => {
     ];
     const randomType = scenarioTypes[Math.floor(Math.random() * scenarioTypes.length)];
     
+    // Handle custom situation
+    const actualJobRole = jobRole === '기타(직접 입력)' ? customSituation || '일반 직무' : jobRole;
+    
     const prompt = `
 [USER INPUT]
-- 직무: ${jobRole}
+- 직무: ${actualJobRole}
 - 영어 레벨: ${englishLevel}
 - 업계: ${industry}
 - 랜덤 시드: ${randomSeed}
