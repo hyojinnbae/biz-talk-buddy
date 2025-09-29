@@ -5,7 +5,7 @@ import heroImage from "@/assets/hero-business-meeting.jpg";
 
 export const Hero = () => {
   return (
-    <section className="pt-24 pb-16 bg-gradient-subtle">
+    <section className="pt-24 pb-16 bg-gradient-subtle" aria-label="메인 히어로 섹션">
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-8 animate-fade-in">
@@ -67,8 +67,9 @@ export const Hero = () => {
             <div className="absolute inset-0 bg-gradient-primary opacity-20 rounded-2xl blur-2xl"></div>
             <img 
               src={heroImage} 
-              alt="Professional business meeting"
+              alt="AI 실무 영어 회화 연습 - 전문적인 비즈니스 미팅 환경에서 영어 대화 스킬 향상"
               className="relative rounded-2xl shadow-elegant w-full h-auto"
+              loading="eager"
             />
           </div>
         </div>

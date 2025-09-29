@@ -2,7 +2,7 @@ import { AlertTriangle, Clock, Users } from "lucide-react";
 
 export const Problem = () => {
   return (
-    <section className="py-20 bg-muted/30">
+    <section className="py-20 bg-muted/30" aria-label="실무자 영어 회화 문제점">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto text-center space-y-16">
           <div className="space-y-6">
@@ -11,7 +11,7 @@ export const Problem = () => {
               실무자의 현실
             </div>
             <h2 className="text-3xl lg:text-4xl font-bold leading-tight">
-              영어로 회의할 일 꼭 있으시죠?<br />
+              실무 영어 회화의 현실적 어려움<br />
               <span className="text-muted-foreground">그런데 왜 말할 때마다 긴장되시나요?</span>
             </h2>
           </div>

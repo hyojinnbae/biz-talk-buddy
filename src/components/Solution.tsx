@@ -2,7 +2,7 @@ import { Lightbulb, MessageSquare, FileText } from "lucide-react";
 
 export const Solution = () => {
   return (
-    <section className="py-20 bg-background">
+    <section className="py-20 bg-background" aria-label="AI 영어 회화 솔루션">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto text-center space-y-16">
           <div className="space-y-6">
