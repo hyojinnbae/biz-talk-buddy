@@ -270,14 +270,17 @@ export class RealtimeChat {
 
   private pcm16ToFloat32(pcmBytes: Uint8Array): Float32Array {
     const sampleCount = pcmBytes.length / 2;
+    const pcm16Array = new Int16Array(sampleCount);
     const out = new Float32Array(sampleCount);
     for (let i = 0, j = 0; i < sampleCount; i++, j += 2) {
       const lo = pcmBytes[j];
       const hi = pcmBytes[j + 1];
       let val = (hi << 8) | lo;
       if (val & 0x8000) val = val - 0x10000; // sign
+      pcm16Array[i] = val;
       out[i] = val / 0x8000;
     }
+    console.log("PCM16 delta length:", pcm16Array?.length);
     return out;
   }
 
