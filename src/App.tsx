@@ -10,6 +10,7 @@ import Practice from "./pages/Practice";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
 import AudioTest from "./pages/AudioTest";
+import WavTest from "./pages/WavTest";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App = () => (
             <Route path="/terms" element={<Terms />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/audio-test" element={<AudioTest />} />
+            <Route path="/wav-test" element={<WavTest />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
