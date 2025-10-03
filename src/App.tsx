@@ -12,6 +12,7 @@ import Privacy from "./pages/Privacy";
 import AudioTest from "./pages/AudioTest";
 import WavTest from "./pages/WavTest";
 import Pcm16Test from "./pages/Pcm16Test";
+import Pcm16khzTest from "./pages/Pcm16khzTest";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
             <Route path="/audio-test" element={<AudioTest />} />
             <Route path="/wav-test" element={<WavTest />} />
             <Route path="/pcm16-test" element={<Pcm16Test />} />
+            <Route path="/pcm16-16khz-test" element={<Pcm16khzTest />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
