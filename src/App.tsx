@@ -9,6 +9,7 @@ import Auth from "./pages/Auth";
 import Practice from "./pages/Practice";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
+import AudioTest from "./pages/AudioTest";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="/practice" element={<Practice />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/privacy" element={<Privacy />} />
+            <Route path="/audio-test" element={<AudioTest />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
