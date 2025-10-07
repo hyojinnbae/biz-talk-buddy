@@ -10,7 +10,7 @@ const Payment = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const paymentWidgetRef = useRef<any>(null);
   const planId = searchParams.get('planId');
 
@@ -27,8 +27,6 @@ const Payment = () => {
 
     const initializePayment = async () => {
       try {
-        setIsLoading(true);
-
         // Get user session
         const { data: { session } } = await supabase.auth.getSession();
         if (!session) {
@@ -47,6 +45,10 @@ const Payment = () => {
         });
 
         if (checkoutError) throw checkoutError;
+
+        // DOM 요소가 렌더링될 때까지 대기
+        setIsLoading(false);
+        await new Promise(resolve => setTimeout(resolve, 100));
 
         // Load Toss Payments
         const tossPayments = await loadTossPayments(TOSS_CLIENT_KEY);
@@ -69,7 +71,6 @@ const Payment = () => {
           variantKey: 'AGREEMENT'
         });
 
-        setIsLoading(false);
       } catch (error) {
         console.error('Payment initialization error:', error);
         toast({
