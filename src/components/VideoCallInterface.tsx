@@ -15,6 +15,7 @@ interface VideoCallInterfaceProps {
   isConnecting?: boolean;
   isSpeaking?: boolean;
   isUserSpeaking?: boolean;
+  aiTranscript?: string;
 }
 
 export const VideoCallInterface = ({ 
@@ -23,7 +24,8 @@ export const VideoCallInterface = ({
   isConnected = false, 
   isConnecting = false, 
   isSpeaking = false, 
-  isUserSpeaking = false 
+  isUserSpeaking = false,
+  aiTranscript = ''
 }: VideoCallInterfaceProps) => {
   const [isMuted, setIsMuted] = useState(false);
 
@@ -101,6 +103,15 @@ export const VideoCallInterface = ({
           </div>
         </div>
       </div>
+
+      {/* Subtitle Area */}
+      {aiTranscript && (
+        <div className="bg-black/70 text-white px-6 py-4 border-t border-gray-700">
+          <div className="max-w-4xl mx-auto">
+            <p className="text-lg text-center leading-relaxed">{aiTranscript}</p>
+          </div>
+        </div>
+      )}
 
       {/* Control bar - Zoom style */}
       <div className="bg-gray-900 border-t border-gray-700 p-6">

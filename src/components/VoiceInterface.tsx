@@ -27,6 +27,7 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
   const [isUserSpeaking, setIsUserSpeaking] = useState(false);
   const [messages, setMessages] = useState<any[]>([]);
   const [transcript, setTranscript] = useState('');
+  const [aiTranscript, setAiTranscript] = useState('');
   const chatRef = useRef<RealtimeChat | null>(null);
   const { user } = useAuth();
   const [showVideoCall, setShowVideoCall] = useState(false);
@@ -34,6 +35,7 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
   const handleMessage = (event: any) => {
     if (event.type === 'response.audio_transcript.delta') {
       setTranscript(prev => prev + event.delta);
+      setAiTranscript(prev => prev + event.delta);
     } else if (event.type === 'response.audio_transcript.done') {
       if (transcript) {
         setMessages(prev => [...prev, { role: 'assistant', content: transcript }]);
@@ -47,6 +49,8 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
       setIsSpeaking(true);
     } else if (event.type === 'response.audio.done') {
       setIsSpeaking(false);
+    } else if (event.type === 'response.done') {
+      setAiTranscript('');
     }
   };
 
@@ -112,6 +116,7 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
       isConnecting={isConnecting}
       isSpeaking={isSpeaking}
       isUserSpeaking={isUserSpeaking}
+      aiTranscript={aiTranscript}
     />
   );
 

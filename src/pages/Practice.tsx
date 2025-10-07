@@ -49,7 +49,7 @@ const Practice = () => {
   }, [user, navigate]);
 
   const generateScenarios = async () => {
-    if (!userInfo.job || !userInfo.level || !userInfo.industry) {
+    if (!userInfo.job || !userInfo.industry) {
       toast({
         title: "정보 누락",
         description: "모든 정보를 입력해주세요.",
@@ -248,42 +248,9 @@ const Practice = () => {
                     )}
                   </div>
 
-                  {/* 영어 레벨 선택 */}
-                  <div className="space-y-2">
-                    <Label>영어 레벨</Label>
-                    <div className="grid gap-3">
-                      {[
-                        { level: 1, desc: "영어 말하기 거의 못 함. 단어로만 대화 가능" },
-                        { level: 2, desc: "짧은 문장은 말할 수 있음. 대화는 어려움" },
-                        { level: 3, desc: "읽기/듣기/쓰기는 잘 되나, 말할 땐 자주 막힘" },
-                        { level: 4, desc: "말은 되지만 표현이 딱딱하거나 부정확함" },
-                        { level: 5, desc: "말은 잘 되며, 더 자연스럽고 전문적인 표현을 원함" }
-                      ].map(({ level, desc }) => (
-                        <Card 
-                          key={level}
-                          className={`p-3 cursor-pointer transition-colors ${
-                            userInfo.level === level ? 'border-primary bg-primary/5' : 'hover:bg-muted/50'
-                          }`}
-                          onClick={() => setUserInfo(prev => ({ ...prev, level }))}
-                        >
-                          <div className="flex items-center gap-3">
-                            <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center text-sm font-medium ${
-                              userInfo.level === level ? 'border-primary bg-primary text-primary-foreground' : 'border-muted-foreground'
-                            }`}>
-                              {level}
-                            </div>
-                            <p className="text-sm">{desc}</p>
-                          </div>
-                        </Card>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* 추가 입력 제거 - 직무/업계/레벨만 사용 */}
-
                   <Button 
                     onClick={generateScenarios}
-                    disabled={!userInfo.job || !userInfo.level || !userInfo.industry || isLoading}
+                    disabled={!userInfo.job || !userInfo.industry || isLoading}
                     className="w-full"
                     size="lg"
                   >
@@ -309,7 +276,7 @@ const Practice = () => {
                   추천 시나리오 선택
                 </h1>
                 <p className="text-lg text-muted-foreground">
-                  {userInfo.job} · {userInfo.industry} · 레벨 {userInfo.level}에 맞는 시나리오입니다
+                  {userInfo.job} · {userInfo.industry}에 맞는 시나리오입니다
                 </p>
               </div>
 
