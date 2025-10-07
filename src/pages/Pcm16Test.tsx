@@ -41,13 +41,11 @@ const Pcm16Test: React.FC = () => {
       
       // 1. 테스트용 PCM16 데이터 생성
       const pcm16Data = generateTestPcm16();
-      console.log('PCM16 데이터 생성 완료:', pcm16Data.length, 'samples');
 
       setStatus('Float32로 변환 중...');
       
       // 2. PCM16 → Float32 변환
       const float32Data = pcm16ToFloat32(pcm16Data);
-      console.log('Float32 변환 완료:', float32Data.length, 'samples');
 
       setStatus('AudioContext 초기화 중...');
       
@@ -74,7 +72,6 @@ const Pcm16Test: React.FC = () => {
 
       // 5. Float32 데이터를 AudioBuffer에 복사
       audioBuffer.copyToChannel(float32Data, 0);
-      console.log('AudioBuffer 생성 완료');
 
       setStatus('재생 중...');
       
@@ -85,14 +82,11 @@ const Pcm16Test: React.FC = () => {
       
       source.onended = () => {
         setStatus('재생 완료');
-        console.log('재생 완료');
       };
 
       source.start(0);
-      console.log('재생 시작');
 
     } catch (error) {
-      console.error('재생 중 오류:', error);
       setStatus(`오류: ${error instanceof Error ? error.message : '알 수 없는 오류'}`);
     }
   };

@@ -13,7 +13,6 @@ const Pcm16khzTest: React.FC = () => {
       // Int16 범위: -32768 ~ 32767을 -1.0 ~ 1.0으로 변환
       float32Array[i] = pcm16Array[i] / 32768.0;
     }
-    console.log('PCM16 → Float32 변환 완료:', pcm16Array.length, '→', float32Array.length, 'samples');
     return float32Array;
   };
 
@@ -32,7 +31,6 @@ const Pcm16khzTest: React.FC = () => {
       pcm16[i] = Math.floor(value * 32767);
     }
 
-    console.log('PCM16 테스트 데이터 생성:', numSamples, 'samples @', sampleRate, 'Hz');
     return pcm16;
   };
 
@@ -54,7 +52,6 @@ const Pcm16khzTest: React.FC = () => {
       // 3. AudioContext 생성 (16000Hz)
       if (!audioContextRef.current) {
         audioContextRef.current = new AudioContext({ sampleRate: 16000 });
-        console.log('AudioContext 생성:', audioContextRef.current.sampleRate, 'Hz');
       }
       
       const audioContext = audioContextRef.current;
@@ -62,7 +59,6 @@ const Pcm16khzTest: React.FC = () => {
       // AudioContext가 suspended 상태면 resume
       if (audioContext.state === 'suspended') {
         await audioContext.resume();
-        console.log('AudioContext resumed');
       }
 
       setStatus('AudioBuffer 생성 중...');
@@ -74,16 +70,8 @@ const Pcm16khzTest: React.FC = () => {
         16000                 // 샘플레이트 (16000Hz)
       );
 
-      console.log('AudioBuffer 생성:', {
-        numberOfChannels: audioBuffer.numberOfChannels,
-        length: audioBuffer.length,
-        sampleRate: audioBuffer.sampleRate,
-        duration: audioBuffer.duration
-      });
-
       // 5. Float32 데이터를 AudioBuffer의 채널 0에 복사
       audioBuffer.copyToChannel(float32Data, 0);
-      console.log('copyToChannel 완료 (채널 0)');
 
       setStatus('재생 중...');
       
@@ -94,14 +82,11 @@ const Pcm16khzTest: React.FC = () => {
       
       source.onended = () => {
         setStatus('재생 완료');
-        console.log('재생 완료');
       };
 
       source.start(0);
-      console.log('재생 시작');
 
     } catch (error) {
-      console.error('재생 중 오류:', error);
       setStatus(`오류: ${error instanceof Error ? error.message : '알 수 없는 오류'}`);
     }
   };

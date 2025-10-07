@@ -87,10 +87,8 @@ export default function Auth() {
       
       // 에러가 없으면 자동으로 redirect될 것임 (useAuth의 onAuthStateChange에 의해)
       if (result.error) {
-        console.error('Authentication error:', result.error);
       }
     } catch (error) {
-      console.error('Unexpected error during authentication:', error);
     } finally {
       setLoading(false);
     }
@@ -101,11 +99,9 @@ export default function Auth() {
     try {
       const result = await signInWithGoogle();
       if (result.error) {
-        console.error('Google sign-in error:', result.error);
       }
       // 성공시 자동으로 redirect될 것임
     } catch (error) {
-      console.error('Unexpected error during Google sign-in:', error);
     } finally {
       setLoading(false);
     }

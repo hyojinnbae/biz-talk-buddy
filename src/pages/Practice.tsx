@@ -83,7 +83,6 @@ const Practice = () => {
         throw new Error('Invalid response format');
       }
     } catch (error) {
-      console.error('Error generating scenarios:', error);
       toast({
         title: "오류",
         description: "시나리오 생성에 실패했습니다. 다시 시도해주세요.",
@@ -95,7 +94,6 @@ const Practice = () => {
   };
 
   const handleScenarioSelect = (scenario: GeneratedScenario) => {
-    console.log('[Practice] handleScenarioSelect', scenario);
     const fullScenario = {
       id: Date.now().toString(),
       title: scenario.title,
@@ -104,7 +102,6 @@ const Practice = () => {
       greeting: scenario.openingLine,
       prompt: `당신은 ${scenario.counterpart}의 역할을 맡아 영어로 대화해주세요. 상황: ${scenario.title}. 사용자의 영어 레벨은 ${userInfo.level}입니다. 업계는 ${userInfo.industry}입니다. 첫 인사말: "${scenario.openingLine}" 자연스럽고 실무적인 대화를 이끌어주세요.`
     };
-    console.log('[Practice] fullScenario prepared', fullScenario);
     setSelectedScenario(fullScenario);
     setCurrentStep('conversation');
   };

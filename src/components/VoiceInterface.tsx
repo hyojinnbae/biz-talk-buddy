@@ -32,8 +32,6 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
   const [showVideoCall, setShowVideoCall] = useState(false);
 
   const handleMessage = (event: any) => {
-    console.log('받은 이벤트:', event);
-    
     if (event.type === 'response.audio_transcript.delta') {
       setTranscript(prev => prev + event.delta);
     } else if (event.type === 'response.audio_transcript.done') {
@@ -53,25 +51,14 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
   };
 
   const startConversation = async () => {
-    // Debug: entry and state snapshot
-    console.log('startConversation called', { selectedScenario: scenario, userProfile: user });
-    console.log('[VoiceInterface] startConversation clicked');
-    if (!scenario) {
-      console.warn('[VoiceInterface] selectedScenario is null/undefined');
-    }
-    if (!user) {
-      console.warn('[VoiceInterface] userProfile is null/undefined');
-    }
     try {
       setIsConnecting(true);
-      console.log('[VoiceInterface] Initializing RealtimeChat...');
       chatRef.current = new RealtimeChat(handleMessage, setIsSpeaking);
       
       // Resume AudioContext on user gesture to avoid autoplay blocking
       await chatRef.current.resumeAudioContext();
       
       await chatRef.current.init();
-      console.log('[VoiceInterface] RealtimeChat initialized successfully');
       
       setIsConnected(true);
       setIsConnecting(false);
@@ -82,7 +69,6 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
         description: "음성 대화를 시작하세요!",
       });
     } catch (error) {
-      console.error('연결 오류:', error);
       setIsConnecting(false);
       toast({
         title: "연결 실패",
@@ -102,24 +88,10 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
   };
 
   useEffect(() => {
-    console.log('[VoiceInterface] mounted', { title: scenario?.title });
     return () => {
-      console.log('[VoiceInterface] unmount');
       chatRef.current?.disconnect();
     };
   }, [scenario?.title]);
-
-  // Debug: track state transitions for connection and UI conditions
-  useEffect(() => {
-    console.log('[VoiceInterface] state', {
-      isConnected,
-      isConnecting,
-      isSpeaking,
-      isUserSpeaking,
-      hasTranscript: !!transcript,
-      messagesCount: messages.length,
-    });
-  }, [isConnected, isConnecting, isSpeaking, isUserSpeaking, transcript, messages.length]);
 
   // Auto-start conversation when component mounts
   useEffect(() => {

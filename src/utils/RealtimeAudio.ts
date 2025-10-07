@@ -35,7 +35,6 @@ export class AudioRecorder {
       this.source.connect(this.processor);
       this.processor.connect(this.audioContext.destination);
     } catch (error) {
-      console.error('Error accessing microphone:', error);
       throw error;
     }
   }
@@ -74,7 +73,6 @@ export class AudioQueue {
   }
 
   async addToQueue(frame: Float32Array) {
-    console.log('[AudioQueue] enqueue samples', frame.length, 'queueLen(before)=', this.queue.length);
     this.queue.push(frame);
     if (!this.isPlaying) {
       await this.playNext();
@@ -82,10 +80,8 @@ export class AudioQueue {
   }
 
   private async playNext() {
-    console.log('[AudioQueue] playNext called, queueLen=', this.queue.length);
     if (this.queue.length === 0) {
       this.isPlaying = false;
-      console.log('[AudioQueue] queue empty, stopping');
       return;
     }
 
@@ -101,13 +97,10 @@ export class AudioQueue {
       source.connect(this.gainNode);
 
       source.onended = () => {
-        console.log('[AudioQueue] chunk finished, playing next');
         this.playNext();
       };
-      console.log('[AudioQueue] playing audio chunk...', { samples: frame.length, sampleRate });
       source.start(0);
     } catch (error) {
-      console.error('Error playing audio:', error);
       this.playNext();
     }
   }
@@ -127,24 +120,16 @@ export class RealtimeChat {
     // Pre-create AudioContext so UI can resume it on first user gesture before any playback
     this.audioContext = new AudioContext({ sampleRate: 24000 });
     this.audioQueue = new AudioQueue(this.audioContext);
-    console.log('[RealtimeChat] AudioContext pre-created', { state: this.audioContext.state, sampleRate: this.audioContext.sampleRate });
   }
 
   async init() {
     try {
-      console.log('RealtimeChat.init: start');
-      
-      // AudioContext pre-created in constructor; will be resumed by UI on user gesture
-      console.log('AudioContext already available', { state: this.audioContext?.state, sampleRate: this.audioContext?.sampleRate });
-      
       // Connect directly to WebSocket proxy (no REST calls)
       const wsUrl = `wss://qgtcogpbqyjwgeanccto.functions.supabase.co/functions/v1/realtime-session`;
-      console.log('Connecting to WebSocket proxy:', wsUrl);
       
       this.ws = new WebSocket(wsUrl);
 
       this.ws.onopen = () => {
-        console.log("Connected to realtime session proxy");
         const initialResponse = {
           type: "response.create",
           response: {
@@ -154,28 +139,17 @@ export class RealtimeChat {
             instructions: "Start now. Say hello first."
           }
         };
-        console.log('WS opened, sending initial response.create', initialResponse);
-        try { this.ws?.send(JSON.stringify(initialResponse)); } catch (e) { console.error('Failed to send initial response.create on open', e); }
+        try { this.ws?.send(JSON.stringify(initialResponse)); } catch (e) { }
       };
 
       this.ws.onmessage = async (event) => {
         const data = JSON.parse(event.data);
-        console.log("Received message:", data.type);
-
-        if (data.type === 'response.output_text.delta') {
-          const preview = typeof data.delta === 'string' ? data.delta.slice(0, 120) : '';
-          console.log('[WS] output_text.delta:', preview);
-        }
-        if (data.type === 'response.output_text.done') {
-          console.log('[WS] output_text.done');
-        }
         
         this.onMessage(data);
 
         // Handle session ready signal from backend
         if (data.type === 'session.ready') {
           this.sessionReady = true;
-          console.log('Session ready, sending initial response.create');
           
           // Send initial response.create to get AI to speak first
           const initialResponse = {
@@ -187,14 +161,11 @@ export class RealtimeChat {
               instructions: "Start now. Say hello first."
             }
           };
-          console.log('Sending response.create to proxy', initialResponse);
           this.ws?.send(JSON.stringify(initialResponse));
         }
 
         // Handle audio output
         if ((data.type === 'response.audio.delta' || data.type === 'response.output_audio.delta') && data.delta) {
-          const b64len = data.delta.length;
-          console.log('[WS] audio.delta received, base64 length=', b64len);
           const binaryString = atob(data.delta);
           const arrayBuffer = new ArrayBuffer(binaryString.length);
           const uint8Array = new Uint8Array(arrayBuffer);
@@ -202,24 +173,20 @@ export class RealtimeChat {
             uint8Array[i] = binaryString.charCodeAt(i);
           }
           const floatData = this.pcm16ToFloat32(uint8Array);
-          console.log('[WS] enqueue float samples', floatData.length);
           await this.audioQueue?.addToQueue(floatData);
         }
 
         if (data.type === 'response.audio.delta' || data.type === 'response.output_audio.delta') {
           this.onSpeakingChange(true);
         } else if (data.type === 'response.audio.done' || data.type === 'response.output_audio.done') {
-          console.log('[WS] audio.done');
           this.onSpeakingChange(false);
         }
       };
 
       this.ws.onerror = (error) => {
-        console.error("WebSocket 오류:", error);
       };
 
       this.ws.onclose = () => {
-        console.log("WebSocket 연결 종료");
       };
 
       // Wait for WebSocket connection
@@ -238,14 +205,10 @@ export class RealtimeChat {
         setTimeout(() => reject(new Error('WebSocket open timeout')), 10000);
       });
 
-      // AudioContext already initialized in constructor; just ensure it's resumed before playback
-      console.log('AudioContext ready (init)', { state: this.audioContext?.state, sampleRate: this.audioContext?.sampleRate });
-
       // Initialize audio recorder
       this.recorder = new AudioRecorder((audioData) => {
         if (this.ws?.readyState === WebSocket.OPEN) {
           const base64Audio = this.encodeAudioData(audioData);
-          console.log('[Mic] sending input_audio_buffer.append, b64len=', base64Audio.length);
           this.ws.send(JSON.stringify({
             type: 'input_audio_buffer.append',
             audio: base64Audio
@@ -254,16 +217,13 @@ export class RealtimeChat {
       });
 
       await this.recorder.start();
-      console.log('RealtimeChat initialized successfully');
     } catch (error) {
-      console.error('Failed to initialize realtime chat:', error);
       throw error;
     }
   }
 
   async resumeAudioContext() {
     if (this.audioContext?.state === 'suspended') {
-      console.log('Resuming AudioContext after user gesture');
       await this.audioContext.resume();
     }
   }
@@ -280,7 +240,6 @@ export class RealtimeChat {
       pcm16Array[i] = val;
       out[i] = val / 0x8000;
     }
-    console.log("PCM16 delta length:", pcm16Array?.length);
     return out;
   }
 

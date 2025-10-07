@@ -55,16 +55,15 @@ const AudioTest = () => {
       const source = audioContextRef.current.createBufferSource();
       source.buffer = audioBuffer;
       source.connect(audioContextRef.current.destination);
-      source.start(0);
-      sourceRef.current = source;
+        source.start(0);
+        sourceRef.current = source;
 
-      source.onended = () => {
-        setStatus('재생 완료');
-      };
+        source.onended = () => {
+          setStatus('재생 완료');
+        };
 
-    } catch (error) {
-      console.error('오디오 재생 오류:', error);
-      setStatus(`오류 발생: ${error instanceof Error ? error.message : '알 수 없는 오류'}`);
+      } catch (error) {
+        setStatus(`오류 발생: ${error instanceof Error ? error.message : '알 수 없는 오류'}`);
     }
   };
 

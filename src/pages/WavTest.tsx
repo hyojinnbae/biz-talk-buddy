@@ -88,7 +88,6 @@ const WavTest = () => {
       setStatus(`WAV 파일 준비 완료 (크기: ${(wavBlob.size / 1024).toFixed(2)} KB)`);
 
     } catch (error) {
-      console.error('변환 오류:', error);
       setStatus(`오류 발생: ${error instanceof Error ? error.message : '알 수 없는 오류'}`);
     }
   };
