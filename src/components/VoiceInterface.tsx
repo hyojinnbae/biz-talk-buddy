@@ -46,18 +46,21 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
         setConversationLog(prev => [...prev, { role: 'assistant', text: transcript, timestamp: new Date() }]);
         setTranscript('');
       }
+    } else if (event.type === 'conversation.item.input_audio_transcription.completed') {
+      if (event.transcript) {
+        setConversationLog(prev => [...prev, { role: 'user', text: event.transcript, timestamp: new Date() }]);
+      }
     } else if (event.type === 'input_audio_buffer.speech_started') {
       setIsUserSpeaking(true);
     } else if (event.type === 'input_audio_buffer.speech_stopped') {
       setIsUserSpeaking(false);
-    } else if (event.type === 'input_audio_buffer.committed') {
-      if (event.transcript) {
-        setConversationLog(prev => [...prev, { role: 'user', text: event.transcript, timestamp: new Date() }]);
-      }
     } else if (event.type === 'response.audio.delta') {
       setIsSpeaking(true);
-    } else if (event.type === 'response.audio.done') {
+    } else if (event.type === 'response.done') {
       setIsSpeaking(false);
+      setTimeout(() => {
+        setAiTranscript('');
+      }, 2000);
     }
   };
 
