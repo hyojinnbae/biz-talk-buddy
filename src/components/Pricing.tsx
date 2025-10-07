@@ -3,10 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Check, Zap, Gift, FileText, Users } from "lucide-react";
 import { Link } from "react-router-dom";
-
 export const Pricing = () => {
-  return (
-    <section className="py-20 bg-background">
+  return <section className="py-20 bg-background">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto text-center space-y-16">
           <div className="space-y-6">
@@ -65,7 +63,7 @@ export const Pricing = () => {
                   <div className="text-4xl font-bold text-primary line-through opacity-50">
                     월 19,000원
                   </div>
-                  <div className="text-5xl font-bold text-success">
+                  <div className="text-5xl font-bold text-success rounded-lg">
                     무료
                   </div>
                   <p className="text-muted-foreground mt-2">
@@ -99,6 +97,5 @@ export const Pricing = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
