@@ -24,6 +24,7 @@ serve(async (req) => {
     // Get user from authorization header
     const authHeader = req.headers.get('authorization');
     if (!authHeader) {
+      console.error('❌ Missing authorization header');
       throw new Error('Missing authorization header');
     }
 
@@ -32,10 +33,14 @@ serve(async (req) => {
     );
 
     if (userError || !user) {
+      console.error('❌ Unauthorized:', userError);
       throw new Error('Unauthorized');
     }
 
+    console.log('✅ User authenticated:', user.id);
+
     const { planId } = await req.json();
+    console.log('📌 Checkout request for planId:', planId);
 
     // Get plan details
     const { data: plan, error: planError } = await supabase
@@ -45,8 +50,11 @@ serve(async (req) => {
       .single();
 
     if (planError || !plan) {
+      console.error('❌ Plan not found:', planError);
       throw new Error('Plan not found');
     }
+
+    console.log('✅ Plan found:', plan.name, plan.amount);
 
     // Get user profile for email
     const { data: profile } = await supabase
@@ -57,6 +65,8 @@ serve(async (req) => {
 
     // Create order
     const orderId = crypto.randomUUID();
+    console.log('📝 Creating order:', orderId);
+    
     const { error: orderError } = await supabase
       .from('orders')
       .insert({
@@ -67,8 +77,11 @@ serve(async (req) => {
       });
 
     if (orderError) {
+      console.error('❌ Order creation failed:', orderError);
       throw new Error('Failed to create order');
     }
+
+    console.log('✅ Order created successfully');
 
     return new Response(
       JSON.stringify({
