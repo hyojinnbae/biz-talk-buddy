@@ -16,7 +16,7 @@ const faqs = [{
   answer: "개인 학습 목적으로만 저장되며, 외부에 공유되지 않습니다. 언제든 삭제 요청이 가능합니다."
 }];
 export const FAQ = () => {
-  return <section className="py-20 bg-background">
+  return <section className="py-12 bg-background">
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto space-y-12">
           <div className="text-center space-y-4">
