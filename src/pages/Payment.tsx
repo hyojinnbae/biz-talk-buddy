@@ -96,13 +96,14 @@ const Payment = () => {
         body: { planId }
       });
 
+      const baseUrl = window.top?.location.origin || window.location.origin;
       await paymentWidgetRef.current.requestPayment({
         orderId: checkoutData.orderId,
         orderName: checkoutData.planName,
         customerEmail: checkoutData.customerEmail,
         customerName: checkoutData.customerName,
-        successUrl: `${window.location.origin}/payment/success`,
-        failUrl: `${window.location.origin}/payment/fail`,
+        successUrl: `${baseUrl}/payment/success`,
+        failUrl: `${baseUrl}/payment/fail`,
       });
     } catch (error) {
       console.error('Payment request error:', error);
