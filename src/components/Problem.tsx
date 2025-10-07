@@ -10,33 +10,40 @@ export const Problem = () => {
               <AlertTriangle className="w-4 h-4" />
               실무자의 현실
             </div>
-            <h2 className="text-3xl font-bold text-gray-900 leading-snug">
-              실무 영어 회화의 현실적 어려움
+            <h2 className="text-3xl lg:text-4xl font-bold leading-tight">
+              실무 영어 회화의 현실적 어려움<br />
+              <span className="text-muted-foreground">그런데 왜 말할 때마다 긴장되시나요?</span>
             </h2>
-            <p className="text-lg text-gray-600 leading-relaxed">
-              그런데 왜 말할 때마다 긴장되시나요?
-            </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="p-6 bg-white rounded-2xl shadow-sm border border-gray-100">
-              <h3 className="text-xl font-semibold mb-2 text-gray-800">이메일과 문서는 잘 되는데</h3>
-              <p className="text-base text-gray-600 leading-relaxed">
-                텍스트로는 완벽한데 말로 하면 괜히 긴장되고 표현이 어색한지 불안합니다
+            <div className="space-y-4 p-6 rounded-xl bg-background border border-border">
+              <div className="w-12 h-12 rounded-xl bg-destructive/10 flex items-center justify-center text-destructive">
+                <Users className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-semibold">이메일과 문서는 잘 되는데</h3>
+              <p className="text-muted-foreground">
+                텍스트로는 완벽한데 말로 하면 괜히 긴장되고 표현이 어색한지 불안합니다.
               </p>
             </div>
 
-            <div className="p-6 bg-white rounded-2xl shadow-sm border border-gray-100">
-              <h3 className="text-xl font-semibold mb-2 text-gray-800">미팅이나 전화만 하면 머릿속이 하얘지고</h3>
-              <p className="text-base text-gray-600 leading-relaxed">
-                "이 표현이 맞나?" 싶어서 결국 말을 줄이게 되고, 준비했던 말도 잊어버립니다
+            <div className="space-y-4 p-6 rounded-xl bg-background border border-border">
+              <div className="w-12 h-12 rounded-xl bg-destructive/10 flex items-center justify-center text-destructive">
+                <Clock className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-semibold">미팅이나 전화만 하면 머릿속이 하얘지고</h3>
+              <p className="text-muted-foreground">
+                "이 표현이 맞나?" 싶어서 결국 말을 줄이게 되고, 준비했던 말도 잊어버립니다.
               </p>
             </div>
 
-            <div className="p-6 bg-white rounded-2xl shadow-sm border border-gray-100">
-              <h3 className="text-xl font-semibold mb-2 text-gray-800">결국 기회가 조용히 지나갑니다</h3>
-              <p className="text-base text-gray-600 leading-relaxed">
-                말하고 싶었던 아이디어, 제안하려던 솔루션이 기회를 놓치고 맙니다
+            <div className="space-y-4 p-6 rounded-xl bg-background border border-border">
+              <div className="w-12 h-12 rounded-xl bg-destructive/10 flex items-center justify-center text-destructive">
+                <AlertTriangle className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-semibold">결국 기회가 조용히 지나갑니다</h3>
+              <p className="text-muted-foreground">
+                말하고 싶었던 아이디어, 제안하려던 솔루션이 기회를 놓치고 맙니다.
               </p>
             </div>
           </div>
@@ -56,13 +63,13 @@ export const Problem = () => {
               </div>
             </div>
 
-            <div className="p-8 rounded-2xl bg-blue-600 text-white text-center">
-              <h3 className="text-2xl font-bold mb-4">영어 실력이 부족한 게 아닙니다</h3>
-              <p className="text-lg mb-4">
-                효과적인 방법으로 연습할 기회가 없었을 뿐이에요
+            <div className="p-8 rounded-2xl bg-gradient-primary text-primary-foreground text-center">
+              <h3 className="text-2xl font-bold mb-4">영어 실력이 부족한 게 아닙니다.</h3>
+              <p className="text-lg opacity-90 mb-4">
+                효과적인 방법으로 연습할 기회가 없었을 뿐이에요.
               </p>
-              <p className="text-lg font-semibold">
-                Protalk는 이를 해결하는 직무 맞춤형 AI 영어 시뮬레이터입니다
+              <p className="text-lg opacity-90 font-semibold">
+                Protalk는 이를 해결하는 직무 맞춤형 AI 영어 시뮬레이션입니다.
               </p>
             </div>
           </div>

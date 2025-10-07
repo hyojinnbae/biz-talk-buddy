@@ -104,9 +104,9 @@ export const VideoCallInterface = ({
         </div>
       </div>
 
-      {/* Subtitle Area - Show when AI is speaking or when there's transcript */}
+      {/* Subtitle Area */}
       {aiTranscript && (
-        <div className="bg-black/80 text-white px-6 py-4 border-t border-gray-700">
+        <div className="bg-black/70 text-white px-6 py-4 border-t border-gray-700">
           <div className="max-w-4xl mx-auto">
             <p className="text-lg text-center leading-relaxed">{aiTranscript}</p>
           </div>

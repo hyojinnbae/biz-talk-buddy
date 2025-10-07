@@ -46,10 +46,10 @@ export const Comparison = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-5xl mx-auto space-y-12">
           <div className="text-center space-y-4">
-            <h2 className="text-3xl font-bold text-gray-900">
+            <h2 className="text-3xl lg:text-4xl font-bold">
               기존 서비스와 차별점
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-muted-foreground">
               실무 중심, 루틴 중심, 피드백을 통한 내 직무용 말하기 훈련 도구
             </p>
           </div>

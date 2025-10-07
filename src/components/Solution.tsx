@@ -10,13 +10,9 @@ export const Solution = () => {
               <Lightbulb className="w-4 h-4" />
               우리의 제안
             </div>
-            <h2 className="text-4xl font-extrabold leading-snug max-w-lg mx-auto text-gray-900">
-              실제 업무 미팅을<br />그대로 재현해 연습하세요
+            <h2 className="text-3xl lg:text-4xl font-bold leading-tight">
+                실제 업무 미팅을 그대로 재현해 연습하세요
             </h2>
-            <p className="mt-6 text-lg text-gray-600 max-w-md mx-auto leading-relaxed">
-              현업 회의, 팀 미팅 등 실제 상황을 시뮬레이트해서<br />
-              반복 연습하고 자신감을 쌓아보세요
-            </p>
           </div>
 
           <div className="grid lg:grid-cols-3 gap-8">
