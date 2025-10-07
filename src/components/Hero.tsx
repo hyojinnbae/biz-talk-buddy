@@ -2,10 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Play, Mic, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-business-meeting.jpg";
-
 export const Hero = () => {
-  return (
-    <section className="pt-24 pb-16 bg-gradient-subtle" aria-label="메인 히어로 섹션">
+  return <section className="pt-24 pb-16 bg-gradient-subtle" aria-label="메인 히어로 섹션">
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-8 animate-fade-in">
@@ -24,14 +22,14 @@ export const Hero = () => {
                  </div>
                  <div className="flex items-center gap-3">
                    <div className="w-2 h-2 rounded-full bg-primary"></div>
-                   <span>내 직무·레벨에 맞춘 시나리오</span>
+                   <span>내 직무에 맞춘 시나리오 제공</span>
                  </div>
                   <div className="flex items-center gap-3">
                     <div className="w-2 h-2 rounded-full bg-primary"></div>
                     <span>Fortune 500 미팅 수준 대화</span>
                   </div>
               </div>
-               <p className="text-lg text-muted-foreground leading-relaxed">
+               <p className="text-lg leading-relaxed text-slate-700">
                  매일 내 상황 맞춤 시나리오 연습으로<br />
                  자신감과 전문성을 함께 성장시키세요.
                </p>
@@ -65,15 +63,9 @@ export const Hero = () => {
           
           <div className="relative animate-scale-in">
             <div className="absolute inset-0 bg-gradient-primary opacity-20 rounded-2xl blur-2xl"></div>
-            <img 
-              src={heroImage} 
-              alt="AI 실무 영어 회화 연습 - 전문적인 비즈니스 미팅 환경에서 영어 대화 스킬 향상"
-              className="relative rounded-2xl shadow-elegant w-full h-auto"
-              loading="eager"
-            />
+            <img src={heroImage} alt="AI 실무 영어 회화 연습 - 전문적인 비즈니스 미팅 환경에서 영어 대화 스킬 향상" className="relative rounded-2xl shadow-elegant w-full h-auto" loading="eager" />
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
