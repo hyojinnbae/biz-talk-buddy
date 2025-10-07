@@ -61,6 +61,74 @@ export type Database = {
           },
         ]
       }
+      orders: {
+        Row: {
+          created_at: string | null
+          id: string
+          payment_key: string | null
+          plan_id: string
+          raw_response: Json | null
+          status: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          payment_key?: string | null
+          plan_id: string
+          raw_response?: Json | null
+          status?: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          payment_key?: string | null
+          plan_id?: string
+          raw_response?: Json | null
+          status?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      plans: {
+        Row: {
+          amount: number
+          created_at: string | null
+          duration_months: number
+          id: string
+          monthly_limit: number
+          name: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          duration_months: number
+          id?: string
+          monthly_limit: number
+          name: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          duration_months?: number
+          id?: string
+          monthly_limit?: number
+          name?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string | null
@@ -207,6 +275,50 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_plans: {
+        Row: {
+          created_at: string | null
+          expires_at: string | null
+          id: string
+          monthly_limit: number
+          plan_id: string
+          trial_limit: number | null
+          updated_at: string | null
+          used_count_this_month: number | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          monthly_limit: number
+          plan_id: string
+          trial_limit?: number | null
+          updated_at?: string | null
+          used_count_this_month?: number | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          monthly_limit?: number
+          plan_id?: string
+          trial_limit?: number | null
+          updated_at?: string | null
+          used_count_this_month?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_plans_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "plans"
             referencedColumns: ["id"]
           },
         ]
