@@ -13,6 +13,9 @@ import AudioTest from "./pages/AudioTest";
 import WavTest from "./pages/WavTest";
 import Pcm16Test from "./pages/Pcm16Test";
 import Pcm16khzTest from "./pages/Pcm16khzTest";
+import Payment from "./pages/Payment";
+import PaymentSuccess from "./pages/PaymentSuccess";
+import PaymentFail from "./pages/PaymentFail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +33,9 @@ const App = () => (
             <Route path="/practice" element={<Practice />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/privacy" element={<Privacy />} />
+            <Route path="/payment" element={<Payment />} />
+            <Route path="/payment/success" element={<PaymentSuccess />} />
+            <Route path="/payment/fail" element={<PaymentFail />} />
             <Route path="/audio-test" element={<AudioTest />} />
             <Route path="/wav-test" element={<WavTest />} />
             <Route path="/pcm16-test" element={<Pcm16Test />} />

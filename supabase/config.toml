@@ -2,3 +2,9 @@ project_id = "qgtcogpbqyjwgeanccto"
 
 [functions.realtime-session]
 verify_jwt = false
+
+[functions.checkout]
+verify_jwt = true
+
+[functions.confirm-payment]
+verify_jwt = false

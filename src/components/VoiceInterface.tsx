@@ -49,6 +49,18 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
         setMessages(prev => [...prev, { role: 'assistant', content: fullTranscript }]);
         setConversationLog(prev => [...prev, { role: 'assistant', content: fullTranscript }]);
         setAiTranscripts(prev => [...prev, fullTranscript]);
+        
+        // Extract rephrase expressions from AI response
+        const rephraseMatch = fullTranscript.match(/Rephrase:\s*['"]([^'"]+)['"]/i);
+        if (rephraseMatch) {
+          // Find the previous user message as the original
+          const lastUserMessage = conversationLog.filter(msg => msg.role === 'user').pop();
+          setRephrasedExpressions(prev => [...prev, {
+            original: lastUserMessage?.content || '',
+            rephrased: rephraseMatch[1]
+          }]);
+        }
+        
         setTranscript('');
       }
     } else if (event.type === 'conversation.item.input_audio_transcription.completed') {
@@ -66,16 +78,6 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
       setIsSpeaking(false);
     } else if (event.type === 'response.done') {
       // AI 응답 완료 시 자막 유지 (바로 클리어하지 않음)
-    } else if (event.type === 'response.function_call_arguments.done') {
-      // Rephrase 표현 추출 (함수 호출로 rephrase가 온다면)
-      try {
-        const args = JSON.parse(event.arguments || '{}');
-        if (args.original && args.rephrased) {
-          setRephrasedExpressions(prev => [...prev, { original: args.original, rephrased: args.rephrased }]);
-        }
-      } catch (e) {
-        console.error('Error parsing rephrase:', e);
-      }
     }
   };
 
