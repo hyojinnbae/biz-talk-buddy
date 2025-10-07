@@ -6,6 +6,7 @@ import { RealtimeChat } from '@/utils/RealtimeAudio';
 import { useAuth } from '@/hooks/useAuth';
 import { Mic, MicOff, MessageSquare, Phone, PhoneOff, Volume2 } from 'lucide-react';
 import { VideoCallInterface } from './VideoCallInterface';
+import { SessionResult } from './SessionResult';
 
 interface VoiceInterfaceProps {
   scenario: {
@@ -28,9 +29,12 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
   const [messages, setMessages] = useState<any[]>([]);
   const [transcript, setTranscript] = useState('');
   const [aiTranscript, setAiTranscript] = useState('');
+  const [conversationLog, setConversationLog] = useState<Array<{role: string, text: string, timestamp: Date}>>([]);
+  const [rephrasedExpressions, setRephrasedExpressions] = useState<Array<{original: string, rephrased: string}>>([]);
   const chatRef = useRef<RealtimeChat | null>(null);
   const { user } = useAuth();
   const [showVideoCall, setShowVideoCall] = useState(false);
+  const [showResult, setShowResult] = useState(false);
 
   const handleMessage = (event: any) => {
     if (event.type === 'response.audio_transcript.delta') {
@@ -39,18 +43,21 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
     } else if (event.type === 'response.audio_transcript.done') {
       if (transcript) {
         setMessages(prev => [...prev, { role: 'assistant', content: transcript }]);
+        setConversationLog(prev => [...prev, { role: 'assistant', text: transcript, timestamp: new Date() }]);
         setTranscript('');
       }
     } else if (event.type === 'input_audio_buffer.speech_started') {
       setIsUserSpeaking(true);
     } else if (event.type === 'input_audio_buffer.speech_stopped') {
       setIsUserSpeaking(false);
+    } else if (event.type === 'input_audio_buffer.committed') {
+      if (event.transcript) {
+        setConversationLog(prev => [...prev, { role: 'user', text: event.transcript, timestamp: new Date() }]);
+      }
     } else if (event.type === 'response.audio.delta') {
       setIsSpeaking(true);
     } else if (event.type === 'response.audio.done') {
       setIsSpeaking(false);
-    } else if (event.type === 'response.done') {
-      setAiTranscript('');
     }
   };
 
@@ -88,7 +95,7 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
     setIsSpeaking(false);
     setIsUserSpeaking(false);
     setShowVideoCall(false);
-    onSessionEnd();
+    setShowResult(true);
   };
 
   useEffect(() => {
@@ -102,7 +109,16 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
     startConversation();
   }, []);
 
-  // Always show video call interface (no intermediate screen)
+  if (showResult) {
+    return (
+      <SessionResult 
+        conversationLog={conversationLog}
+        rephrasedExpressions={rephrasedExpressions}
+        onClose={onSessionEnd}
+      />
+    );
+  }
+
   return (
     <VideoCallInterface 
       scenario={{

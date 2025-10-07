@@ -72,14 +72,11 @@ export const Scenarios = () => {
     <section id="scenarios" className="py-20 bg-muted/30">
       <div className="container mx-auto px-4">
         <div className="text-center space-y-4 mb-16">
-          <h2 className="text-3xl lg:text-4xl font-bold">
+          <h2 className="text-3xl font-bold text-gray-900">
             시나리오 갤러리
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             실제 업무에서 마주하는 상황, 미리 연습하세요
-          </p>
-          <p className="text-sm text-muted-foreground">
-            오늘 무엇을 연습할지 모르겠다면 → 갤러리에서 클릭 (베타 버전)
           </p>
         </div>
         

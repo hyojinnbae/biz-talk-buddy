@@ -34,27 +34,19 @@ export const FAQ = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto space-y-12">
           <div className="text-center space-y-4">
-            <h2 className="text-3xl lg:text-4xl font-bold">
+            <h2 className="text-3xl font-bold text-gray-900">
               자주 묻는 질문
             </h2>
           </div>
 
-          <Accordion type="single" collapsible className="space-y-4">
+          <div className="space-y-8">
             {faqs.map((faq, index) => (
-              <AccordionItem 
-                key={index} 
-                value={`item-${index}`}
-                className="border border-border rounded-lg px-6"
-              >
-                <AccordionTrigger className="text-left font-semibold hover:no-underline">
-                  {faq.question}
-                </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground leading-relaxed">
-                  {faq.answer}
-                </AccordionContent>
-              </AccordionItem>
+              <div key={index} className="mb-8">
+                <h4 className="text-lg font-semibold text-gray-800">{faq.question}</h4>
+                <p className="mt-2 text-base text-gray-600 leading-relaxed">{faq.answer}</p>
+              </div>
             ))}
-          </Accordion>
+          </div>
         </div>
       </div>
     </section>

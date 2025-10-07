@@ -36,34 +36,20 @@ export const Features = () => {
   return (
     <section id="features" className="py-20 bg-background">
       <div className="container mx-auto px-4">
-        <div className="text-center space-y-6 mb-20">
-          <h2 className="text-4xl lg:text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+        <div className="text-center space-y-4 mb-20">
+          <h2 className="text-3xl font-bold text-gray-900">
             핵심 기능
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            글로벌 비즈니스를 책임지는 실무자·관리자가 실제로 필요한 핵심 기능에만 집중했습니다.
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            글로벌 비즈니스를 책임지는 실무자·관리자가 실제로 필요한 핵심 기능에만 집중했습니다
           </p>
-          <div className="w-24 h-1 bg-gradient-primary mx-auto rounded-full"></div>
         </div>
         
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-8">
           {features.map((feature, index) => (
-            <div 
-              key={index}
-              className="relative p-8 rounded-2xl bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-2 border-primary/20 hover:border-primary/40 transition-all duration-500 hover:shadow-[0_20px_40px_rgba(var(--primary),0.15)] group"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <div className="relative space-y-6">
-                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-primary-glow flex items-center justify-center shadow-lg ${feature.color}`}>
-                  <feature.icon className="w-8 h-8 text-primary-foreground" />
-                </div>
-                <div className="space-y-3">
-                  <h3 className="text-2xl font-bold">{feature.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed">
-                    {feature.description}
-                  </p>
-                </div>
-              </div>
+            <div key={index} className="p-6 bg-white rounded-2xl shadow-sm border border-gray-100">
+              <h3 className="text-xl font-semibold mb-2 text-gray-800">{feature.title}</h3>
+              <p className="text-base text-gray-600 leading-relaxed">{feature.description}</p>
             </div>
           ))}
         </div>
