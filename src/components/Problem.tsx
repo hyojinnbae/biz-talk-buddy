@@ -52,20 +52,19 @@ export const Problem = () => {
               <h3 className="text-lg font-bold mb-4 text-center">📊 실무자 2,500명 설문조사 결과</h3>
               <div className="grid md:grid-cols-2 gap-4 text-sm">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">커리어 발전을 위해 영어가 중요하며,  
-이로 인한 장벽을 느낀 적 있다</div>
-                  <p className="text-muted-foreground text-left">커리어 발전을 위해 영어가 중요하며, 
+                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">68%</div>
+                  <p className="text-muted-foreground text-left">커리어 발전을 위해 영어가 중요하며,  
 이로 인한 장벽을 느낀 적 있다</p>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center text-accent font-bold">74%</div>
                   <p className="text-muted-foreground text-left">영어 중요성의 이유는 승진 등  
-커리어 발전 및 해외 파트너와의 원활한 소통</p>
+ 커리어 발전 및 해외 파트너와의 원활한 소통</p>
                 </div>
               </div>
             </div>
 
-            <div className="p-8 rounded-2xl bg-gradient-primary text-primary-foreground text-center">
+            <div className="p-8 rounded-2xl bg-gradient-primary text-primary-foreground text-center py-[10px]">
               <h3 className="text-2xl font-bold mb-4">영어 실력이 부족한 게 아닙니다.</h3>
               <p className="text-lg opacity-90 mb-4">
                 효과적인 방법으로 연습할 기회가 없었을 뿐이에요.
