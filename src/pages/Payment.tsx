@@ -103,6 +103,7 @@ const Payment = () => {
         customerName: checkoutData.customerName,
         successUrl: `${window.location.origin}/payment/success`,
         failUrl: `${window.location.origin}/payment/fail`,
+        windowTarget: 'self',
       });
     } catch (error) {
       console.error('Payment request error:', error);
