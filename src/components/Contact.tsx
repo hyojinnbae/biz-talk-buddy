@@ -14,9 +14,8 @@ export const Contact = () => {
           <div className="text-center p-6 rounded-lg bg-card border">
             <Mail className="mx-auto mb-4 text-primary" size={48} />
             <h3 className="font-semibold mb-2">이메일 문의</h3>
-            <p className="text-muted-foreground mb-4">
-              자세한 문의 사항, 법인 도입 문의는 이메일로 보내주세요
-            </p>
+            <p className="text-muted-foreground mb-4">자세한 문의 사항, 법인 도입 문의는 
+이메일로 보내주세요</p>
             <Button variant="outline" asChild>
               <a href="mailto:contact@protalk.ai">
                 contact@protalk.ai
@@ -27,9 +26,8 @@ export const Contact = () => {
           <div className="text-center p-6 rounded-lg bg-card border">
             <MessageCircle className="mx-auto mb-4 text-primary" size={48} />
             <h3 className="font-semibold mb-2">카카오톡 문의</h3>
-            <p className="text-muted-foreground mb-4">
-              빠른 답변이 필요하시면 카톡으로 연락주세요
-            </p>
+            <p className="text-muted-foreground mb-4">빠른 답변이 필요하시면 
+카톡으로 연락주세요</p>
             <Button variant="outline" asChild>
               <a href="https://pf.kakao.com/_xoGxbxj" target="_blank" rel="noopener noreferrer">
                 카카오톡 문의하기
