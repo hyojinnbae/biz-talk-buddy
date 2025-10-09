@@ -71,7 +71,7 @@ const Pcm16Test: React.FC = () => {
       );
 
       // 5. Float32 데이터를 AudioBuffer에 복사
-      audioBuffer.copyToChannel(float32Data, 0);
+      audioBuffer.copyToChannel(new Float32Array(float32Data.buffer as ArrayBuffer), 0);
 
       setStatus('재생 중...');
       

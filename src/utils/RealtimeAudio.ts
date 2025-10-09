@@ -90,7 +90,7 @@ export class AudioQueue {
     try {
       const sampleRate = 24000;
       const buffer = this.audioContext.createBuffer(1, frame.length, sampleRate);
-      buffer.copyToChannel(frame, 0, 0);
+      buffer.copyToChannel(new Float32Array(frame.buffer as ArrayBuffer), 0, 0);
 
       const source = this.audioContext.createBufferSource();
       source.buffer = buffer;
