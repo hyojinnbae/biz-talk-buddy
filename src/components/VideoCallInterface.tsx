@@ -55,15 +55,23 @@ export const VideoCallInterface = ({
 
       {/* Case Brief - Fixed at top */}
       {scenario?.caseBrief && (
-        <div className="bg-gray-700/50 text-white px-6 py-4 border-b border-gray-600">
+        <div className="bg-gray-700/50 text-white px-6 py-3 border-b border-gray-600">
           <div className="max-w-5xl mx-auto">
-            <div className="bg-gray-800/70 rounded-lg p-4 border border-gray-600">
-              <h4 className="text-sm font-semibold text-blue-300 mb-2 flex items-center gap-2">
+            <div className="bg-gray-800/70 rounded-lg p-3 border border-gray-600">
+              <h4 className="text-sm font-semibold text-blue-300 mb-1 flex items-center gap-2">
                 💼 오늘의 상황 (Case Brief)
               </h4>
-              <p className="text-sm leading-relaxed text-gray-200 whitespace-pre-line">
-                {scenario.caseBrief}
+              <p className="text-xs text-yellow-300 mb-3">
+                💡 할 말이 떠오르지 않으면 아래 내용을 참고하세요!
               </p>
+              <div className="text-sm text-gray-200 space-y-1.5">
+                {scenario.caseBrief.split('\n').filter(line => line.trim()).map((line, idx) => (
+                  <div key={idx} className="flex gap-2">
+                    <span className="text-blue-400 flex-shrink-0">•</span>
+                    <span className="leading-snug">{line.trim()}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
