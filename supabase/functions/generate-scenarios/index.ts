@@ -26,11 +26,11 @@ function makeOpening(base: string, industry: string, level: number) {
 }
 
 function makeCaseBrief(title: string, industry: string, jobRole: string): string {
-  // 4-bullet format template
-  return `내 서비스: [Service/Product Name] (${industry} 플랫폼)
-문제: ${title}와 관련된 주요 이슈 발생
-논의 사항: 원인 파악, 개선 방안 논의, 이해관계자 조율
-Goal: 구체적인 액션 아이템 및 타임라인 합의`;
+  // 4-bullet format template: Service, Problem, Agenda, Goal
+  return `Service: [Specific service/product name] (${industry} 기반 솔루션)
+Problem: ${title}와 관련된 구체적 이슈
+Agenda: 주요 논의 포인트 및 해결 방안
+Goal: 실행 가능한 액션 아이템 및 타임라인 합의`;
 }
 
 function makeAiRolecard(counterpart: string, industry: string): string {
@@ -230,21 +230,21 @@ JSON 배열 형태로만 응답해줘:
     "title": "4~5단어 시나리오 제목",
     "counterpart": "상대방 직책",
     "openingLine": "AI가 먼저 할 인사말 (영어)",
-    "caseBrief": "4 bullet points in this exact format:\n- 내 서비스: [specific service/product name] ([industry] 플랫폼/솔루션)\n- 문제: [specific problem with metrics if possible, e.g., '신규 클라이언트 온보딩 완료율이 15% 감소']\n- 논의 사항: [2-3 key discussion topics]\n- Goal: [specific goal with action items and timeline]",
+    "caseBrief": "4 bullet points in this exact format:\n- Service: [specific service name, e.g., 'AI 프레젠테이션 생성 SaaS 플랫폼', '헬스케어 데이터 분석 서비스', 'CRM 자동화 솔루션']\n- Problem: [specific problem with context/metrics, e.g., '인수 대상 기업의 고객층이 대기업에서 SMB로 변경되어 전략 재정립 필요']\n- Agenda: [2-3 key discussion topics, e.g., '가격 모델 재조정, 세일즈 파이프라인 구조 변경, 커뮤니케이션 포인트 재설계']\n- Goal: [specific goal with action items and timeline, e.g., '시장 세그먼트 전환 전략 및 주요 실행 일정 합의']",
     "aiRolecard": "1-paragraph description of the AI's role, personality traits, communication style, and what they might emphasize in the conversation. Should reflect their position and industry."
   },
   {
     "title": "4~5단어 시나리오 제목",
     "counterpart": "상대방 직책",
     "openingLine": "AI가 먼저 할 인사말 (영어)",
-    "caseBrief": "4 bullet points in this exact format:\n- 내 서비스: [specific service/product name] ([industry] 플랫폼/솔루션)\n- 문제: [specific problem with metrics if possible, e.g., '신규 클라이언트 온보딩 완료율이 15% 감소']\n- 논의 사항: [2-3 key discussion topics]\n- Goal: [specific goal with action items and timeline]",
+    "caseBrief": "4 bullet points in this exact format:\n- Service: [specific service name, e.g., 'AI 프레젠테이션 생성 SaaS 플랫폼', '헬스케어 데이터 분석 서비스', 'CRM 자동화 솔루션']\n- Problem: [specific problem with context/metrics, e.g., '인수 대상 기업의 고객층이 대기업에서 SMB로 변경되어 전략 재정립 필요']\n- Agenda: [2-3 key discussion topics, e.g., '가격 모델 재조정, 세일즈 파이프라인 구조 변경, 커뮤니케이션 포인트 재설계']\n- Goal: [specific goal with action items and timeline, e.g., '시장 세그먼트 전환 전략 및 주요 실행 일정 합의']",
     "aiRolecard": "1-paragraph description of the AI's role, personality traits, communication style, and what they might emphasize in the conversation. Should reflect their position and industry."
   },
   {
     "title": "4~5단어 시나리오 제목",
     "counterpart": "상대방 직책",
     "openingLine": "AI가 먼저 할 인사말 (영어)",
-    "caseBrief": "4 bullet points in this exact format:\n- 내 서비스: [specific service/product name] ([industry] 플랫폼/솔루션)\n- 문제: [specific problem with metrics if possible, e.g., '신규 클라이언트 온보딩 완료율이 15% 감소']\n- 논의 사항: [2-3 key discussion topics]\n- Goal: [specific goal with action items and timeline]",
+    "caseBrief": "4 bullet points in this exact format:\n- Service: [specific service name, e.g., 'AI 프레젠테이션 생성 SaaS 플랫폼', '헬스케어 데이터 분석 서비스', 'CRM 자동화 솔루션']\n- Problem: [specific problem with context/metrics, e.g., '인수 대상 기업의 고객층이 대기업에서 SMB로 변경되어 전략 재정립 필요']\n- Agenda: [2-3 key discussion topics, e.g., '가격 모델 재조정, 세일즈 파이프라인 구조 변경, 커뮤니케이션 포인트 재설계']\n- Goal: [specific goal with action items and timeline, e.g., '시장 세그먼트 전환 전략 및 주요 실행 일정 합의']",
     "aiRolecard": "1-paragraph description of the AI's role, personality traits, communication style, and what they might emphasize in the conversation. Should reflect their position and industry."
   }
 ]
