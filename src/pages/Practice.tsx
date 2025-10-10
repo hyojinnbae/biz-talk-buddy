@@ -203,11 +203,10 @@ const Practice = () => {
                       <SelectTrigger>
                         <SelectValue placeholder="직무를 선택하세요" />
                       </SelectTrigger>
-                       <SelectContent>
+                      <SelectContent>
                         <SelectItem value="CEO">CEO</SelectItem>
-                        <SelectItem value="BD">BD</SelectItem>
+                        <SelectItem value="BD/Sales">BD/Sales</SelectItem>
                         <SelectItem value="PM/PO">PM/PO</SelectItem>
-                        <SelectItem value="개발자">개발자</SelectItem>
                         <SelectItem value="마케터">마케터</SelectItem>
                         <SelectItem value="기타(직접 입력)">기타(직접 입력)</SelectItem>
                       </SelectContent>
@@ -230,14 +229,11 @@ const Practice = () => {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="IT & SaaS">IT & SaaS</SelectItem>
-                        <SelectItem value="제조">제조</SelectItem>
+                        <SelectItem value="소비재 브랜드">소비재 브랜드</SelectItem>
                         <SelectItem value="헬스케어">헬스케어</SelectItem>
-                        <SelectItem value="금융">금융</SelectItem>
-                        <SelectItem value="무역 & 물류">무역 & 물류</SelectItem>
-                        <SelectItem value="소비재">소비재</SelectItem>
-                        <SelectItem value="교육">교육</SelectItem>
-                        <SelectItem value="컨설팅 & 전문서비스">컨설팅 & 전문서비스</SelectItem>
-                        <SelectItem value="기타(직접 입력)">기타(직접 입력)</SelectItem>
+                        <SelectItem value="첨단 제조 — 반도체, 자동차, 화학 등">첨단 제조 — 반도체, 자동차, 화학 등</SelectItem>
+                        <SelectItem value="전문 서비스 및 컨설팅">전문 서비스 및 컨설팅</SelectItem>
+                        <SelectItem value="기타 (직접 입력)">기타 (직접 입력)</SelectItem>
                       </SelectContent>
                     </Select>
                     {userInfo.industry === '기타(직접 입력)' && (
