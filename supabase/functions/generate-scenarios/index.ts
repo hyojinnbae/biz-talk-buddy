@@ -25,6 +25,14 @@ function makeOpening(base: string, industry: string, level: number) {
   }
 }
 
+function makeCaseBrief(title: string, industry: string, jobRole: string): string {
+  return `Your company is working on ${title.toLowerCase()}. As a ${jobRole} in the ${industry} industry, you're facing a critical decision point that requires alignment with stakeholders.\n\nThis conversation will focus on addressing key concerns, negotiating terms or priorities, and finding a mutually beneficial path forward. Be prepared to discuss specific metrics, timelines, and trade-offs.`;
+}
+
+function makeAiRolecard(counterpart: string, industry: string): string {
+  return `You are speaking with ${counterpart} from a partner organization in the ${industry} sector. They are experienced, detail-oriented, and focused on protecting their team's interests while maintaining a collaborative relationship. Expect them to ask probing questions, push back on assumptions, and negotiate based on data and performance metrics.`;
+}
+
 function buildFallbackScenarios(jobRole: string, industry: string, englishLevel: number) {
   const role = jobRole || '기타';
   const ind = industry || 'SaaS';
@@ -153,6 +161,8 @@ function buildFallbackScenarios(jobRole: string, industry: string, englishLevel:
     title: t.title,
     counterpart: t.counterpart,
     openingLine: makeOpening(t.base, ind, englishLevel),
+    caseBrief: makeCaseBrief(t.title, ind, role),
+    aiRolecard: makeAiRolecard(t.counterpart, ind)
   }));
 }
 
@@ -215,17 +225,23 @@ JSON 배열 형태로만 응답해줘:
   {
     "title": "4~5단어 시나리오 제목",
     "counterpart": "상대방 직책",
-    "openingLine": "AI가 먼저 할 인사말 (영어)"
+    "openingLine": "AI가 먼저 할 인사말 (영어)",
+    "caseBrief": "2-paragraph description of the business context and situation. First paragraph explains the background and current situation. Second paragraph explains what needs to be discussed or decided.",
+    "aiRolecard": "1-paragraph description of the AI's role, personality traits, communication style, and what they might emphasize in the conversation. Should reflect their position and industry."
   },
   {
     "title": "4~5단어 시나리오 제목",
     "counterpart": "상대방 직책",
-    "openingLine": "AI가 먼저 할 인사말 (영어)"
+    "openingLine": "AI가 먼저 할 인사말 (영어)",
+    "caseBrief": "2-paragraph description of the business context and situation. First paragraph explains the background and current situation. Second paragraph explains what needs to be discussed or decided.",
+    "aiRolecard": "1-paragraph description of the AI's role, personality traits, communication style, and what they might emphasize in the conversation. Should reflect their position and industry."
   },
   {
     "title": "4~5단어 시나리오 제목",
     "counterpart": "상대방 직책",
-    "openingLine": "AI가 먼저 할 인사말 (영어)"
+    "openingLine": "AI가 먼저 할 인사말 (영어)",
+    "caseBrief": "2-paragraph description of the business context and situation. First paragraph explains the background and current situation. Second paragraph explains what needs to be discussed or decided.",
+    "aiRolecard": "1-paragraph description of the AI's role, personality traits, communication style, and what they might emphasize in the conversation. Should reflect their position and industry."
   }
 ]
 
