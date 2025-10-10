@@ -27,10 +27,51 @@ function makeOpening(base: string, industry: string, level: number) {
 
 function makeCaseBrief(title: string, industry: string, jobRole: string): string {
   // 4-bullet format template: Service, Problem, Agenda, Goal
-  return `Service: [Specific service/product name] (${industry} 기반 솔루션)
-Problem: ${title}와 관련된 구체적 이슈
-Agenda: 주요 논의 포인트 및 해결 방안
-Goal: 실행 가능한 액션 아이템 및 타임라인 합의`;
+  // Generate specific, realistic case brief examples
+  const serviceExamples = {
+    'SaaS': ['AI 프레젠테이션 생성 SaaS 플랫폼', 'CRM 자동화 솔루션', '프로젝트 관리 협업 툴'],
+    '헬스케어': ['병원용 환자 데이터 분석 솔루션', '원격 진료 플랫폼', '의료 기기 관리 시스템'],
+    '핀테크': ['모바일 결제 서비스', 'P2P 송금 플랫폼', '자산 관리 앱'],
+    'AI/ML': ['자연어 처리 API 서비스', '이미지 인식 솔루션', 'AI 챗봇 플랫폼'],
+    '이커머스': ['D2C 패션 브랜드', '식품 정기배송 서비스', '라이브 커머스 플랫폼']
+  };
+  
+  const service = serviceExamples[industry as keyof typeof serviceExamples]?.[Math.floor(Math.random() * 3)] || 'B2B 클라우드 솔루션';
+  
+  const problemExamples = [
+    '신규 클라이언트 온보딩 완료율이 최근 15% 감소함',
+    '베타 테스트에서 기업 고객의 사용률이 예상 대비 30% 낮음',
+    '주요 경쟁사가 유사 기능을 저가에 출시하여 시장 점유율 하락',
+    '고객 이탈률이 전월 대비 20% 증가하여 원인 파악 필요',
+    '제품 출시 일정이 2주 지연되어 마케팅 일정 재조정 필요'
+  ];
+  
+  const problem = problemExamples[Math.floor(Math.random() * problemExamples.length)];
+  
+  const agendaExamples = [
+    '주요 원인 파악, 온보딩 자동화 단계 개선, 고객 피드백 반영',
+    '기능 우선순위 조정, 피드백 반영 계획, 신규 온보딩 개선',
+    '가격 경쟁력 분석, 차별화 포인트 강화, 마케팅 메시지 재정립',
+    '고객 세그먼트별 이탈 원인 분석, 리텐션 전략 수립, CS 프로세스 개선',
+    '개발 리소스 재배분, 출시 범위 조정, 마케팅 캠페인 일정 변경'
+  ];
+  
+  const agenda = agendaExamples[Math.floor(Math.random() * agendaExamples.length)];
+  
+  const goalExamples = [
+    '개선 우선순위 및 실행 타임라인 합의',
+    '다음 분기 내 고객 유지율 20% 향상 로드맵 확정',
+    '향후 3개월 내 시장 대응 전략 및 실행 계획 수립',
+    '주요 KPI 개선을 위한 액션 플랜 및 담당자 배정',
+    '조정된 일정에 따른 팀별 역할 및 마일스톤 합의'
+  ];
+  
+  const goal = goalExamples[Math.floor(Math.random() * goalExamples.length)];
+  
+  return `Service: ${service}
+Problem: ${problem}
+Agenda: ${agenda}
+Goal: ${goal}`;
 }
 
 function makeAiRolecard(counterpart: string, industry: string): string {
@@ -230,21 +271,21 @@ JSON 배열 형태로만 응답해줘:
     "title": "4~5단어 시나리오 제목",
     "counterpart": "상대방 직책",
     "openingLine": "AI가 먼저 할 인사말 (영어)",
-    "caseBrief": "4 bullet points in this exact format:\n- Service: [specific service name, e.g., 'AI 프레젠테이션 생성 SaaS 플랫폼', '헬스케어 데이터 분석 서비스', 'CRM 자동화 솔루션']\n- Problem: [specific problem with context/metrics, e.g., '인수 대상 기업의 고객층이 대기업에서 SMB로 변경되어 전략 재정립 필요']\n- Agenda: [2-3 key discussion topics, e.g., '가격 모델 재조정, 세일즈 파이프라인 구조 변경, 커뮤니케이션 포인트 재설계']\n- Goal: [specific goal with action items and timeline, e.g., '시장 세그먼트 전환 전략 및 주요 실행 일정 합의']",
+    "caseBrief": "CRITICAL: Generate SPECIFIC and REALISTIC case brief in 4 bullet points. NO placeholder text like '[specific service name]' or '[업계명]'. Use actual concrete examples.\n\nFormat:\n- Service: [Write actual specific service name like 'AI 프레젠테이션 생성 SaaS 플랫폼', 'CRM 자동화 솔루션', '헬스케어 데이터 분석 솔루션', 'D2C 패션 브랜드', '모바일 결제 서비스' - MUST be concrete]\n- Problem: [Write specific problem with numbers/metrics like '신규 클라이언트 온보딩 완료율이 최근 15% 감소함', '베타 테스트에서 기업 고객 사용률이 예상 대비 30% 낮음' - MUST include context]\n- Agenda: [Write 2-3 concrete discussion topics like '주요 원인 파악, 온보딩 자동화 단계 개선, 고객 피드백 반영' - MUST be actionable]\n- Goal: [Write specific outcome like '개선 우선순위 및 실행 타임라인 합의', '다음 분기 내 고객 유지율 20% 향상 로드맵 확정' - MUST include timeline/target]\n\nExamples:\n- Service: AI 프레젠테이션 생성 SaaS 플랫폼\n- Problem: 베타 테스트에서 기업 고객의 사용률이 예상 대비 30% 낮음\n- Agenda: 기능 우선순위 조정, 피드백 반영 계획, 신규 온보딩 개선\n- Goal: 다음 분기 내 고객 유지율 20% 향상 로드맵 확정\n\nAnother example:\n- Service: 병원용 환자 데이터 분석 솔루션\n- Problem: 최근 고객 병원 3곳에서 데이터 처리 속도 문제 제기\n- Agenda: 서버 부하 분석, 처리 프로세스 개선, SLA 재협의\n- Goal: 안정성 확보 및 주요 고객 리텐션 유지",
     "aiRolecard": "1-paragraph description of the AI's role, personality traits, communication style, and what they might emphasize in the conversation. Should reflect their position and industry."
   },
   {
     "title": "4~5단어 시나리오 제목",
     "counterpart": "상대방 직책",
     "openingLine": "AI가 먼저 할 인사말 (영어)",
-    "caseBrief": "4 bullet points in this exact format:\n- Service: [specific service name, e.g., 'AI 프레젠테이션 생성 SaaS 플랫폼', '헬스케어 데이터 분석 서비스', 'CRM 자동화 솔루션']\n- Problem: [specific problem with context/metrics, e.g., '인수 대상 기업의 고객층이 대기업에서 SMB로 변경되어 전략 재정립 필요']\n- Agenda: [2-3 key discussion topics, e.g., '가격 모델 재조정, 세일즈 파이프라인 구조 변경, 커뮤니케이션 포인트 재설계']\n- Goal: [specific goal with action items and timeline, e.g., '시장 세그먼트 전환 전략 및 주요 실행 일정 합의']",
+    "caseBrief": "CRITICAL: Generate SPECIFIC and REALISTIC case brief in 4 bullet points. NO placeholder text like '[specific service name]' or '[업계명]'. Use actual concrete examples.\n\nFormat:\n- Service: [Write actual specific service name like 'AI 프레젠테이션 생성 SaaS 플랫폼', 'CRM 자동화 솔루션', '헬스케어 데이터 분석 솔루션', 'D2C 패션 브랜드', '모바일 결제 서비스' - MUST be concrete]\n- Problem: [Write specific problem with numbers/metrics like '신규 클라이언트 온보딩 완료율이 최근 15% 감소함', '베타 테스트에서 기업 고객 사용률이 예상 대비 30% 낮음' - MUST include context]\n- Agenda: [Write 2-3 concrete discussion topics like '주요 원인 파악, 온보딩 자동화 단계 개선, 고객 피드백 반영' - MUST be actionable]\n- Goal: [Write specific outcome like '개선 우선순위 및 실행 타임라인 합의', '다음 분기 내 고객 유지율 20% 향상 로드맵 확정' - MUST include timeline/target]\n\nExamples:\n- Service: AI 프레젠테이션 생성 SaaS 플랫폼\n- Problem: 베타 테스트에서 기업 고객의 사용률이 예상 대비 30% 낮음\n- Agenda: 기능 우선순위 조정, 피드백 반영 계획, 신규 온보딩 개선\n- Goal: 다음 분기 내 고객 유지율 20% 향상 로드맵 확정\n\nAnother example:\n- Service: 병원용 환자 데이터 분석 솔루션\n- Problem: 최근 고객 병원 3곳에서 데이터 처리 속도 문제 제기\n- Agenda: 서버 부하 분석, 처리 프로세스 개선, SLA 재협의\n- Goal: 안정성 확보 및 주요 고객 리텐션 유지",
     "aiRolecard": "1-paragraph description of the AI's role, personality traits, communication style, and what they might emphasize in the conversation. Should reflect their position and industry."
   },
   {
     "title": "4~5단어 시나리오 제목",
     "counterpart": "상대방 직책",
     "openingLine": "AI가 먼저 할 인사말 (영어)",
-    "caseBrief": "4 bullet points in this exact format:\n- Service: [specific service name, e.g., 'AI 프레젠테이션 생성 SaaS 플랫폼', '헬스케어 데이터 분석 서비스', 'CRM 자동화 솔루션']\n- Problem: [specific problem with context/metrics, e.g., '인수 대상 기업의 고객층이 대기업에서 SMB로 변경되어 전략 재정립 필요']\n- Agenda: [2-3 key discussion topics, e.g., '가격 모델 재조정, 세일즈 파이프라인 구조 변경, 커뮤니케이션 포인트 재설계']\n- Goal: [specific goal with action items and timeline, e.g., '시장 세그먼트 전환 전략 및 주요 실행 일정 합의']",
+    "caseBrief": "CRITICAL: Generate SPECIFIC and REALISTIC case brief in 4 bullet points. NO placeholder text like '[specific service name]' or '[업계명]'. Use actual concrete examples.\n\nFormat:\n- Service: [Write actual specific service name like 'AI 프레젠테이션 생성 SaaS 플랫폼', 'CRM 자동화 솔루션', '헬스케어 데이터 분석 솔루션', 'D2C 패션 브랜드', '모바일 결제 서비스' - MUST be concrete]\n- Problem: [Write specific problem with numbers/metrics like '신규 클라이언트 온보딩 완료율이 최근 15% 감소함', '베타 테스트에서 기업 고객 사용률이 예상 대비 30% 낮음' - MUST include context]\n- Agenda: [Write 2-3 concrete discussion topics like '주요 원인 파악, 온보딩 자동화 단계 개선, 고객 피드백 반영' - MUST be actionable]\n- Goal: [Write specific outcome like '개선 우선순위 및 실행 타임라인 합의', '다음 분기 내 고객 유지율 20% 향상 로드맵 확정' - MUST include timeline/target]\n\nExamples:\n- Service: AI 프레젠테이션 생성 SaaS 플랫폼\n- Problem: 베타 테스트에서 기업 고객의 사용률이 예상 대비 30% 낮음\n- Agenda: 기능 우선순위 조정, 피드백 반영 계획, 신규 온보딩 개선\n- Goal: 다음 분기 내 고객 유지율 20% 향상 로드맵 확정\n\nAnother example:\n- Service: 병원용 환자 데이터 분석 솔루션\n- Problem: 최근 고객 병원 3곳에서 데이터 처리 속도 문제 제기\n- Agenda: 서버 부하 분석, 처리 프로세스 개선, SLA 재협의\n- Goal: 안정성 확보 및 주요 고객 리텐션 유지",
     "aiRolecard": "1-paragraph description of the AI's role, personality traits, communication style, and what they might emphasize in the conversation. Should reflect their position and industry."
   }
 ]
