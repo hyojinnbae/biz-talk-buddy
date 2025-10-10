@@ -8,9 +8,7 @@ export const Solution = () => {
               <Lightbulb className="w-4 h-4" />
               우리의 제안
             </div>
-            <h2 className="text-3xl lg:text-4xl font-bold leading-tight">
-                실제 업무 미팅을 그대로 재현해 연습하세요
-            </h2>
+            <h2 className="text-3xl font-bold leading-tight lg:text-3xl">비즈니스 영어, 하루 10분이라도 꾸준히 말해야 실력이 됩니다</h2>
           </div>
 
           <div className="grid lg:grid-cols-3 gap-8">
@@ -33,7 +31,7 @@ export const Solution = () => {
                 <MessageSquare className="w-8 h-8" />
               </div>
               <div className="space-y-3">
-                <h3 className="text-xl font-semibold">AI가 회의 시나리오를 만들어주고</h3>
+                <h3 className="text-xl font-semibold">AI가 대화를 리드해주고</h3>
                 <p className="text-muted-foreground leading-relaxed">자연스러운 롤플레이로, 내가 어떤 준비도 하지 않아도 돼요. 
 AI 롤플레이 코치가 음성으로 말하고, 내 업무 표현 중 개선이 필요한 부분을 자연스럽게 리프레이즈 해줘요.</p>
               </div>

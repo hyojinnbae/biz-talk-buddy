@@ -10,7 +10,7 @@ export const Problem = () => {
             </div>
             <h2 className="text-3xl lg:text-4xl font-bold leading-tight py-[3px]">
               실무 영어 회화의 현실적 어려움<br />
-              <span className="text-muted-foreground">비즈니스 영어는 계속 사용해야 실력이 유지됩니다</span>
+              <span className="text-muted-foreground py-[10px]">말하는 자신감을 완성하는 AI 실무 영어 회화 트레이닝</span>
             </h2>
           </div>
 
