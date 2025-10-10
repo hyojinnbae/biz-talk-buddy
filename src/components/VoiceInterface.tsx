@@ -17,7 +17,6 @@ interface VoiceInterfaceProps {
     prompt: string;
     counterpart?: string;
     caseBrief?: string;
-    aiRolecard?: string;
   };
   onSessionEnd: () => void;
 }
@@ -171,8 +170,7 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
         title: scenario.title,
         description: scenario.description,
         counterpart: scenario.role_target,
-        caseBrief: scenario.caseBrief,
-        aiRolecard: scenario.aiRolecard
+        caseBrief: scenario.caseBrief
       }} 
       onEndCall={endConversation}
       isConnected={isConnected}

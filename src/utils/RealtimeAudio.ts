@@ -130,13 +130,12 @@ export class RealtimeChat {
       this.ws = new WebSocket(wsUrl);
 
       this.ws.onopen = () => {
+        // Send initial response.create after connection opens
         const initialResponse = {
           type: "response.create",
           response: {
-            conversation: "default",
             modalities: ["text", "audio"],
-            audio: { voice: "alloy", format: "pcm16" },
-            instructions: "Start now. Say hello first."
+            instructions: "Start the conversation now. Say hello first and introduce the situation."
           }
         };
         try { this.ws?.send(JSON.stringify(initialResponse)); } catch (e) { }
@@ -155,10 +154,8 @@ export class RealtimeChat {
           const initialResponse = {
             type: "response.create",
             response: {
-              conversation: "default",
               modalities: ["text", "audio"],
-              audio: { voice: "alloy", format: "pcm16" },
-              instructions: "Start now. Say hello first."
+              instructions: "Start the conversation now. Say hello first and introduce the situation."
             }
           };
           this.ws?.send(JSON.stringify(initialResponse));

@@ -10,7 +10,6 @@ interface VideoCallInterfaceProps {
     description: string;
     counterpart?: string;
     caseBrief?: string;
-    aiRolecard?: string;
   } | null;
   onEndCall: () => void;
   isConnected?: boolean;
@@ -54,30 +53,18 @@ export const VideoCallInterface = ({
         </div>
       </div>
 
-      {/* Case Brief & AI Rolecard - Fixed at top */}
-      {(scenario?.caseBrief || scenario?.aiRolecard) && (
-        <div className="bg-gray-700/50 text-white px-6 py-4 border-b border-gray-600 max-h-48 overflow-y-auto">
-          <div className="max-w-5xl mx-auto space-y-3">
-            {scenario?.caseBrief && (
-              <div className="bg-gray-800/70 rounded-lg p-4 border border-gray-600">
-                <h4 className="text-sm font-semibold text-blue-300 mb-2 flex items-center gap-2">
-                  💼 오늘의 상황 (Case Brief)
-                </h4>
-                <p className="text-sm leading-relaxed text-gray-200 whitespace-pre-line">
-                  {scenario.caseBrief}
-                </p>
-              </div>
-            )}
-            {scenario?.aiRolecard && (
-              <div className="bg-gray-800/70 rounded-lg p-4 border border-gray-600">
-                <h4 className="text-sm font-semibold text-green-300 mb-2 flex items-center gap-2">
-                  🎭 대화 상대 (AI Rolecard)
-                </h4>
-                <p className="text-sm leading-relaxed text-gray-200">
-                  {scenario.aiRolecard}
-                </p>
-              </div>
-            )}
+      {/* Case Brief - Fixed at top */}
+      {scenario?.caseBrief && (
+        <div className="bg-gray-700/50 text-white px-6 py-4 border-b border-gray-600">
+          <div className="max-w-5xl mx-auto">
+            <div className="bg-gray-800/70 rounded-lg p-4 border border-gray-600">
+              <h4 className="text-sm font-semibold text-blue-300 mb-2 flex items-center gap-2">
+                💼 오늘의 상황 (Case Brief)
+              </h4>
+              <p className="text-sm leading-relaxed text-gray-200 whitespace-pre-line">
+                {scenario.caseBrief}
+              </p>
+            </div>
           </div>
         </div>
       )}

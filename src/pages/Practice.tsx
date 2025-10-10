@@ -26,6 +26,7 @@ interface GeneratedScenario {
   title: string;
   counterpart: string;
   openingLine: string;
+  caseBrief?: string;
 }
 
 const Practice = () => {
@@ -98,6 +99,7 @@ const Practice = () => {
       description: `${scenario.title} - ${scenario.counterpart}와의 실무 대화`,
       role_target: scenario.counterpart,
       greeting: scenario.openingLine,
+      caseBrief: scenario.caseBrief || `Your company is working on ${scenario.title.toLowerCase()}. As a ${userInfo.job} in the ${userInfo.industry} industry, you're facing a critical decision point that requires alignment with stakeholders.\n\nThis conversation will focus on addressing key concerns, negotiating terms or priorities, and finding a mutually beneficial path forward. Be prepared to discuss specific metrics, timelines, and trade-offs.`,
       prompt: `당신은 ${scenario.counterpart}의 역할을 맡아 영어로 대화해주세요. 상황: ${scenario.title}. 업계는 ${userInfo.industry}입니다. 첫 인사말: "${scenario.openingLine}" 자연스럽고 실무적인 대화를 이끌어주세요.`
     };
     setSelectedScenario(fullScenario);
@@ -205,6 +207,7 @@ const Practice = () => {
                         <SelectItem value="CEO">CEO</SelectItem>
                         <SelectItem value="BD">BD</SelectItem>
                         <SelectItem value="PM/PO">PM/PO</SelectItem>
+                        <SelectItem value="개발자">개발자</SelectItem>
                         <SelectItem value="마케터">마케터</SelectItem>
                         <SelectItem value="기타(직접 입력)">기타(직접 입력)</SelectItem>
                       </SelectContent>
