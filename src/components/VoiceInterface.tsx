@@ -30,7 +30,6 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
   const [messages, setMessages] = useState<any[]>([]);
   const [transcript, setTranscript] = useState('');
   const [aiTranscript, setAiTranscript] = useState('');
-  const [aiTranscripts, setAiTranscripts] = useState<string[]>([]); // 여러 문장 누적
   const [conversationLog, setConversationLog] = useState<Array<{role: string, content: string}>>([]);
   const [rephrasedExpressions, setRephrasedExpressions] = useState<Array<{original: string, rephrased: string}>>([]);
   const [showSessionResult, setShowSessionResult] = useState(false);
@@ -49,7 +48,6 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
       if (fullTranscript) {
         setMessages(prev => [...prev, { role: 'assistant', content: fullTranscript }]);
         setConversationLog(prev => [...prev, { role: 'assistant', content: fullTranscript }]);
-        setAiTranscripts(prev => [...prev, fullTranscript]);
         
         // Extract rephrase expressions from AI response
         // Look for "Rephrase:" followed by complete sentence(s)
@@ -137,7 +135,6 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
     setShowSessionResult(false);
     setConversationLog([]);
     setRephrasedExpressions([]);
-    setAiTranscripts([]);
     onSessionEnd();
   };
 
@@ -177,7 +174,6 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
       isConnecting={isConnecting}
       isSpeaking={isSpeaking}
       isUserSpeaking={isUserSpeaking}
-      aiTranscripts={aiTranscripts}
     />
   );
 
