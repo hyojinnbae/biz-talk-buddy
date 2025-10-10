@@ -60,12 +60,15 @@ export const VideoCallInterface = ({
                 💼 오늘의 상황 (Case Brief) 💡 할 말이 떠오르지 않으면 아래 내용을 참고하세요!
               </h4>
               <div className="text-sm text-gray-200 space-y-1.5">
-                {scenario.caseBrief.split('\n').filter(line => line.trim()).map((line, idx) => (
-                  <div key={idx} className="flex gap-2">
-                    <span className="text-blue-400 flex-shrink-0">•</span>
-                    <span className="leading-snug">{line.trim()}</span>
-                  </div>
-                ))}
+                {typeof scenario.caseBrief === 'string' 
+                  ? scenario.caseBrief.split('\n').filter(line => line.trim()).map((line, idx) => (
+                      <div key={idx} className="flex gap-2">
+                        <span className="text-blue-400 flex-shrink-0">•</span>
+                        <span className="leading-snug">{line.trim()}</span>
+                      </div>
+                    ))
+                  : <div className="text-gray-200">{JSON.stringify(scenario.caseBrief)}</div>
+                }
               </div>
             </div>
           </div>
