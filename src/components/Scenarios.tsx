@@ -15,7 +15,6 @@ const scenarios = [
     title: "BD - 미국 파트너와 가격 협상",
     example: "Can we revisit the pricing structure for Q4?",
     role: "BD Manager",
-    level: "Intermediate",
     description: "글로벌 파트너사와의 딜 협상 상황을 실전처럼 연습",
     participants: "You + US VP",
     duration: "15 min",
@@ -26,7 +25,6 @@ const scenarios = [
     title: "PM - 인도 개발자와 일정 조율",
     example: "Let's make sure we're aligned on the timeline.",
     role: "Product Manager",
-    level: "Advanced",
     description: "글로벌 개발팀과의 프로젝트 일정 및 우선순위 조율",
     participants: "You + India Dev Team",
     duration: "20 min",
@@ -37,7 +35,6 @@ const scenarios = [
     title: "마케터 - 글로벌 캠페인 결과 공유",
     example: "Here's how we performed against the KPIs.",
     role: "Marketing Manager",
-    level: "Intermediate",
     description: "캠페인 성과 분석 및 최적화 전략 제안",
     participants: "You + Global Marketing Director",
     duration: "18 min",
@@ -48,7 +45,6 @@ const scenarios = [
     title: "CEO - 해외 투자자 대상 피칭 리허설",
     example: "We're currently raising a pre-Series A round.",
     role: "Founder/CEO",
-    level: "Expert",
     description: "시리즈 A 투자 유치를 위한 피칭 연습",
     participants: "You + VC Partner",
     duration: "30 min",
@@ -59,7 +55,6 @@ const scenarios = [
     title: "CS - 유럽 고객 컴플레인 응대",
     example: "We truly apologize for the inconvenience caused.",
     role: "Customer Success",
-    level: "Intermediate",
     description: "글로벌 고객의 불만사항 해결 및 관계 회복",
     participants: "You + European Client",
     duration: "12 min",
@@ -94,9 +89,6 @@ export const Scenarios = () => {
                   <div className={`w-12 h-12 rounded-xl ${scenario.color} flex items-center justify-center`}>
                     <scenario.icon className="w-6 h-6" />
                   </div>
-                  <Badge variant="outline" className="text-xs bg-background/80 backdrop-blur-sm">
-                    {scenario.level}
-                  </Badge>
                 </div>
                 
                 <div className="space-y-3">

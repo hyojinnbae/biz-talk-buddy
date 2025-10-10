@@ -21,7 +21,15 @@ export const Footer = () => {
         </div>
         
         <div className="mt-6 pt-6 border-t text-center">
-          
+          <p className="text-sm text-muted-foreground mb-2">
+            궁금한 점이 있으신가요? 아래로 언제든 연락주세요.
+          </p>
+          <a 
+            href="mailto:protalk.biz@gmail.com" 
+            className="text-sm text-foreground hover:text-primary transition-colors"
+          >
+            protalk.biz@gmail.com
+          </a>
         </div>
       </div>
     </footer>;

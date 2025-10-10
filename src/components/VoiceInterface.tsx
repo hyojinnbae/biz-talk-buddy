@@ -51,14 +51,28 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
         setAiTranscripts(prev => [...prev, fullTranscript]);
         
         // Extract rephrase expressions from AI response
-        const rephraseMatch = fullTranscript.match(/Rephrase:\s*['"]([^'"]+)['"]/i);
+        // Look for "Rephrase:" followed by complete sentence(s)
+        const rephrasePattern = /Rephrase:\s*(.+?)(?=\n\n|$)/is;
+        const rephraseMatch = fullTranscript.match(rephrasePattern);
+        
         if (rephraseMatch) {
+          const rephrasedText = rephraseMatch[1].trim();
+          // Split by periods or newlines to get individual sentences
+          const sentences = rephrasedText
+            .split(/[.\n]+/)
+            .map(s => s.trim())
+            .filter(s => s.length > 0)
+            .slice(0, 3); // Max 3 sentences
+          
           // Find the previous user message as the original
           const lastUserMessage = conversationLog.filter(msg => msg.role === 'user').pop();
-          setRephrasedExpressions(prev => [...prev, {
-            original: lastUserMessage?.content || '',
-            rephrased: rephraseMatch[1]
-          }]);
+          
+          sentences.forEach(sentence => {
+            setRephrasedExpressions(prev => [...prev, {
+              original: lastUserMessage?.content || '',
+              rephrased: sentence
+            }]);
+          });
         }
         
         setTranscript('');

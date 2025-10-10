@@ -12,7 +12,7 @@ const features = [
   {
     icon: Target,
     title: "프롬프트 기반 대화 시나리오 생성",
-    description: "직무 / 레벨 / 대화 상대 / 주제 선택 또는 자유 프롬프트 입력도 가능 → 실제 업무 미팅처럼 연습 가능",
+    description: "직무 / 대화 상대 / 주제 선택 또는 자유 프롬프트 입력도 가능 → 실제 업무 미팅처럼 연습 가능",
     color: "text-primary",
     badge: "MVP"
   },

@@ -16,7 +16,6 @@ type Step = 'userInfo' | 'scenarios' | 'conversation';
 
 interface UserInfo {
   job: string;
-  level: number;
   industry: string;
   customSituation?: string;
   customPartner?: string;
@@ -34,7 +33,7 @@ const Practice = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState<Step>('userInfo');
-  const [userInfo, setUserInfo] = useState<UserInfo>({ job: '', level: 1, industry: '' });
+  const [userInfo, setUserInfo] = useState<UserInfo>({ job: '', industry: '' });
   const [generatedScenarios, setGeneratedScenarios] = useState<GeneratedScenario[]>([]);
   const [selectedScenario, setSelectedScenario] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -63,7 +62,6 @@ const Practice = () => {
       const { data, error } = await supabase.functions.invoke('generate-scenarios', {
         body: {
           jobRole: userInfo.job,
-          englishLevel: userInfo.level,
           industry: userInfo.industry,
           customSituation: userInfo.customSituation,
         }
@@ -100,7 +98,7 @@ const Practice = () => {
       description: `${scenario.title} - ${scenario.counterpart}와의 실무 대화`,
       role_target: scenario.counterpart,
       greeting: scenario.openingLine,
-      prompt: `당신은 ${scenario.counterpart}의 역할을 맡아 영어로 대화해주세요. 상황: ${scenario.title}. 사용자의 영어 레벨은 ${userInfo.level}입니다. 업계는 ${userInfo.industry}입니다. 첫 인사말: "${scenario.openingLine}" 자연스럽고 실무적인 대화를 이끌어주세요.`
+      prompt: `당신은 ${scenario.counterpart}의 역할을 맡아 영어로 대화해주세요. 상황: ${scenario.title}. 업계는 ${userInfo.industry}입니다. 첫 인사말: "${scenario.openingLine}" 자연스럽고 실무적인 대화를 이끌어주세요.`
     };
     setSelectedScenario(fullScenario);
     setCurrentStep('conversation');
@@ -118,7 +116,7 @@ const Practice = () => {
         title: '직접 입력한 시나리오',
         description: customScenario,
         role_target: '맞춤 상대방',
-        prompt: `당신은 다음 상황에서 대화 상대방 역할을 맡아 영어로 대화해주세요. 상황: ${customScenario}. 사용자의 영어 레벨은 ${userInfo.level}입니다. 자연스럽고 실무적인 대화를 이끌어주세요.`
+        prompt: `당신은 다음 상황에서 대화 상대방 역할을 맡아 영어로 대화해주세요. 상황: ${customScenario}. 자연스럽고 실무적인 대화를 이끌어주세요.`
       };
       setSelectedScenario(customScenarioObj);
       setCurrentStep('conversation');
@@ -184,7 +182,7 @@ const Practice = () => {
                   맞춤 영어 회화 연습
                 </h1>
                 <p className="text-lg text-muted-foreground">
-                  직무와 레벨에 맞는 실무 상황을 추천해드립니다
+                  직무에 맞는 실무 상황을 추천해드립니다
                 </p>
               </div>
 

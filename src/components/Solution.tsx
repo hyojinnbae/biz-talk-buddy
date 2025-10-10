@@ -19,7 +19,7 @@ export const Solution = () => {
               <div className="space-y-3">
                 <h3 className="text-xl font-semibold">나의 실무 상황을 선택</h3>
                 <p className="text-muted-foreground leading-relaxed text-base">
-                  직무 / 레벨 / 대화 상대 / 주제 / 상황 선택<br />
+                  직무 / 대화 상대 / 주제 / 상황 선택<br />
                   자유 프롬프트 입력 가능해,<br />
                   내가 미래 커리어에서 원하는, 또는 곧 사용해야 할 중요한 일정을 위한 가장 효과적인 영어 회화 환경을 조성합니다.
                 </p>
