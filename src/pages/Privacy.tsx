@@ -26,7 +26,7 @@ const Privacy = () => {
               <p className="text-muted-foreground">[개정일]: 2025년 10월 16일</p>
             </div>
 
-            <p className="text-muted-foreground leading-relaxed">
+              <p className="text-muted-foreground leading-relaxed">
               ProTalk 는 「개인정보 보호법」에 따라 사용자의 개인정보를 보호하고, 권익을 보호하며, 개인정보와 관련한 이용자의 고충을 원활하게 처리할 수 있도록 다음과 같은 방침을 두고 있습니다.
             </p>
 
