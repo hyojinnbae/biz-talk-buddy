@@ -15,7 +15,6 @@ interface VideoCallInterfaceProps {
   isConnecting?: boolean;
   isSpeaking?: boolean;
   isUserSpeaking?: boolean;
-  aiTranscripts?: string[];
 }
 
 export const VideoCallInterface = ({ 
@@ -24,8 +23,7 @@ export const VideoCallInterface = ({
   isConnected = false, 
   isConnecting = false, 
   isSpeaking = false, 
-  isUserSpeaking = false,
-  aiTranscripts = []
+  isUserSpeaking = false
 }: VideoCallInterfaceProps) => {
   const [isMuted, setIsMuted] = useState(false);
 
@@ -104,18 +102,6 @@ export const VideoCallInterface = ({
         </div>
       </div>
 
-      {/* Subtitle Area - 여러 문장 누적 표시 */}
-      {aiTranscripts.length > 0 && (
-        <div className="bg-black/70 text-white px-6 py-4 border-t border-gray-700 max-h-32 overflow-y-auto">
-          <div className="max-w-4xl mx-auto space-y-2">
-            {aiTranscripts.slice(-3).map((text, idx) => (
-              <p key={idx} className={`text-lg text-center leading-relaxed ${idx === aiTranscripts.slice(-3).length - 1 ? 'font-semibold' : 'text-white/60'}`}>
-                {text}
-              </p>
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* Control bar - Zoom style */}
       <div className="bg-gray-900 border-t border-gray-700 p-6">
