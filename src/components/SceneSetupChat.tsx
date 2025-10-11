@@ -54,10 +54,20 @@ const SceneSetupChat = ({ job, industry, preselectedScenario, onComplete }: Scen
     title: preselectedScenario.title
   } : {};
   
-  const [currentStep, setCurrentStep] = useState<'service' | 'problem' | 'agenda' | 'goal' | 'summary'>(initialStep);
-  const [answers, setAnswers] = useState<Record<string, string>>(initialAnswers);
-  const [currentOptions, setCurrentOptions] = useState<string[]>([]);
-  const [isLoadingOptions, setIsLoadingOptions] = useState(false);
+  const getCurrentQuestionForStep = (step: string, currentAnswers: Record<string, string>) => {
+    switch (step) {
+      case 'service':
+        return "What's your product or service?";
+      case 'problem':
+        return "What's your current challenge?";
+      case 'agenda':
+        return "What's the specific context?";
+      case 'goal':
+        return "What's your goal for today's meeting?";
+      default:
+        return '';
+    }
+  };
   
   const getInitialChatHistory = (): Array<{ role: 'ai' | 'user', text: string }> => {
     if (preselectedScenario) {
@@ -72,6 +82,10 @@ const SceneSetupChat = ({ job, industry, preselectedScenario, onComplete }: Scen
     ];
   };
   
+  const [currentStep, setCurrentStep] = useState<'service' | 'problem' | 'agenda' | 'goal' | 'summary'>(initialStep);
+  const [answers, setAnswers] = useState<Record<string, string>>(initialAnswers);
+  const [currentOptions, setCurrentOptions] = useState<string[]>([]);
+  const [isLoadingOptions, setIsLoadingOptions] = useState(false);
   const [chatHistory, setChatHistory] = useState<Array<{ role: 'ai' | 'user', text: string }>>(getInitialChatHistory());
 
   const fetchOptions = async (step: string, previousAnswers: Record<string, string>) => {
@@ -190,21 +204,6 @@ const SceneSetupChat = ({ job, industry, preselectedScenario, onComplete }: Scen
           onComplete(caseData);
         }, 2000);
       }, 500);
-    }
-  };
-
-  const getCurrentQuestionForStep = (step: string, currentAnswers: Record<string, string>) => {
-    switch (step) {
-      case 'service':
-        return "What's your product or service?";
-      case 'problem':
-        return "What's your current challenge?";
-      case 'agenda':
-        return "What's the specific context?";
-      case 'goal':
-        return "What's your goal for today's meeting?";
-      default:
-        return '';
     }
   };
 
