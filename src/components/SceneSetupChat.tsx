@@ -18,58 +18,113 @@ interface SceneSetupChatProps {
   onComplete: (caseData: CaseData) => void;
 }
 
+// Contextual options based on job and industry
+const getServiceOptions = (job: string, industry: string) => {
+  if (industry.includes('IT & SaaS')) {
+    return ['CRM platform', 'AI analytics dashboard', 'Cloud collaboration tool'];
+  } else if (industry.includes('소비재')) {
+    return ['Skincare brand', 'K-beauty retailer', 'Indie cosmetics label'];
+  } else if (industry.includes('헬스케어')) {
+    return ['Medical device platform', 'Healthcare data analytics', 'Telemedicine solution'];
+  } else if (industry.includes('첨단 제조')) {
+    return ['Smart home device', 'Wearable tech', 'Audio equipment'];
+  } else if (industry.includes('컨설팅')) {
+    return ['Strategy consulting firm', 'Digital transformation services', 'Management advisory'];
+  }
+  return ['Tech platform', 'Product solution', 'Service provider'];
+};
+
+const getProblemOptions = (industry: string) => {
+  if (industry.includes('IT & SaaS')) {
+    return ['Low adoption rate', 'High churn rate', 'Performance issues'];
+  } else if (industry.includes('소비재')) {
+    return ['Low brand awareness in new market', 'Declining online engagement'];
+  } else if (industry.includes('헬스케어')) {
+    return ['Regulatory compliance challenges', 'User adoption barriers'];
+  } else if (industry.includes('첨단 제조')) {
+    return ['Production delay', 'Supplier quality issue'];
+  } else if (industry.includes('컨설팅')) {
+    return ['Client retention challenges', 'Project scope creep'];
+  }
+  return ['Market challenges', 'Operational issues'];
+};
+
+const getAgendaOptions = (problem: string) => {
+  if (problem.includes('Low adoption') || problem.includes('High churn')) {
+    return ['Client onboarding improvement', 'Post-beta performance review'];
+  } else if (problem.includes('Low brand awareness')) {
+    return ['Online marketing strategy in new market', 'Collaboration with local influencers'];
+  } else if (problem.includes('Declining engagement')) {
+    return ['Social media content revamp', 'CRM campaign review'];
+  } else if (problem.includes('Production delay') || problem.includes('Supplier')) {
+    return ['Negotiation with supplier', 'Quality control review meeting'];
+  } else if (problem.includes('Regulatory')) {
+    return ['Compliance strategy meeting', 'Risk mitigation plan'];
+  } else if (problem.includes('Performance')) {
+    return ['Technical optimization review', 'Infrastructure upgrade discussion'];
+  } else if (problem.includes('retention')) {
+    return ['Service improvement plan', 'Value proposition review'];
+  }
+  return ['Strategy discussion', 'Action plan meeting'];
+};
+
+const getGoalOptions = (agenda: string) => {
+  if (agenda.includes('improvement') || agenda.includes('review')) {
+    return ['Get constructive feedback', 'Align on next steps'];
+  } else if (agenda.includes('marketing') || agenda.includes('Collaboration')) {
+    return ['Build brand trust', 'Align campaign direction'];
+  } else if (agenda.includes('Negotiation') || agenda.includes('supplier')) {
+    return ['Secure commitment', 'Adjust delivery schedule'];
+  }
+  return ['Build trust with partner', 'Close a deal or agreement', 'Gather feedback'];
+};
+
 const SceneSetupChat = ({ job, industry, onComplete }: SceneSetupChatProps) => {
-  const [currentTurn, setCurrentTurn] = useState(1);
+  const [currentStep, setCurrentStep] = useState<'service' | 'problem' | 'agenda' | 'goal' | 'summary'>('service');
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [chatHistory, setChatHistory] = useState<Array<{ role: 'ai' | 'user', text: string }>>([
-    { role: 'ai', text: `${job} · ${industry} 분야에서 실무 영어 회화를 연습하시는군요! 몇 가지만 선택해주시면 맞춤 시나리오를 준비해드릴게요.` }
+    { role: 'ai', text: `${job} · ${industry} 분야에서 실무 영어 회화를 연습하시는군요! 몇 가지만 선택해주시면 맞춤 시나리오를 준비해드릴게요.` },
+    { role: 'ai', text: "What's your product or service?" }
   ]);
 
-  const questions = [
-    {
-      id: 'service',
-      question: "What's your company or product?",
-      options: [
-        'AI design SaaS platform',
-        'Beauty & skincare brand',
-        'Healthcare data analytics',
-        'Manufacturing tech solution'
-      ]
-    },
-    {
-      id: 'problem',
-      question: "What challenge are you facing?",
-      options: [
-        'Low brand awareness',
-        'High customer churn rate',
-        'Product quality issues',
-        'Delayed project timeline'
-      ]
-    },
-    {
-      id: 'agenda',
-      question: "What's today's meeting about?",
-      options: [
-        'Marketing strategy in new market',
-        'Partnership renewal discussion',
-        'Product improvement plan',
-        'Budget and resource allocation'
-      ]
-    },
-    {
-      id: 'goal',
-      question: "What's your goal today?",
-      options: [
-        'Build trust with partner',
-        'Close a deal or agreement',
-        'Get constructive feedback',
-        'Align on next steps'
-      ]
+  const getCurrentOptions = () => {
+    switch (currentStep) {
+      case 'service':
+        return getServiceOptions(job, industry);
+      case 'problem':
+        return getProblemOptions(industry);
+      case 'agenda':
+        return getAgendaOptions(answers.problem || '');
+      case 'goal':
+        return getGoalOptions(answers.agenda || '');
+      default:
+        return [];
     }
-  ];
+  };
 
-  const handleAnswer = (questionId: string, answer: string) => {
-    const newAnswers = { ...answers, [questionId]: answer };
+  const getCurrentQuestion = () => {
+    switch (currentStep) {
+      case 'service':
+        return "What's your product or service?";
+      case 'problem':
+        return "What's your current challenge?";
+      case 'agenda':
+        return "What's today's meeting about?";
+      case 'goal':
+        return "What's your goal for today's meeting?";
+      default:
+        return '';
+    }
+  };
+
+  const getNextStep = (current: string): 'service' | 'problem' | 'agenda' | 'goal' | 'summary' => {
+    const steps: Array<'service' | 'problem' | 'agenda' | 'goal' | 'summary'> = ['service', 'problem', 'agenda', 'goal', 'summary'];
+    const currentIndex = steps.indexOf(current as any);
+    return steps[currentIndex + 1];
+  };
+
+  const handleAnswer = (answer: string) => {
+    const newAnswers = { ...answers, [currentStep]: answer };
     setAnswers(newAnswers);
 
     // Add to chat history
@@ -78,32 +133,37 @@ const SceneSetupChat = ({ job, industry, onComplete }: SceneSetupChatProps) => {
       { role: 'user', text: answer },
     ]);
 
-    if (currentTurn < questions.length) {
+    if (currentStep !== 'goal') {
       // Show next question
+      const nextStep = getNextStep(currentStep);
       setTimeout(() => {
-        setChatHistory(prev => [
-          ...prev,
-          { role: 'ai', text: questions[currentTurn].question }
-        ]);
-        setCurrentTurn(currentTurn + 1);
+        setCurrentStep(nextStep);
+        if (nextStep !== 'summary') {
+          setChatHistory(prev => [
+            ...prev,
+            { role: 'ai', text: getCurrentQuestionForStep(nextStep, newAnswers) }
+          ]);
+        }
       }, 500);
     } else {
       // Generate case brief and complete
       setTimeout(() => {
         const caseData: CaseData = {
-          service: newAnswers.service || 'AI design SaaS platform',
-          problem: newAnswers.problem || 'Low brand awareness',
-          agenda: newAnswers.agenda || 'Marketing strategy in new market',
-          goal: newAnswers.goal || 'Build trust with partner',
+          service: newAnswers.service || '',
+          problem: newAnswers.problem || '',
+          agenda: newAnswers.agenda || '',
+          goal: newAnswers.goal || '',
           job,
           industry
         };
 
+        const briefText = `Got it! You're a ${job} working on ${caseData.service}. You're facing ${caseData.problem.toLowerCase()}, and today's meeting is about ${caseData.agenda.toLowerCase()}. Your goal is to ${caseData.goal.toLowerCase()}. Let's prepare for this!`;
+        
         setChatHistory(prev => [
           ...prev,
           { 
             role: 'ai', 
-            text: `Got it! You're a ${job} working on ${caseData.service}. You're facing ${caseData.problem.toLowerCase()}, and today's meeting is about ${caseData.agenda.toLowerCase()}. Your goal is to ${caseData.goal.toLowerCase()}. Let's prepare for this!` 
+            text: briefText
           }
         ]);
 
@@ -114,7 +174,21 @@ const SceneSetupChat = ({ job, industry, onComplete }: SceneSetupChatProps) => {
     }
   };
 
-  const currentQuestion = currentTurn <= questions.length ? questions[currentTurn - 1] : null;
+  const getCurrentQuestionForStep = (step: string, currentAnswers: Record<string, string>) => {
+    switch (step) {
+      case 'problem':
+        return "What's your current challenge?";
+      case 'agenda':
+        return "What's today's meeting about?";
+      case 'goal':
+        return "What's your goal for today's meeting?";
+      default:
+        return '';
+    }
+  };
+
+  const currentOptions = getCurrentOptions();
+  const showOptions = currentStep !== 'summary';
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
@@ -145,18 +219,15 @@ const SceneSetupChat = ({ job, industry, onComplete }: SceneSetupChatProps) => {
         </div>
 
         {/* Current question options */}
-        {currentQuestion && (
+        {showOptions && (
           <div className="space-y-3">
-            <p className="text-sm text-muted-foreground mb-4">
-              {currentQuestion.question}
-            </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {currentQuestion.options.map((option, idx) => (
+              {currentOptions.map((option, idx) => (
                 <Button
                   key={idx}
                   variant="outline"
                   className="h-auto py-4 px-6 text-left justify-start hover:bg-primary hover:text-primary-foreground transition-all"
-                  onClick={() => handleAnswer(currentQuestion.id, option)}
+                  onClick={() => handleAnswer(option)}
                 >
                   {option}
                 </Button>
@@ -167,14 +238,21 @@ const SceneSetupChat = ({ job, industry, onComplete }: SceneSetupChatProps) => {
 
         {/* Progress indicator */}
         <div className="mt-8 flex justify-center gap-2">
-          {questions.map((_, idx) => (
-            <div
-              key={idx}
-              className={`h-2 w-12 rounded-full transition-colors ${
-                idx < currentTurn ? 'bg-primary' : 'bg-muted'
-              }`}
-            />
-          ))}
+          {['service', 'problem', 'agenda', 'goal'].map((step, idx) => {
+            const stepOrder = ['service', 'problem', 'agenda', 'goal'];
+            const currentIndex = stepOrder.indexOf(currentStep);
+            const isCompleted = idx < currentIndex;
+            const isCurrent = idx === currentIndex;
+            
+            return (
+              <div
+                key={step}
+                className={`h-2 w-12 rounded-full transition-colors ${
+                  isCompleted || isCurrent ? 'bg-primary' : 'bg-muted'
+                }`}
+              />
+            );
+          })}
         </div>
       </Card>
     </div>
