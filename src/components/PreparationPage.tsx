@@ -91,95 +91,91 @@ export const PreparationPage = ({ caseData, onStartRoleplay }: PreparationPagePr
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 p-4 md:p-8">
-      <div className="max-w-4xl mx-auto space-y-6">
-        {/* Case Brief Section */}
-        <Card className="border-primary/20 shadow-lg">
-          <CardHeader>
-            <CardTitle className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-              Case Brief
-            </CardTitle>
-            <CardDescription className="text-base">
-              Review the key information for your role-play scenario
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {caseItems.map((item, index) => {
-              const Icon = item.icon;
-              return (
-                <div
-                  key={index}
-                  className="flex items-start gap-4 p-4 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
-                >
-                  <div className="p-2 rounded-lg bg-primary/10">
-                    <Icon className="w-5 h-5 text-primary" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-semibold text-sm text-muted-foreground mb-1">
-                      {item.label}
-                    </p>
-                    <p className="text-foreground">{item.value}</p>
-                  </div>
-                </div>
-              );
-            })}
-          </CardContent>
-        </Card>
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 flex flex-col">
+      {/* Case Brief Section - 20% */}
+      <div className="h-[20vh] border-b border-primary/20 bg-background/95 backdrop-blur">
+        <div className="max-w-7xl mx-auto px-4 md:px-8 h-full flex flex-col justify-center">
+          <h2 className="text-lg md:text-xl font-bold text-primary mb-3">Case Brief</h2>
+          <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm md:text-base">
+            <div className="flex items-center gap-2">
+              <Briefcase className="w-4 h-4 text-primary shrink-0" />
+              <span className="font-semibold text-muted-foreground">Service/Product:</span>
+              <span className="text-foreground">{caseData.service}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Target className="w-4 h-4 text-primary shrink-0" />
+              <span className="font-semibold text-muted-foreground">Problem:</span>
+              <span className="text-foreground">{caseData.problem}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <ClipboardList className="w-4 h-4 text-primary shrink-0" />
+              <span className="font-semibold text-muted-foreground">Agenda:</span>
+              <span className="text-foreground">{caseData.agenda}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Trophy className="w-4 h-4 text-primary shrink-0" />
+              <span className="font-semibold text-muted-foreground">Goal:</span>
+              <span className="text-foreground">{caseData.goal}</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        {/* Warm-up Expressions Section */}
-        <Card className="border-primary/20 shadow-lg">
-          <CardHeader>
-            <CardTitle className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+      {/* Warm-up Expressions Section - 80% */}
+      <div className="flex-1 overflow-auto">
+        <div className="max-w-4xl mx-auto px-4 md:px-8 py-8">
+          <div className="text-center mb-6">
+            <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent mb-2 flex items-center justify-center gap-2">
+              <Volume2 className="w-6 h-6 text-primary" />
               Warm-up Expressions
-            </CardTitle>
-            <CardDescription className="text-base">
-              Practice these key expressions before starting your role-play
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {loadingExpressions ? (
-              <div className="flex items-center justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <>
-                <div className="space-y-3">
-                  {expressions.map((expression, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center gap-3 p-4 rounded-lg bg-muted/50 hover:bg-muted transition-colors group"
-                    >
-                      <Button
-                        size="icon"
-                        variant="outline"
-                        onClick={() => playExpression(expression, index)}
-                        disabled={playingIndex === index}
-                        className="shrink-0 h-10 w-10"
-                      >
-                        {playingIndex === index ? (
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                        ) : (
-                          <Volume2 className="w-4 h-4" />
-                        )}
-                      </Button>
-                      <p className="flex-1 text-foreground">{expression}</p>
-                    </div>
-                  ))}
-                </div>
+            </h2>
+            <p className="text-base text-muted-foreground">
+              회화 전 핵심 문장을 듣고 따라 말하며 준비하세요
+            </p>
+          </div>
 
-                <div className="pt-6 border-t">
-                  <Button
-                    onClick={onStartRoleplay}
-                    size="lg"
-                    className="w-full text-lg font-semibold"
+          {loadingExpressions ? (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            </div>
+          ) : (
+            <div className="space-y-6">
+              <div className="space-y-3">
+                {expressions.map((expression, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center gap-3 p-4 rounded-lg bg-muted/50 hover:bg-muted transition-colors group"
                   >
-                    Start Role-play ▶
-                  </Button>
-                </div>
-              </>
-            )}
-          </CardContent>
-        </Card>
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      onClick={() => playExpression(expression, index)}
+                      disabled={playingIndex === index}
+                      className="shrink-0 h-10 w-10"
+                    >
+                      {playingIndex === index ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Volume2 className="w-4 h-4" />
+                      )}
+                    </Button>
+                    <p className="flex-1 text-foreground">{expression}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="pt-6">
+                <Button
+                  onClick={onStartRoleplay}
+                  size="lg"
+                  className="w-full text-lg font-semibold"
+                >
+                  Start Role-play ▶
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
