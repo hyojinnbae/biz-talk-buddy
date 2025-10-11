@@ -82,10 +82,10 @@ serve(async (req) => {
               type: 'server_vad',
               threshold: 0.5,
               prefix_padding_ms: 300,
-              silence_duration_ms: 1000
+              silence_duration_ms: 45000
             },
             temperature: 0.8,
-            max_response_output_tokens: 4096
+            max_response_output_tokens: 'inf'
           }
         };
         

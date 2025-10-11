@@ -112,6 +112,10 @@ export class RealtimeChat {
   private audioQueue: AudioQueue | null = null;
   private recorder: AudioRecorder | null = null;
   private sessionReady = false;
+  private reconnectAttempts = 0;
+  private maxReconnectAttempts = 3;
+  private reconnectTimeout: NodeJS.Timeout | null = null;
+  private isDisconnecting = false;
 
   constructor(
     private onMessage: (message: any) => void,
@@ -184,9 +188,17 @@ export class RealtimeChat {
       };
 
       this.ws.onerror = (error) => {
+        console.error('WebSocket error:', error);
+        if (!this.isDisconnecting) {
+          this.attemptReconnect();
+        }
       };
 
-      this.ws.onclose = () => {
+      this.ws.onclose = (event) => {
+        console.log('WebSocket closed:', event.code, event.reason);
+        if (!this.isDisconnecting && event.code !== 1000) {
+          this.attemptReconnect();
+        }
       };
 
       // Wait for WebSocket connection
@@ -328,7 +340,54 @@ export class RealtimeChat {
     this.ws.send(JSON.stringify({type: 'response.create'}));
   }
 
+  private attemptReconnect() {
+    if (this.reconnectAttempts >= this.maxReconnectAttempts) {
+      console.log('Max reconnect attempts reached');
+      this.onMessage({
+        type: 'error',
+        message: 'Connection lost. Please restart the session.'
+      });
+      return;
+    }
+
+    this.reconnectAttempts++;
+    console.log(`Attempting reconnect ${this.reconnectAttempts}/${this.maxReconnectAttempts}`);
+
+    if (this.reconnectTimeout) {
+      clearTimeout(this.reconnectTimeout);
+    }
+
+    this.reconnectTimeout = setTimeout(async () => {
+      try {
+        // Clean up old connection
+        this.recorder?.stop();
+        this.ws?.close();
+        
+        // Reinitialize
+        await this.init();
+        
+        this.reconnectAttempts = 0;
+        console.log('Reconnection successful');
+        
+        this.onMessage({
+          type: 'info',
+          message: 'Reconnected successfully'
+        });
+      } catch (error) {
+        console.error('Reconnection failed:', error);
+        this.attemptReconnect();
+      }
+    }, 2000);
+  }
+
   disconnect() {
+    this.isDisconnecting = true;
+    
+    if (this.reconnectTimeout) {
+      clearTimeout(this.reconnectTimeout);
+      this.reconnectTimeout = null;
+    }
+    
     this.recorder?.stop();
     this.ws?.close();
     this.audioContext?.close();
