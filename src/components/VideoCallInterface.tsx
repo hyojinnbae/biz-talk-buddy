@@ -10,22 +10,29 @@ interface VideoCallInterfaceProps {
     description: string;
     counterpart?: string;
   } | null;
+  caseData?: {
+    service: string;
+    problem: string;
+    agenda: string;
+    goal: string;
+    job?: string;
+    industry?: string;
+  } | null;
   onEndCall: () => void;
   isConnected?: boolean;
   isConnecting?: boolean;
   isSpeaking?: boolean;
   isUserSpeaking?: boolean;
-  aiTranscripts?: string[];
 }
 
 export const VideoCallInterface = ({ 
   scenario, 
+  caseData,
   onEndCall, 
   isConnected = false, 
   isConnecting = false, 
   isSpeaking = false, 
-  isUserSpeaking = false,
-  aiTranscripts = []
+  isUserSpeaking = false
 }: VideoCallInterfaceProps) => {
   const [isMuted, setIsMuted] = useState(false);
 
@@ -51,6 +58,34 @@ export const VideoCallInterface = ({
           </div>
         </div>
       </div>
+
+      {/* Case Brief Section */}
+      {caseData && (
+        <div className="bg-gray-800/50 border-b border-gray-700 px-6 py-4">
+          <div className="max-w-5xl mx-auto">
+            <div className="bg-gray-900/80 border border-blue-500/30 rounded-lg p-4">
+              <h3 className="text-blue-400 font-medium mb-3 flex items-center gap-2">
+                📋 오늘의 상황 (Case Brief) 💡 한 말이 떠오르지 않으면 아래 내용을 참고하세요!
+              </h3>
+              <ul className="space-y-2 text-sm text-gray-300">
+                <li>
+                  • <span className="text-white font-medium">내 서비스:</span> {caseData.service}
+                  {caseData.industry && <span className="text-gray-400"> ({caseData.industry})</span>}
+                </li>
+                <li>
+                  • <span className="text-white font-medium">문제:</span> {caseData.problem}
+                </li>
+                <li>
+                  • <span className="text-white font-medium">논의 사항:</span> {caseData.agenda}
+                </li>
+                <li>
+                  • <span className="text-white font-medium">Goal:</span> {caseData.goal}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      )}
       
       {/* Main Video Call Area */}
       <div className="flex-1 flex">
@@ -103,19 +138,6 @@ export const VideoCallInterface = ({
           </div>
         </div>
       </div>
-
-      {/* Subtitle Area - 여러 문장 누적 표시 */}
-      {aiTranscripts.length > 0 && (
-        <div className="bg-black/70 text-white px-6 py-4 border-t border-gray-700 max-h-32 overflow-y-auto">
-          <div className="max-w-4xl mx-auto space-y-2">
-            {aiTranscripts.slice(-3).map((text, idx) => (
-              <p key={idx} className={`text-lg text-center leading-relaxed ${idx === aiTranscripts.slice(-3).length - 1 ? 'font-semibold' : 'text-white/60'}`}>
-                {text}
-              </p>
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* Control bar - Zoom style */}
       <div className="bg-gray-900 border-t border-gray-700 p-6">

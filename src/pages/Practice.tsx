@@ -184,7 +184,11 @@ const Practice = () => {
     return (
       <div className="min-h-screen bg-background">
         {showProgressBar && <ProgressBar currentStep={getCurrentStepNumber()} />}
-        <VoiceInterface scenario={selectedScenario} onSessionEnd={handleSessionEnd} />
+        <VoiceInterface 
+          scenario={selectedScenario} 
+          caseData={caseData}
+          onSessionEnd={handleSessionEnd} 
+        />
       </div>
     );
   }

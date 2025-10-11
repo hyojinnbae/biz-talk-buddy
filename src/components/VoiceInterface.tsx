@@ -17,10 +17,18 @@ interface VoiceInterfaceProps {
     prompt: string;
     counterpart?: string;
   };
+  caseData?: {
+    service: string;
+    problem: string;
+    agenda: string;
+    goal: string;
+    job?: string;
+    industry?: string;
+  } | null;
   onSessionEnd: () => void;
 }
 
-const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd }) => {
+const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, caseData, onSessionEnd }) => {
   const { toast } = useToast();
   const [isConnected, setIsConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
@@ -29,7 +37,7 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
   const [messages, setMessages] = useState<any[]>([]);
   const [transcript, setTranscript] = useState('');
   const [aiTranscript, setAiTranscript] = useState('');
-  const [aiTranscripts, setAiTranscripts] = useState<string[]>([]); // 여러 문장 누적
+  const [aiTranscripts, setAiTranscripts] = useState<string[]>([]);
   const [conversationLog, setConversationLog] = useState<Array<{role: string, content: string}>>([]);
   const [rephrasedExpressions, setRephrasedExpressions] = useState<string[]>([]);
   const [showSessionResult, setShowSessionResult] = useState(false);
@@ -163,13 +171,13 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
         title: scenario.title,
         description: scenario.description,
         counterpart: scenario.role_target
-      }} 
+      }}
+      caseData={caseData}
       onEndCall={endConversation}
       isConnected={isConnected}
       isConnecting={isConnecting}
       isSpeaking={isSpeaking}
       isUserSpeaking={isUserSpeaking}
-      aiTranscripts={aiTranscripts}
     />
   );
 
