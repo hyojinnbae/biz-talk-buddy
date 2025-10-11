@@ -27,20 +27,21 @@ Avoid generic terms like "ROI", "satisfaction", "engagement" - be specific and s
 
     switch (step) {
       case 'service':
-        userPrompt = `Given:
-- Job role: ${job}
+        userPrompt = `Context:
+- Job: ${job}
 - Industry: ${industry}
 - Scenario: ${scenario}
-- Meeting purpose: ${meetingPurpose || 'Strategic discussion'}
 
-Generate 2 concise examples of products, services, or strategic initiatives that this person would realistically present or discuss in this meeting.
-Focus on strategic projects or major initiatives (not minor features).
-Tone: Strategic and executive-level.
+Task: Generate exactly TWO options for the PRODUCT or SERVICE CATEGORY that this user would discuss.
 
-Examples for context:
-- "Global brand expansion initiative"
-- "AI-driven marketing analytics platform"
-- "Regional distribution partnership program"
+Rules:
+- Output pure category nouns (1-3 words), e.g., "Skincare", "F&B", "Fashion"
+- NO strategy/initiative words (strategy, collaboration, plan, campaign, roadmap, integration, program, rollout)
+- NO verbs. NO quotes. NO punctuation.
+
+${industry.toLowerCase().includes('consumer') || industry.toLowerCase().includes('소비재') ? 
+  'Industry = "Consumer Brand", think in everyday CPG categories (e.g., Skincare, Makeup, Haircare, Fragrance, Snacks, Beverages, Home Care, Personal Care, Home living, Entertainment).' : 
+  'Focus on core product/service categories relevant to this industry.'}
 
 Return only 2 options, one per line, no numbering or bullets.`;
         break;
