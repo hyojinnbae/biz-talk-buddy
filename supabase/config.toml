@@ -1,8 +1,5 @@
 project_id = "qgtcogpbqyjwgeanccto"
 
-[functions.scene-setup-options]
-verify_jwt = false
-
 [functions.realtime-session]
 verify_jwt = false
 
