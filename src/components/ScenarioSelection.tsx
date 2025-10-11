@@ -365,7 +365,7 @@ const ScenarioSelection = ({ job, industry, onScenarioSelect, onCustomInput, onB
                     size="lg"
                   >
                     <Mic className="w-4 h-4" />
-                    지금 연습하기
+                    선택
                   </Button>
                 </CardContent>
               </Card>
