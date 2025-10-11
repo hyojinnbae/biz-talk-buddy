@@ -6,7 +6,7 @@ import { MessageSquare } from 'lucide-react';
 interface CaseData {
   service: string;
   problem: string;
-  agenda: string;
+  context: string;
   goal: string;
   job: string;
   industry: string;
@@ -29,65 +29,60 @@ interface SceneSetupChatProps {
   onComplete: (caseData: CaseData) => void;
 }
 
-// Contextual options based on job and industry
-const getServiceOptions = (job: string, industry: string) => {
-  if (industry.includes('IT & SaaS')) {
-    return ['CRM platform', 'AI analytics dashboard', 'Cloud collaboration tool'];
-  } else if (industry.includes('소비재')) {
-    return ['Skincare brand', 'K-beauty retailer', 'Indie cosmetics label'];
-  } else if (industry.includes('헬스케어')) {
-    return ['Medical device platform', 'Healthcare data analytics', 'Telemedicine solution'];
-  } else if (industry.includes('첨단 제조')) {
-    return ['Smart home device', 'Wearable tech', 'Audio equipment'];
-  } else if (industry.includes('컨설팅')) {
-    return ['Strategy consulting firm', 'Digital transformation services', 'Management advisory'];
+// Service options (2 choices only)
+const getServiceOptions = (scenarioTitle: string) => {
+  if (scenarioTitle.includes('Market Entry') || scenarioTitle.includes('Marketing')) {
+    return ['Skincare brand for Japanese market', 'K-beauty online retail platform'];
+  } else if (scenarioTitle.includes('Partnership') || scenarioTitle.includes('Collaboration')) {
+    return ['AI dashboard for enterprise clients', 'Cloud-based analytics platform'];
+  } else if (scenarioTitle.includes('Review') || scenarioTitle.includes('Performance')) {
+    return ['B2B SaaS CRM platform', 'AI-powered marketing automation tool'];
+  } else if (scenarioTitle.includes('Negotiation') || scenarioTitle.includes('Quality')) {
+    return ['Smart wearable device', 'IoT home automation system'];
   }
-  return ['Tech platform', 'Product solution', 'Service provider'];
+  return ['B2B SaaS platform', 'Consumer tech product'];
 };
 
-const getProblemOptions = (industry: string) => {
-  if (industry.includes('IT & SaaS')) {
-    return ['Low adoption rate', 'High churn rate', 'Performance issues'];
-  } else if (industry.includes('소비재')) {
-    return ['Low brand awareness in new market', 'Declining online engagement'];
-  } else if (industry.includes('헬스케어')) {
-    return ['Regulatory compliance challenges', 'User adoption barriers'];
-  } else if (industry.includes('첨단 제조')) {
-    return ['Production delay', 'Supplier quality issue'];
-  } else if (industry.includes('컨설팅')) {
-    return ['Client retention challenges', 'Project scope creep'];
+// Problem options (2 choices only)
+const getProblemOptions = (scenarioTitle: string) => {
+  if (scenarioTitle.includes('Market Entry') || scenarioTitle.includes('Marketing')) {
+    return ['Low brand awareness in new market', 'Distribution channel gap'];
+  } else if (scenarioTitle.includes('Partnership') || scenarioTitle.includes('Collaboration')) {
+    return ['Partnership term discussion', 'Partnership onboarding and KPI alignment'];
+  } else if (scenarioTitle.includes('Review') || scenarioTitle.includes('Performance')) {
+    return ['Below-target user adoption rate', 'High customer churn rate'];
+  } else if (scenarioTitle.includes('Negotiation') || scenarioTitle.includes('Quality')) {
+    return ['Quality control standards dispute', 'Delivery timeline concerns'];
   }
-  return ['Market challenges', 'Operational issues'];
+  return ['Client retention challenges', 'Product-market fit issues'];
 };
 
-const getAgendaOptions = (problem: string) => {
-  if (problem.includes('Low adoption') || problem.includes('High churn')) {
-    return ['Client onboarding improvement', 'Post-beta performance review'];
-  } else if (problem.includes('Low brand awareness')) {
-    return ['Online marketing strategy in new market', 'Collaboration with local influencers'];
-  } else if (problem.includes('Declining engagement')) {
-    return ['Social media content revamp', 'CRM campaign review'];
-  } else if (problem.includes('Production delay') || problem.includes('Supplier')) {
-    return ['Negotiation with supplier', 'Quality control review meeting'];
-  } else if (problem.includes('Regulatory')) {
-    return ['Compliance strategy meeting', 'Risk mitigation plan'];
-  } else if (problem.includes('Performance')) {
-    return ['Technical optimization review', 'Infrastructure upgrade discussion'];
-  } else if (problem.includes('retention')) {
-    return ['Service improvement plan', 'Value proposition review'];
+// Context options (2 choices only) - replaces agenda
+const getContextOptions = (scenarioTitle: string, problem: string) => {
+  if (scenarioTitle.includes('Partnership') || scenarioTitle.includes('Collaboration')) {
+    return ['Partner proposed 70:30 revenue share', 'Your team prefers 50:50 split for fairness'];
+  } else if (scenarioTitle.includes('Market Entry') || scenarioTitle.includes('Marketing')) {
+    return ['Local competitor has 45% market share', 'Your brand awareness is only 12% in target market'];
+  } else if (scenarioTitle.includes('Review') || scenarioTitle.includes('Performance')) {
+    return ['Q1 metrics show 30% below target', 'User feedback indicates onboarding friction'];
+  } else if (scenarioTitle.includes('Negotiation') || scenarioTitle.includes('Quality')) {
+    return ['Supplier wants to increase price by 15%', 'Your budget allows max 5% increase'];
   }
-  return ['Strategy discussion', 'Action plan meeting'];
+  return ['Current approach not meeting expectations', 'Need to align on new strategy'];
 };
 
-const getGoalOptions = (agenda: string) => {
-  if (agenda.includes('improvement') || agenda.includes('review')) {
-    return ['Get constructive feedback', 'Align on next steps'];
-  } else if (agenda.includes('marketing') || agenda.includes('Collaboration')) {
-    return ['Build brand trust', 'Align campaign direction'];
-  } else if (agenda.includes('Negotiation') || agenda.includes('supplier')) {
-    return ['Secure commitment', 'Adjust delivery schedule'];
+// Goal options (2 choices only)
+const getGoalOptions = (scenarioTitle: string) => {
+  if (scenarioTitle.includes('Partnership') || scenarioTitle.includes('Collaboration')) {
+    return ['Negotiate fairer terms and build trust', 'Secure commitment for long-term partnership'];
+  } else if (scenarioTitle.includes('Market Entry') || scenarioTitle.includes('Marketing')) {
+    return ['Build brand trust with local partners', 'Present compelling market entry plan'];
+  } else if (scenarioTitle.includes('Review') || scenarioTitle.includes('Performance')) {
+    return ['Gather actionable feedback for improvement', 'Align on new KPIs and action plan'];
+  } else if (scenarioTitle.includes('Negotiation') || scenarioTitle.includes('Quality')) {
+    return ['Negotiate better terms within budget', 'Find win-win solution maintaining quality'];
   }
-  return ['Build trust with partner', 'Close a deal or agreement', 'Gather feedback'];
+  return ['Build trust and alignment', 'Secure agreement on next steps'];
 };
 
 // Questions for preselected scenarios
@@ -150,99 +145,52 @@ const getGoalOptionsForPreselected = (challenge: string) => {
 };
 
 const SceneSetupChat = ({ job, industry, preselectedScenario, onComplete }: SceneSetupChatProps) => {
-  // If preselected scenario exists, start with target market/challenge questions
-  const initialStep = preselectedScenario ? 'target' : 'service';
-  const initialAnswers = preselectedScenario ? {
-    service: preselectedScenario.service,
-    problem: preselectedScenario.problem,
-    agenda: preselectedScenario.agenda,
-    title: preselectedScenario.title
-  } : {};
+  // Always start with service question (4-step flow: service → problem → context → goal)
+  const [currentStep, setCurrentStep] = useState<'service' | 'problem' | 'context' | 'goal' | 'summary'>('service');
+  const [answers, setAnswers] = useState<Record<string, string>>({
+    title: preselectedScenario?.title || ''
+  });
   
-  const [currentStep, setCurrentStep] = useState<'service' | 'problem' | 'agenda' | 'goal' | 'target' | 'challenge' | 'summary'>(initialStep);
-  const [answers, setAnswers] = useState<Record<string, string>>(initialAnswers);
-  
-  const getInitialChatHistory = (): Array<{ role: 'ai' | 'user', text: string }> => {
-    if (preselectedScenario) {
-      return [
-        { role: 'ai' as const, text: `Great, you've chosen "${preselectedScenario.title}".` },
-        { role: 'ai' as const, text: getTargetMarketQuestion(preselectedScenario.title) }
-      ];
-    }
-    return [
-      { role: 'ai' as const, text: `${job} · ${industry} 분야에서 실무 영어 회화를 연습하시는군요! 몇 가지만 선택해주시면 맞춤 시나리오를 준비해드릴게요.` },
-      { role: 'ai' as const, text: "What's your product or service?" }
-    ];
-  };
-  
-  const [chatHistory, setChatHistory] = useState<Array<{ role: 'ai' | 'user', text: string }>>(getInitialChatHistory());
+  const [chatHistory, setChatHistory] = useState<Array<{ role: 'ai' | 'user', text: string }>>([
+    { role: 'ai', text: `Great, you've chosen "${preselectedScenario?.title || 'a scenario'}".` },
+    { role: 'ai', text: "Let's make this situation more concrete. We'll set the scene for your meeting." },
+    { role: 'ai', text: "Which product or service are we talking about?" }
+  ]);
 
   const getCurrentOptions = () => {
-    if (preselectedScenario) {
-      // Simplified flow for preselected scenarios
-      switch (currentStep) {
-        case 'target':
-          return getTargetMarketOptions(answers.title || '');
-        case 'challenge':
-          return getChallengeOptions(answers.title || '');
-        case 'goal':
-          return getGoalOptionsForPreselected(answers.challenge || '');
-        default:
-          return [];
-      }
-    }
+    const scenarioTitle = answers.title || '';
     
-    // Original flow for custom scenarios
     switch (currentStep) {
       case 'service':
-        return getServiceOptions(job, industry);
+        return getServiceOptions(scenarioTitle);
       case 'problem':
-        return getProblemOptions(industry);
-      case 'agenda':
-        return getAgendaOptions(answers.problem || '');
+        return getProblemOptions(scenarioTitle);
+      case 'context':
+        return getContextOptions(scenarioTitle, answers.problem || '');
       case 'goal':
-        return getGoalOptions(answers.agenda || '');
+        return getGoalOptions(scenarioTitle);
       default:
         return [];
     }
   };
 
   const getCurrentQuestion = () => {
-    if (preselectedScenario) {
-      switch (currentStep) {
-        case 'target':
-          return getTargetMarketQuestion(answers.title || '');
-        case 'challenge':
-          return getChallengeQuestion(answers.target || '');
-        case 'goal':
-          return getGoalQuestion();
-        default:
-          return '';
-      }
-    }
-    
     switch (currentStep) {
       case 'service':
-        return "What's your product or service?";
+        return "Which product or service are we talking about?";
       case 'problem':
-        return "What's your current challenge?";
-      case 'agenda':
-        return "What's today's meeting about?";
+        return "What issue are you focusing on in this meeting?";
+      case 'context':
+        return "Which situation fits better?";
       case 'goal':
-        return "What's your goal for today's meeting?";
+        return "What's your main goal for today's meeting?";
       default:
         return '';
     }
   };
 
-  const getNextStep = (current: string): 'service' | 'problem' | 'agenda' | 'goal' | 'target' | 'challenge' | 'summary' => {
-    if (preselectedScenario) {
-      const preselectedSteps: Array<'target' | 'challenge' | 'goal' | 'summary'> = ['target', 'challenge', 'goal', 'summary'];
-      const currentIndex = preselectedSteps.indexOf(current as any);
-      return preselectedSteps[currentIndex + 1];
-    }
-    
-    const steps: Array<'service' | 'problem' | 'agenda' | 'goal' | 'summary'> = ['service', 'problem', 'agenda', 'goal', 'summary'];
+  const getNextStep = (current: string): 'service' | 'problem' | 'context' | 'goal' | 'summary' => {
+    const steps: Array<'service' | 'problem' | 'context' | 'goal' | 'summary'> = ['service', 'problem', 'context', 'goal', 'summary'];
     const currentIndex = steps.indexOf(current as any);
     return steps[currentIndex + 1];
   };
@@ -272,34 +220,16 @@ const SceneSetupChat = ({ job, industry, preselectedScenario, onComplete }: Scen
     } else {
       // Generate case brief and complete
       setTimeout(() => {
-        let caseData: CaseData;
-        let briefText: string;
+        const caseData: CaseData = {
+          service: newAnswers.service || '',
+          problem: newAnswers.problem || '',
+          context: newAnswers.context || '',
+          goal: newAnswers.goal || '',
+          job,
+          industry
+        };
         
-        if (preselectedScenario) {
-          // Use preselected scenario data + user answers
-          caseData = {
-            service: preselectedScenario.service,
-            problem: `${newAnswers.challenge || preselectedScenario.problem}`,
-            agenda: `${preselectedScenario.agenda} - ${newAnswers.target || 'target market'}`,
-            goal: newAnswers.goal || '',
-            job,
-            industry
-          };
-          
-          briefText = `Got it. You're a ${job} meeting ${preselectedScenario.partner.toLowerCase()} to discuss ${caseData.agenda.toLowerCase()}. Your challenge is ${caseData.problem.toLowerCase()}, and your goal is to ${caseData.goal.toLowerCase()}.`;
-        } else {
-          // Original custom scenario flow
-          caseData = {
-            service: newAnswers.service || '',
-            problem: newAnswers.problem || '',
-            agenda: newAnswers.agenda || '',
-            goal: newAnswers.goal || '',
-            job,
-            industry
-          };
-          
-          briefText = `Got it! You're a ${job} working on ${caseData.service}. You're facing ${caseData.problem.toLowerCase()}, and today's meeting is about ${caseData.agenda.toLowerCase()}. Your goal is to ${caseData.goal.toLowerCase()}. Let's prepare for this!`;
-        }
+        const briefText = `Got it. You're meeting to discuss ${answers.title}. Your situation: ${caseData.context}. Your goal is to ${caseData.goal.toLowerCase()}.`;
         
         setChatHistory(prev => [
           ...prev,
@@ -317,24 +247,13 @@ const SceneSetupChat = ({ job, industry, preselectedScenario, onComplete }: Scen
   };
 
   const getCurrentQuestionForStep = (step: string, currentAnswers: Record<string, string>) => {
-    if (preselectedScenario) {
-      switch (step) {
-        case 'challenge':
-          return getChallengeQuestion(currentAnswers.target || '');
-        case 'goal':
-          return getGoalQuestion();
-        default:
-          return '';
-      }
-    }
-    
     switch (step) {
       case 'problem':
-        return "What's your current challenge?";
-      case 'agenda':
-        return "What's today's meeting about?";
+        return "What issue are you focusing on in this meeting?";
+      case 'context':
+        return "Which situation fits better?";
       case 'goal':
-        return "What's your goal for today's meeting?";
+        return "What's your main goal for today's meeting?";
       default:
         return '';
     }
@@ -391,39 +310,21 @@ const SceneSetupChat = ({ job, industry, preselectedScenario, onComplete }: Scen
 
         {/* Progress indicator */}
         <div className="mt-8 flex justify-center gap-2">
-          {preselectedScenario ? (
-            ['target', 'challenge', 'goal'].map((step, idx) => {
-              const stepOrder = ['target', 'challenge', 'goal'];
-              const currentIndex = stepOrder.indexOf(currentStep);
-              const isCompleted = idx < currentIndex;
-              const isCurrent = idx === currentIndex;
-              
-              return (
-                <div
-                  key={step}
-                  className={`h-2 w-12 rounded-full transition-colors ${
-                    isCompleted || isCurrent ? 'bg-primary' : 'bg-muted'
-                  }`}
-                />
-              );
-            })
-          ) : (
-            ['service', 'problem', 'agenda', 'goal'].map((step, idx) => {
-              const stepOrder = ['service', 'problem', 'agenda', 'goal'];
-              const currentIndex = stepOrder.indexOf(currentStep);
-              const isCompleted = idx < currentIndex;
-              const isCurrent = idx === currentIndex;
-              
-              return (
-                <div
-                  key={step}
-                  className={`h-2 w-12 rounded-full transition-colors ${
-                    isCompleted || isCurrent ? 'bg-primary' : 'bg-muted'
-                  }`}
-                />
-              );
-            })
-          )}
+          {['service', 'problem', 'context', 'goal'].map((step, idx) => {
+            const stepOrder = ['service', 'problem', 'context', 'goal'];
+            const currentIndex = stepOrder.indexOf(currentStep);
+            const isCompleted = idx < currentIndex;
+            const isCurrent = idx === currentIndex;
+            
+            return (
+              <div
+                key={step}
+                className={`h-2 w-12 rounded-full transition-colors ${
+                  isCompleted || isCurrent ? 'bg-primary' : 'bg-muted'
+                }`}
+              />
+            );
+          })}
         </div>
       </Card>
     </div>

@@ -7,14 +7,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Label } from '@/components/ui/label';
 import VoiceInterface from '@/components/VoiceInterface';
 import SceneSetupChat from '@/components/SceneSetupChat';
-import CaseSheet from '@/components/CaseSheet';
-import WarmupExpressions from '@/components/WarmupExpressions';
+import CaseBriefWithWarmup from '@/components/CaseBriefWithWarmup';
 import ProgressBar from '@/components/ProgressBar';
 import ScenarioSelection from '@/components/ScenarioSelection';
 import { Home } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
-type Step = 'userInfo' | 'scenarioSelection' | 'sceneSetup' | 'caseSheet' | 'warmup' | 'roleplay';
+type Step = 'userInfo' | 'scenarioSelection' | 'sceneSetup' | 'caseBriefWarmup' | 'roleplay';
 
 interface ScenarioData {
   title: string;
@@ -34,7 +33,7 @@ interface UserInfo {
 interface CaseData {
   service: string;
   problem: string;
-  agenda: string;
+  context: string;
   goal: string;
   job: string;
   industry: string;
@@ -49,6 +48,7 @@ const Practice = () => {
   const [caseData, setCaseData] = useState<CaseData | null>(null);
   const [selectedScenario, setSelectedScenario] = useState<any>(null);
   const [preselectedScenario, setPreselectedScenario] = useState<ScenarioData | null>(null);
+  const [scenarioTitle, setScenarioTitle] = useState<string>('');
 
   useEffect(() => {
     if (!user) {
@@ -71,6 +71,7 @@ const Practice = () => {
 
   const handleScenarioSelect = (scenario: ScenarioData) => {
     setPreselectedScenario(scenario);
+    setScenarioTitle(scenario.title);
     setCurrentStep('sceneSetup');
   };
 
@@ -86,21 +87,17 @@ const Practice = () => {
 
   const handleSceneSetupComplete = (data: CaseData) => {
     setCaseData(data);
-    setCurrentStep('caseSheet');
+    setCurrentStep('caseBriefWarmup');
   };
 
-  const handleCaseSheetNext = () => {
-    setCurrentStep('warmup');
-  };
-
-  const handleWarmupNext = () => {
+  const handleCaseBriefWarmupNext = () => {
     if (caseData) {
       const scenario = {
         id: Date.now().toString(),
-        title: caseData.agenda,
+        title: scenarioTitle,
         description: `${caseData.service} - ${caseData.problem}`,
         role_target: 'Business Partner',
-        prompt: `You are a business partner. The user is a ${caseData.job} working on ${caseData.service}. They are facing ${caseData.problem}. Today's meeting is about ${caseData.agenda}. The goal is to ${caseData.goal}. Conduct a natural, professional business conversation in English. Start with: "Good morning. Thanks for joining. Let's discuss ${caseData.agenda}."`,
+        prompt: `You are a business partner. The user is a ${caseData.job} working on ${caseData.service}. They are facing ${caseData.problem}. Context: ${caseData.context}. The goal is to ${caseData.goal}. Conduct a natural, professional business conversation in English. Keep your responses brief (2-3 sentences). Start with: "Good morning. Thanks for joining. Let's discuss our partnership."`,
       };
       setSelectedScenario(scenario);
       setCurrentStep('roleplay');
@@ -119,9 +116,8 @@ const Practice = () => {
     switch (currentStep) {
       case 'scenarioSelection': return 0;
       case 'sceneSetup': return 1;
-      case 'caseSheet': return 2;
-      case 'warmup': return 3;
-      case 'roleplay': return 4;
+      case 'caseBriefWarmup': return 2;
+      case 'roleplay': return 3;
       default: return 0;
     }
   };
@@ -159,27 +155,21 @@ const Practice = () => {
     );
   }
 
-  // Step 2: Case Sheet
-  if (currentStep === 'caseSheet' && caseData) {
+  // Step 2: Case Brief + Warm-up Expressions (combined)
+  if (currentStep === 'caseBriefWarmup' && caseData) {
     return (
       <div className="min-h-screen bg-background">
         {showProgressBar && <ProgressBar currentStep={getCurrentStepNumber()} />}
-        <CaseSheet caseData={caseData} onNext={handleCaseSheetNext} />
+        <CaseBriefWithWarmup 
+          caseData={caseData} 
+          scenarioTitle={scenarioTitle}
+          onNext={handleCaseBriefWarmupNext} 
+        />
       </div>
     );
   }
 
-  // Step 3: Warm-up Expressions
-  if (currentStep === 'warmup' && caseData) {
-    return (
-      <div className="min-h-screen bg-background">
-        {showProgressBar && <ProgressBar currentStep={getCurrentStepNumber()} />}
-        <WarmupExpressions caseData={caseData} onNext={handleWarmupNext} />
-      </div>
-    );
-  }
-
-  // Step 4: Realtime Role-play
+  // Step 3: Realtime Role-play (8 minutes)
   if (currentStep === 'roleplay' && selectedScenario) {
     return (
       <div className="min-h-screen bg-background">
