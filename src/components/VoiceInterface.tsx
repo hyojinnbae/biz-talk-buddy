@@ -169,6 +169,7 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
       isConnecting={isConnecting}
       isSpeaking={isSpeaking}
       isUserSpeaking={isUserSpeaking}
+      aiTranscripts={aiTranscripts}
     />
   );
 

@@ -5,7 +5,7 @@ import { Briefcase, Target, AlertCircle, CheckCircle } from 'lucide-react';
 interface CaseData {
   service: string;
   problem: string;
-  context: string;
+  agenda: string;
   goal: string;
   job: string;
   industry: string;
@@ -53,14 +53,14 @@ const CaseSheet = ({ caseData, onNext }: CaseSheetProps) => {
             </div>
           </div>
 
-          {/* Context */}
+          {/* Agenda */}
           <div className="flex gap-4 items-start">
             <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0">
               <Target className="w-5 h-5 text-orange-600" />
             </div>
             <div>
-              <p className="text-sm font-semibold text-muted-foreground mb-1">Context</p>
-              <p className="text-base leading-relaxed">{caseData.context}</p>
+              <p className="text-sm font-semibold text-muted-foreground mb-1">Agenda</p>
+              <p className="text-base leading-relaxed">{caseData.agenda}</p>
             </div>
           </div>
 
