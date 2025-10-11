@@ -12,9 +12,20 @@ interface CaseData {
   industry: string;
 }
 
+interface ScenarioData {
+  title: string;
+  description: string;
+  partner: string;
+  service: string;
+  problem: string;
+  agenda: string;
+  goal: string;
+}
+
 interface SceneSetupChatProps {
   job: string;
   industry: string;
+  preselectedScenario?: ScenarioData | null;
   onComplete: (caseData: CaseData) => void;
 }
 
@@ -79,13 +90,32 @@ const getGoalOptions = (agenda: string) => {
   return ['Build trust with partner', 'Close a deal or agreement', 'Gather feedback'];
 };
 
-const SceneSetupChat = ({ job, industry, onComplete }: SceneSetupChatProps) => {
-  const [currentStep, setCurrentStep] = useState<'service' | 'problem' | 'agenda' | 'goal' | 'summary'>('service');
-  const [answers, setAnswers] = useState<Record<string, string>>({});
-  const [chatHistory, setChatHistory] = useState<Array<{ role: 'ai' | 'user', text: string }>>([
-    { role: 'ai', text: `${job} · ${industry} 분야에서 실무 영어 회화를 연습하시는군요! 몇 가지만 선택해주시면 맞춤 시나리오를 준비해드릴게요.` },
-    { role: 'ai', text: "What's your product or service?" }
-  ]);
+const SceneSetupChat = ({ job, industry, preselectedScenario, onComplete }: SceneSetupChatProps) => {
+  // If preselected scenario exists, skip service/problem/agenda and only ask for goal
+  const initialStep = preselectedScenario ? 'goal' : 'service';
+  const initialAnswers = preselectedScenario ? {
+    service: preselectedScenario.service,
+    problem: preselectedScenario.problem,
+    agenda: preselectedScenario.agenda
+  } : {};
+  
+  const [currentStep, setCurrentStep] = useState<'service' | 'problem' | 'agenda' | 'goal' | 'summary'>(initialStep);
+  const [answers, setAnswers] = useState<Record<string, string>>(initialAnswers);
+  
+  const getInitialChatHistory = (): Array<{ role: 'ai' | 'user', text: string }> => {
+    if (preselectedScenario) {
+      return [
+        { role: 'ai' as const, text: `Great choice! You've selected "${preselectedScenario.title}". Let me help you prepare for this meeting.` },
+        { role: 'ai' as const, text: "What's your goal for today's meeting?" }
+      ];
+    }
+    return [
+      { role: 'ai' as const, text: `${job} · ${industry} 분야에서 실무 영어 회화를 연습하시는군요! 몇 가지만 선택해주시면 맞춤 시나리오를 준비해드릴게요.` },
+      { role: 'ai' as const, text: "What's your product or service?" }
+    ];
+  };
+  
+  const [chatHistory, setChatHistory] = useState<Array<{ role: 'ai' | 'user', text: string }>>(getInitialChatHistory());
 
   const getCurrentOptions = () => {
     switch (currentStep) {

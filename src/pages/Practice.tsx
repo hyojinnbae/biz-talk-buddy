@@ -10,10 +10,21 @@ import SceneSetupChat from '@/components/SceneSetupChat';
 import CaseSheet from '@/components/CaseSheet';
 import WarmupExpressions from '@/components/WarmupExpressions';
 import ProgressBar from '@/components/ProgressBar';
+import ScenarioSelection from '@/components/ScenarioSelection';
 import { Home } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
-type Step = 'userInfo' | 'sceneSetup' | 'caseSheet' | 'warmup' | 'roleplay';
+type Step = 'userInfo' | 'scenarioSelection' | 'sceneSetup' | 'caseSheet' | 'warmup' | 'roleplay';
+
+interface ScenarioData {
+  title: string;
+  description: string;
+  partner: string;
+  service: string;
+  problem: string;
+  agenda: string;
+  goal: string;
+}
 
 interface UserInfo {
   job: string;
@@ -37,6 +48,7 @@ const Practice = () => {
   const [userInfo, setUserInfo] = useState<UserInfo>({ job: '', industry: '' });
   const [caseData, setCaseData] = useState<CaseData | null>(null);
   const [selectedScenario, setSelectedScenario] = useState<any>(null);
+  const [preselectedScenario, setPreselectedScenario] = useState<ScenarioData | null>(null);
 
   useEffect(() => {
     if (!user) {
@@ -45,7 +57,7 @@ const Practice = () => {
     }
   }, [user, navigate]);
 
-  const handleStartSceneSetup = () => {
+  const handleStartScenarioSelection = () => {
     if (!userInfo.job || !userInfo.industry) {
       toast({
         title: "정보 누락",
@@ -54,7 +66,22 @@ const Practice = () => {
       });
       return;
     }
+    setCurrentStep('scenarioSelection');
+  };
+
+  const handleScenarioSelect = (scenario: ScenarioData) => {
+    setPreselectedScenario(scenario);
     setCurrentStep('sceneSetup');
+  };
+
+  const handleCustomInput = () => {
+    setPreselectedScenario(null);
+    setCurrentStep('sceneSetup');
+  };
+
+  const handleBackToUserInfo = () => {
+    setCurrentStep('userInfo');
+    setPreselectedScenario(null);
   };
 
   const handleSceneSetupComplete = (data: CaseData) => {
@@ -84,11 +111,13 @@ const Practice = () => {
     setSelectedScenario(null);
     setCaseData(null);
     setUserInfo({ job: '', industry: '' });
+    setPreselectedScenario(null);
     setCurrentStep('userInfo');
   };
 
   const getCurrentStepNumber = (): number => {
     switch (currentStep) {
+      case 'scenarioSelection': return 0;
       case 'sceneSetup': return 1;
       case 'caseSheet': return 2;
       case 'warmup': return 3;
@@ -100,7 +129,20 @@ const Practice = () => {
   if (!user) return null;
 
   // Show progress bar for steps 1-4
-  const showProgressBar = currentStep !== 'userInfo';
+  const showProgressBar = currentStep !== 'userInfo' && currentStep !== 'scenarioSelection';
+
+  // Step 0: Scenario Selection
+  if (currentStep === 'scenarioSelection') {
+    return (
+      <ScenarioSelection
+        job={userInfo.job}
+        industry={userInfo.industry}
+        onScenarioSelect={handleScenarioSelect}
+        onCustomInput={handleCustomInput}
+        onBack={handleBackToUserInfo}
+      />
+    );
+  }
 
   // Step 1: Scene Setup Chat
   if (currentStep === 'sceneSetup') {
@@ -110,6 +152,7 @@ const Practice = () => {
         <SceneSetupChat
           job={userInfo.job}
           industry={userInfo.industry}
+          preselectedScenario={preselectedScenario}
           onComplete={handleSceneSetupComplete}
         />
       </div>
@@ -211,7 +254,7 @@ const Practice = () => {
               </div>
 
               <Button 
-                onClick={handleStartSceneSetup}
+                onClick={handleStartScenarioSelection}
                 disabled={!userInfo.job || !userInfo.industry}
                 className="w-full"
                 size="lg"
