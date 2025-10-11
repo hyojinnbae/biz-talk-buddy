@@ -7,13 +7,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Label } from '@/components/ui/label';
 import VoiceInterface from '@/components/VoiceInterface';
 import SceneSetupChat from '@/components/SceneSetupChat';
-import { PreparationPage } from '@/components/PreparationPage';
+import CaseSheet from '@/components/CaseSheet';
+import WarmupExpressions from '@/components/WarmupExpressions';
 import ProgressBar from '@/components/ProgressBar';
 import ScenarioSelection from '@/components/ScenarioSelection';
 import { Home } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
-type Step = 'userInfo' | 'scenarioSelection' | 'sceneSetup' | 'preparation' | 'roleplay';
+type Step = 'userInfo' | 'scenarioSelection' | 'sceneSetup' | 'caseSheet' | 'warmup' | 'roleplay';
 
 interface ScenarioData {
   title: string;
@@ -85,10 +86,14 @@ const Practice = () => {
 
   const handleSceneSetupComplete = (data: CaseData) => {
     setCaseData(data);
-    setCurrentStep('preparation');
+    setCurrentStep('caseSheet');
   };
 
-  const handlePreparationComplete = () => {
+  const handleCaseSheetNext = () => {
+    setCurrentStep('warmup');
+  };
+
+  const handleWarmupNext = () => {
     if (caseData) {
       const scenario = {
         id: Date.now().toString(),
@@ -114,8 +119,9 @@ const Practice = () => {
     switch (currentStep) {
       case 'scenarioSelection': return 0;
       case 'sceneSetup': return 1;
-      case 'preparation': return 2;
-      case 'roleplay': return 3;
+      case 'caseSheet': return 2;
+      case 'warmup': return 3;
+      case 'roleplay': return 4;
       default: return 0;
     }
   };
@@ -153,17 +159,27 @@ const Practice = () => {
     );
   }
 
-  // Step 2: Preparation (Case Brief + Warm-up Expressions)
-  if (currentStep === 'preparation' && caseData) {
+  // Step 2: Case Sheet
+  if (currentStep === 'caseSheet' && caseData) {
     return (
       <div className="min-h-screen bg-background">
         {showProgressBar && <ProgressBar currentStep={getCurrentStepNumber()} />}
-        <PreparationPage caseData={caseData} onStartRoleplay={handlePreparationComplete} />
+        <CaseSheet caseData={caseData} onNext={handleCaseSheetNext} />
       </div>
     );
   }
 
-  // Step 3: Realtime Role-play
+  // Step 3: Warm-up Expressions
+  if (currentStep === 'warmup' && caseData) {
+    return (
+      <div className="min-h-screen bg-background">
+        {showProgressBar && <ProgressBar currentStep={getCurrentStepNumber()} />}
+        <WarmupExpressions caseData={caseData} onNext={handleWarmupNext} />
+      </div>
+    );
+  }
+
+  // Step 4: Realtime Role-play
   if (currentStep === 'roleplay' && selectedScenario) {
     return (
       <div className="min-h-screen bg-background">
