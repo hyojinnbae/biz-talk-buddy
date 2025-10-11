@@ -31,7 +31,7 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
   const [aiTranscript, setAiTranscript] = useState('');
   const [aiTranscripts, setAiTranscripts] = useState<string[]>([]); // 여러 문장 누적
   const [conversationLog, setConversationLog] = useState<Array<{role: string, content: string}>>([]);
-  const [rephrasedExpressions, setRephrasedExpressions] = useState<Array<{original: string, rephrased: string}>>([]);
+  const [rephrasedExpressions, setRephrasedExpressions] = useState<string[]>([]);
   const [showSessionResult, setShowSessionResult] = useState(false);
   const chatRef = useRef<RealtimeChat | null>(null);
   const { user } = useAuth();
@@ -64,14 +64,8 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
             .filter(s => s.length > 0)
             .slice(0, 3); // Max 3 sentences
           
-          // Find the previous user message as the original
-          const lastUserMessage = conversationLog.filter(msg => msg.role === 'user').pop();
-          
           sentences.forEach(sentence => {
-            setRephrasedExpressions(prev => [...prev, {
-              original: lastUserMessage?.content || '',
-              rephrased: sentence
-            }]);
+            setRephrasedExpressions(prev => [...prev, sentence]);
           });
         }
         
