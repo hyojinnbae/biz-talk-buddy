@@ -9,13 +9,13 @@ interface VideoCallInterfaceProps {
     title: string;
     description: string;
     counterpart?: string;
-    caseBrief?: string;
   } | null;
   onEndCall: () => void;
   isConnected?: boolean;
   isConnecting?: boolean;
   isSpeaking?: boolean;
   isUserSpeaking?: boolean;
+  aiTranscripts?: string[];
 }
 
 export const VideoCallInterface = ({ 
@@ -24,7 +24,8 @@ export const VideoCallInterface = ({
   isConnected = false, 
   isConnecting = false, 
   isSpeaking = false, 
-  isUserSpeaking = false
+  isUserSpeaking = false,
+  aiTranscripts = []
 }: VideoCallInterfaceProps) => {
   const [isMuted, setIsMuted] = useState(false);
 
@@ -50,30 +51,6 @@ export const VideoCallInterface = ({
           </div>
         </div>
       </div>
-
-      {/* Case Brief - Fixed at top */}
-      {scenario?.caseBrief && (
-        <div className="bg-gray-700/50 text-white px-6 py-3 border-b border-gray-600">
-          <div className="max-w-5xl mx-auto">
-            <div className="bg-gray-800/70 rounded-lg p-3 border border-gray-600">
-              <h4 className="text-sm font-semibold text-blue-300 mb-2">
-                💼 오늘의 상황 (Case Brief) 💡 할 말이 떠오르지 않으면 아래 내용을 참고하세요!
-              </h4>
-              <div className="text-sm text-gray-200 space-y-1.5">
-                {typeof scenario.caseBrief === 'string' 
-                  ? scenario.caseBrief.split('\n').filter(line => line.trim()).map((line, idx) => (
-                      <div key={idx} className="flex gap-2">
-                        <span className="text-blue-400 flex-shrink-0">•</span>
-                        <span className="leading-snug">{line.trim()}</span>
-                      </div>
-                    ))
-                  : <div className="text-gray-200">{JSON.stringify(scenario.caseBrief)}</div>
-                }
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
       
       {/* Main Video Call Area */}
       <div className="flex-1 flex">
@@ -126,6 +103,19 @@ export const VideoCallInterface = ({
           </div>
         </div>
       </div>
+
+      {/* Subtitle Area - 여러 문장 누적 표시 */}
+      {aiTranscripts.length > 0 && (
+        <div className="bg-black/70 text-white px-6 py-4 border-t border-gray-700 max-h-32 overflow-y-auto">
+          <div className="max-w-4xl mx-auto space-y-2">
+            {aiTranscripts.slice(-3).map((text, idx) => (
+              <p key={idx} className={`text-lg text-center leading-relaxed ${idx === aiTranscripts.slice(-3).length - 1 ? 'font-semibold' : 'text-white/60'}`}>
+                {text}
+              </p>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Control bar - Zoom style */}
       <div className="bg-gray-900 border-t border-gray-700 p-6">

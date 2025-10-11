@@ -26,7 +26,6 @@ interface GeneratedScenario {
   title: string;
   counterpart: string;
   openingLine: string;
-  caseBrief?: string;
 }
 
 const Practice = () => {
@@ -99,7 +98,6 @@ const Practice = () => {
       description: `${scenario.title} - ${scenario.counterpart}와의 실무 대화`,
       role_target: scenario.counterpart,
       greeting: scenario.openingLine,
-      caseBrief: scenario.caseBrief || `Your company is working on ${scenario.title.toLowerCase()}. As a ${userInfo.job} in the ${userInfo.industry} industry, you're facing a critical decision point that requires alignment with stakeholders.\n\nThis conversation will focus on addressing key concerns, negotiating terms or priorities, and finding a mutually beneficial path forward. Be prepared to discuss specific metrics, timelines, and trade-offs.`,
       prompt: `당신은 ${scenario.counterpart}의 역할을 맡아 영어로 대화해주세요. 상황: ${scenario.title}. 업계는 ${userInfo.industry}입니다. 첫 인사말: "${scenario.openingLine}" 자연스럽고 실무적인 대화를 이끌어주세요.`
     };
     setSelectedScenario(fullScenario);
@@ -203,9 +201,9 @@ const Practice = () => {
                       <SelectTrigger>
                         <SelectValue placeholder="직무를 선택하세요" />
                       </SelectTrigger>
-                      <SelectContent>
+                       <SelectContent>
                         <SelectItem value="CEO">CEO</SelectItem>
-                        <SelectItem value="BD/Sales">BD/Sales</SelectItem>
+                        <SelectItem value="BD">BD</SelectItem>
                         <SelectItem value="PM/PO">PM/PO</SelectItem>
                         <SelectItem value="마케터">마케터</SelectItem>
                         <SelectItem value="기타(직접 입력)">기타(직접 입력)</SelectItem>
@@ -229,11 +227,14 @@ const Practice = () => {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="IT & SaaS">IT & SaaS</SelectItem>
-                        <SelectItem value="소비재 브랜드">소비재 브랜드</SelectItem>
+                        <SelectItem value="제조">제조</SelectItem>
                         <SelectItem value="헬스케어">헬스케어</SelectItem>
-                        <SelectItem value="첨단 제조 — 반도체, 자동차, 화학 등">첨단 제조 — 반도체, 자동차, 화학 등</SelectItem>
-                        <SelectItem value="전문 서비스 및 컨설팅">전문 서비스 및 컨설팅</SelectItem>
-                        <SelectItem value="기타 (직접 입력)">기타 (직접 입력)</SelectItem>
+                        <SelectItem value="금융">금융</SelectItem>
+                        <SelectItem value="무역 & 물류">무역 & 물류</SelectItem>
+                        <SelectItem value="소비재">소비재</SelectItem>
+                        <SelectItem value="교육">교육</SelectItem>
+                        <SelectItem value="컨설팅 & 전문서비스">컨설팅 & 전문서비스</SelectItem>
+                        <SelectItem value="기타(직접 입력)">기타(직접 입력)</SelectItem>
                       </SelectContent>
                     </Select>
                     {userInfo.industry === '기타(직접 입력)' && (

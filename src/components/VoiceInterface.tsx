@@ -16,7 +16,6 @@ interface VoiceInterfaceProps {
     role_target: string;
     prompt: string;
     counterpart?: string;
-    caseBrief?: string;
   };
   onSessionEnd: () => void;
 }
@@ -30,8 +29,9 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
   const [messages, setMessages] = useState<any[]>([]);
   const [transcript, setTranscript] = useState('');
   const [aiTranscript, setAiTranscript] = useState('');
+  const [aiTranscripts, setAiTranscripts] = useState<string[]>([]); // 여러 문장 누적
   const [conversationLog, setConversationLog] = useState<Array<{role: string, content: string}>>([]);
-  const [rephrasedExpressions, setRephrasedExpressions] = useState<string[]>([]);
+  const [rephrasedExpressions, setRephrasedExpressions] = useState<Array<{original: string, rephrased: string}>>([]);
   const [showSessionResult, setShowSessionResult] = useState(false);
   const chatRef = useRef<RealtimeChat | null>(null);
   const { user } = useAuth();
@@ -48,6 +48,7 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
       if (fullTranscript) {
         setMessages(prev => [...prev, { role: 'assistant', content: fullTranscript }]);
         setConversationLog(prev => [...prev, { role: 'assistant', content: fullTranscript }]);
+        setAiTranscripts(prev => [...prev, fullTranscript]);
         
         // Extract rephrase expressions from AI response
         // Look for "Rephrase:" followed by complete sentence(s)
@@ -56,10 +57,22 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
         
         if (rephraseMatch) {
           const rephrasedText = rephraseMatch[1].trim();
-          // Add the rephrased sentence as a single entry
-          if (rephrasedText.length > 0) {
-            setRephrasedExpressions(prev => [...prev, rephrasedText]);
-          }
+          // Split by periods or newlines to get individual sentences
+          const sentences = rephrasedText
+            .split(/[.\n]+/)
+            .map(s => s.trim())
+            .filter(s => s.length > 0)
+            .slice(0, 3); // Max 3 sentences
+          
+          // Find the previous user message as the original
+          const lastUserMessage = conversationLog.filter(msg => msg.role === 'user').pop();
+          
+          sentences.forEach(sentence => {
+            setRephrasedExpressions(prev => [...prev, {
+              original: lastUserMessage?.content || '',
+              rephrased: sentence
+            }]);
+          });
         }
         
         setTranscript('');
@@ -123,6 +136,7 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
     setShowSessionResult(false);
     setConversationLog([]);
     setRephrasedExpressions([]);
+    setAiTranscripts([]);
     onSessionEnd();
   };
 
@@ -154,14 +168,14 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ scenario, onSessionEnd 
         id: scenario.id,
         title: scenario.title,
         description: scenario.description,
-        counterpart: scenario.role_target,
-        caseBrief: scenario.caseBrief
+        counterpart: scenario.role_target
       }} 
       onEndCall={endConversation}
       isConnected={isConnected}
       isConnecting={isConnecting}
       isSpeaking={isSpeaking}
       isUserSpeaking={isUserSpeaking}
+      aiTranscripts={aiTranscripts}
     />
   );
 
