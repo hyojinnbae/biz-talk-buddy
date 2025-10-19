@@ -250,7 +250,7 @@ const SceneSetupChat = ({ job, industry, preselectedScenario, onComplete }: Scen
                   <Button
                     key={idx}
                     variant="outline"
-                    className="h-auto py-4 px-6 text-left justify-start hover:bg-primary hover:text-primary-foreground transition-all"
+                    className="h-auto py-4 px-6 text-left justify-start hover:bg-primary hover:text-primary-foreground transition-all whitespace-normal"
                     onClick={() => handleAnswer(option)}
                   >
                     {option}
