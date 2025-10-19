@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Play, Users } from "lucide-react";
+import { Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/ai-partner-professional.jpg";
 
@@ -34,35 +34,36 @@ export const Hero = () => {
             </h1>
 
             {/* Description */}
-            <p className="text-lg text-muted-foreground leading-relaxed max-w-lg">
-              실전과 같은 환경에서 AI 파트너와 시뮬레이션하며,
-              <br />
-              내 직무에 맞춘 Case Study로 자신감과 전문성을 동시에 성장시키세요.
-            </p>
+            <div className="space-y-4">
+              <ul className="space-y-3 text-lg text-muted-foreground">
+                <li className="flex items-start gap-3">
+                  <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0"></div>
+                  <span>실전과 같은 환경에서 시뮬레이션</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0"></div>
+                  <span>내 직무에 맞춘 시나리오 제공</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0"></div>
+                  <span>실전 Case Study 기반 대화</span>
+                </li>
+              </ul>
+              <p className="text-lg text-muted-foreground leading-relaxed max-w-lg pt-2">
+                매일 내 상황에 맞춘 Case Study로<br />
+                자신감과 전문성을 동시에 성장시키세요.
+              </p>
+            </div>
 
-            {/* CTA Buttons */}
-            <div className="flex items-center gap-4 pt-4">
+            {/* CTA Button */}
+            <div className="pt-4">
               <Button 
                 size="lg" 
-                className="bg-foreground text-background hover:bg-foreground/90 font-semibold px-8 h-14 rounded-lg shadow-lg"
+                className="bg-gradient-primary text-primary-foreground hover:opacity-90 font-semibold px-8 h-14 rounded-lg shadow-lg"
                 asChild
               >
                 <Link to="/practice">
                   지금 시작하기
-                </Link>
-              </Button>
-              
-              <Button 
-                variant="ghost" 
-                size="lg"
-                className="gap-2 font-semibold text-foreground hover:text-primary h-14"
-                asChild
-              >
-                <Link to="#features">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Play className="w-5 h-5 text-primary fill-primary ml-0.5" />
-                  </div>
-                  <span>사용 방법</span>
                 </Link>
               </Button>
             </div>
