@@ -18,7 +18,7 @@ serve(async (req) => {
 
     console.log('Generating options for:', { job, industry, scenario, step, previousAnswers, meetingPurpose });
 
-    let systemPrompt = `You are an expert business scenario designer. Generate exactly 2 realistic, concise business options in English.
+    let systemPrompt = `You are an expert business scenario designer. Generate exactly 4 realistic, concise business options in English.
 Each option should be a short phrase (3-8 words), not a full sentence.
 Focus on real-world business situations that match the given context.
 Avoid generic terms like "ROI", "satisfaction", "engagement" - be specific and strategic.`;
@@ -32,18 +32,19 @@ Avoid generic terms like "ROI", "satisfaction", "engagement" - be specific and s
 - Industry: ${industry}
 - Scenario: ${scenario}
 
-Task: Generate exactly TWO options for the PRODUCT or SERVICE CATEGORY that this user would discuss.
+Task: Generate exactly FOUR diverse options for the PRODUCT or SERVICE CATEGORY that this user would discuss.
 
 Rules:
 - Output pure category nouns (1-3 words), e.g., "Skincare", "F&B", "Fashion"
 - NO strategy/initiative words (strategy, collaboration, plan, campaign, roadmap, integration, program, rollout)
 - NO verbs. NO quotes. NO punctuation.
+- Ensure variety - cover different product/service types within the industry
 
 ${industry.toLowerCase().includes('consumer') || industry.toLowerCase().includes('소비재') ? 
-  'Industry = "Consumer Brand", think in everyday CPG categories (e.g., Skincare, Makeup, Haircare, Fragrance, Snacks, Beverages, Home Care, Personal Care, Home living, Entertainment).' : 
-  'Focus on core product/service categories relevant to this industry.'}
+  'Industry = "Consumer Brand", generate 4 diverse CPG categories from: Skincare, Makeup, Haircare, Fragrance, Body Care, Snacks, Beverages, Supplements, Home Care, Personal Care, Baby Care, Pet Care, Fashion Accessories, Home Living, Entertainment Products.' : 
+  'Focus on 4 diverse core product/service categories relevant to this industry.'}
 
-Return only 2 options, one per line, no numbering or bullets.`;
+Return only 4 options, one per line, no numbering or bullets.`;
         break;
 
       case 'problem':
@@ -54,7 +55,7 @@ Return only 2 options, one per line, no numbering or bullets.`;
 - Product/Service: ${previousAnswers.service}
 - Meeting purpose: ${meetingPurpose || 'Strategic discussion'}
 
-Generate 2 realistic strategic challenges or decision points that require executive attention or cross-functional alignment.
+Generate 4 realistic strategic challenges or decision points that require executive attention or cross-functional alignment.
 Avoid superficial metrics. Focus on business-critical issues.
 
 Examples for context:
@@ -62,7 +63,7 @@ Examples for context:
 - "Channel conflict between regional partners"
 - "Product-market fit uncertainty in new segments"
 
-Return only 2 options, one per line, no numbering or bullets.`;
+Return only 4 options, one per line, no numbering or bullets.`;
         break;
 
       case 'agenda':
@@ -72,7 +73,7 @@ Return only 2 options, one per line, no numbering or bullets.`;
 - Scenario: ${scenario}
 - Problem: ${previousAnswers.problem}
 
-Generate 2 short context examples with numeric or factual detail that make the situation concrete.
+Generate 4 short context examples with numeric or factual detail that make the situation concrete.
 Include specific metrics, percentages, costs, timeframes, or regional data.
 
 Examples for context:
@@ -80,7 +81,7 @@ Examples for context:
 - "Distributor sales in Japan fell by 25% YoY"
 - "Customer acquisition cost increased by 40% this quarter"
 
-Return only 2 options, one per line, no numbering or bullets.`;
+Return only 4 options, one per line, no numbering or bullets.`;
         break;
 
       case 'goal':
@@ -92,7 +93,7 @@ Return only 2 options, one per line, no numbering or bullets.`;
 - Context: ${previousAnswers.agenda}
 - Meeting purpose: ${meetingPurpose || 'Strategic discussion'}
 
-Generate 2 specific strategic goals that reflect executive intent and desired meeting outcomes.
+Generate 4 specific strategic goals that reflect executive intent and desired meeting outcomes.
 Focus on actionable decisions or approvals needed.
 
 Examples for context:
@@ -100,7 +101,7 @@ Examples for context:
 - "Define regional growth strategy for next quarter"
 - "Finalize partnership terms with key distributor"
 
-Return only 2 options, one per line, no numbering or bullets.`;
+Return only 4 options, one per line, no numbering or bullets.`;
         break;
 
       default:
@@ -142,7 +143,7 @@ Return only 2 options, one per line, no numbering or bullets.`;
         // Remove numbering, bullets, or dashes at the start
         return line.replace(/^[\d\-\*\.]+\s*/, '').trim();
       })
-      .slice(0, 2); // Take only first 2 options
+      .slice(0, 4); // Take only first 4 options
 
     console.log('Generated options:', options);
 
