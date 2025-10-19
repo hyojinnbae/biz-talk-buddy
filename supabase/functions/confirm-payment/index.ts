@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -17,11 +18,33 @@ serve(async (req) => {
       throw new Error('TOSS_SECRET_KEY not configured');
     }
 
+    // Validate input with Zod
+    const PaymentSchema = z.object({
+      paymentKey: z.string().min(1).max(200),
+      orderId: z.string().uuid(),
+      amount: z.number().int().positive().max(10000000)
+    });
+
+    const body = await req.json();
+    const { paymentKey, orderId, amount } = PaymentSchema.parse(body);
+
+    // Get authenticated user
+    const authHeader = req.headers.get('authorization');
+    if (!authHeader) {
+      throw new Error('Unauthorized: No authorization header');
+    }
+
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    const { paymentKey, orderId, amount } = await req.json();
+    const { data: { user }, error: authError } = await supabase.auth.getUser(
+      authHeader.replace('Bearer ', '')
+    );
+
+    if (authError || !user) {
+      throw new Error('Unauthorized: Invalid token');
+    }
 
     // Verify order exists and amount matches
     const { data: order, error: orderError } = await supabase
@@ -32,6 +55,11 @@ serve(async (req) => {
 
     if (orderError || !order) {
       throw new Error('Order not found');
+    }
+
+    // Verify order belongs to authenticated user
+    if (order.user_id !== user.id) {
+      throw new Error('Unauthorized: Order does not belong to user');
     }
 
     if (order.plans.amount !== amount) {

@@ -1,5 +1,6 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -161,19 +162,35 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  // Parse body first so we can always return a sensible fallback
+  // Validate input with Zod
+  const ScenarioSchema = z.object({
+    jobRole: z.string().min(1).max(100).optional(),
+    job: z.string().min(1).max(100).optional(),
+    englishLevel: z.number().int().min(1).max(10).optional(),
+    level: z.number().int().min(1).max(10).optional(),
+    industry: z.string().min(1).max(100),
+    customSituation: z.string().max(500).optional()
+  });
+
   let jobRole = '' as string;
   let englishLevel = 3 as number;
   let industry = '' as string;
   let customSituation = '' as string;
+  
   try {
     const body = await req.json();
-    jobRole = body?.jobRole ?? body?.job ?? '';
-    englishLevel = Number(body?.englishLevel ?? body?.level ?? 3);
-    industry = body?.industry ?? '';
-    customSituation = body?.customSituation ?? '';
-  } catch (_) {
-    // ignore body parse errors; we'll use defaults
+    const validated = ScenarioSchema.parse(body);
+    jobRole = validated.jobRole ?? validated.job ?? '';
+    englishLevel = validated.englishLevel ?? validated.level ?? 3;
+    industry = validated.industry ?? '';
+    customSituation = validated.customSituation ?? '';
+  } catch (error) {
+    // Return fallback scenarios on validation error
+    console.error('Validation error:', error);
+    const fb = buildFallbackScenarios(jobRole || '기타', industry || 'SaaS', englishLevel || 3);
+    return new Response(JSON.stringify(fb), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
   }
 
   try {

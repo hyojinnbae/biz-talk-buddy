@@ -7,7 +7,7 @@ verify_jwt = false
 verify_jwt = true
 
 [functions.confirm-payment]
-verify_jwt = false
+verify_jwt = true
 
 [functions.scene-setup-options]
 verify_jwt = false

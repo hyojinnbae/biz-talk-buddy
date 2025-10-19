@@ -1,5 +1,6 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
 
@@ -14,7 +15,18 @@ serve(async (req) => {
   }
 
   try {
-    const { job, industry, scenario, step, previousAnswers, meetingPurpose } = await req.json();
+    // Validate input with Zod
+    const SetupSchema = z.object({
+      step: z.enum(['service', 'problem', 'agenda', 'goal']),
+      job: z.string().min(1).max(100),
+      industry: z.string().min(1).max(100),
+      scenario: z.string().max(200).optional(),
+      meetingPurpose: z.string().max(200).optional(),
+      previousAnswers: z.record(z.string().max(300)).optional()
+    });
+
+    const body = await req.json();
+    const { job, industry, scenario, step, previousAnswers, meetingPurpose } = SetupSchema.parse(body);
 
     console.log('Generating options for:', { job, industry, scenario, step, previousAnswers, meetingPurpose });
 

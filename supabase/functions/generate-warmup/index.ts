@@ -1,5 +1,6 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
 
@@ -14,7 +15,16 @@ serve(async (req) => {
   }
 
   try {
-    const { service, problem, agenda, goal } = await req.json();
+    // Validate input with Zod
+    const WarmupSchema = z.object({
+      service: z.string().min(1).max(200),
+      problem: z.string().min(1).max(200),
+      agenda: z.string().min(1).max(200),
+      goal: z.string().min(1).max(200)
+    });
+
+    const body = await req.json();
+    const { service, problem, agenda, goal } = WarmupSchema.parse(body);
 
     console.log('Generating warmup sentences for:', { service, problem, agenda, goal });
 
