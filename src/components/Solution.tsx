@@ -19,8 +19,8 @@ export const Solution = () => {
               <div className="space-y-3">
                 <h3 className="text-xl font-semibold">내 실무 상황 선택</h3>
                 <p className="text-muted-foreground leading-relaxed text-base">
-                  직무·대화 상대·주제·상황 선택<br />
-                  또는 자유 프롬프트 입력 가능<br />
+                  직무·대화 상대·주제·상황 선택 또는<br />
+                  자유 프롬프트 입력 가능<br />
                   내 미래 커리어에 필요한 Case Study를<br />
                   가장 효과적으로 연습합니다.
                 </p>
@@ -33,7 +33,7 @@ export const Solution = () => {
               </div>
               <div className="space-y-3">
                 <h3 className="text-xl font-semibold">AI가 대화를 리드</h3>
-                <p className="text-muted-foreground leading-relaxed">자연스러운 Role-play로 별도 준비 불필요<br />AI 코치가 음성 대화하며,<br />더 나은 표현을 자연스럽게 제안합니다.</p>
+                <p className="text-muted-foreground leading-relaxed">자연스러운 Role-play로 별도 준비 불필요<br />AI 코치가 음성 대화하며 더 나은 표현을<br />자연스럽게 제안합니다.</p>
               </div>
             </div>
 
@@ -43,7 +43,7 @@ export const Solution = () => {
               </div>
               <div className="space-y-3">
                 <h3 className="text-xl font-semibold">다 끝나면 복습 자료 완성</h3>
-                <p className="text-muted-foreground leading-relaxed">대화 로그와 표현 카드가 자동 정리되어<br />필요할 때 꺼내보고,<br />원하는 문장 위주로 복습 가능합니다.</p>
+                <p className="text-muted-foreground leading-relaxed">대화 로그와 표현 카드가 자동 정리되어<br />필요할 때 꺼내보고 원하는 문장 위주로<br />복습 가능합니다.</p>
               </div>
             </div>
           </div>

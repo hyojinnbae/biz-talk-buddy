@@ -59,7 +59,7 @@ export const Hero = () => {
             <div className="pt-4">
               <Button 
                 size="lg" 
-                className="bg-gradient-primary text-primary-foreground hover:opacity-90 font-semibold px-8 h-14 rounded-lg shadow-lg"
+                className="bg-gradient-primary text-primary-foreground hover:opacity-90 font-semibold px-8 h-12 rounded-lg shadow-lg text-lg"
                 asChild
               >
                 <Link to="/practice">

@@ -19,16 +19,16 @@ export const Problem = () => {
               <div className="w-12 h-12 rounded-xl bg-destructive/10 flex items-center justify-center text-destructive">
                 <Users className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-semibold">이메일은 잘 되는데<br />말하기는 긴장돼요</h3>
-              <p className="text-muted-foreground">텍스트로는 완벽한데<br />말로 하면 표현이 어색하고 불안합니다.</p>
+              <h3 className="text-lg font-semibold">이메일은 잘 되는데 말하기는 긴장돼요</h3>
+              <p className="text-muted-foreground">텍스트로는 완벽한데 말로 하면<br />표현이 어색하고 불안합니다.</p>
             </div>
 
             <div className="space-y-4 p-6 rounded-xl bg-background border border-border">
               <div className="w-12 h-12 rounded-xl bg-destructive/10 flex items-center justify-center text-destructive">
                 <Clock className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-semibold">미팅만 하면<br />머릿속이 하얘져요</h3>
-              <p className="text-muted-foreground">"이 표현이 맞나?" 싶어<br />말을 줄이게 되고, 준비한 말도 잊어버립니다.</p>
+              <h3 className="text-lg font-semibold">미팅만 하면 머릿속이 하얘져요</h3>
+              <p className="text-muted-foreground">"이 표현이 맞나?" 싶어 말을 줄이게 되고,<br />준비한 말도 잊어버립니다.</p>
             </div>
 
             <div className="space-y-4 p-6 rounded-xl bg-background border border-border">
@@ -36,7 +36,7 @@ export const Problem = () => {
                 <AlertTriangle className="w-6 h-6" />
               </div>
               <h3 className="text-lg font-semibold">기회가 조용히 지나갑니다</h3>
-              <p className="text-muted-foreground">말하고 싶었던 아이디어,<br />제안하려던 솔루션이 기회를 놓칩니다.</p>
+              <p className="text-muted-foreground">말하고 싶었던 아이디어, 제안하려던 솔루션이<br />기회를 놓칩니다.</p>
             </div>
           </div>
 
@@ -50,7 +50,7 @@ export const Problem = () => {
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center text-accent font-bold">74%</div>
-                  <p className="text-muted-foreground text-left text-base">영어 중요성의 이유는<br />승진·해외 파트너와의 원활한 소통</p>
+                  <p className="text-muted-foreground text-left text-base">영어 중요성의 이유는 승진·<br />해외 파트너와의 원활한 소통</p>
                 </div>
               </div>
             </div>
