@@ -14,12 +14,12 @@ export const Hero = () => {
               </div>
               <h1 className="text-4xl lg:text-6xl font-bold leading-tight bg-gradient-hero bg-clip-text text-transparent">
                 현장에서 바로 통하는<br />
-                실무 영어 Role-play 연습
+                중고급 실무영어
               </h1>
                <div className="space-y-3 text-muted-foreground">
                  <div className="flex items-center gap-3">
                    <div className="w-2 h-2 rounded-full bg-primary"></div>
-                   <span>실전과 같은 환경에서 실시간 회화</span>
+                   <span>실전과 같은 환경에서 시뮬레이션</span>
                  </div>
                  <div className="flex items-center gap-3">
                    <div className="w-2 h-2 rounded-full bg-primary"></div>
