@@ -8,7 +8,7 @@ export const Solution = () => {
               <Lightbulb className="w-4 h-4" />
               우리의 제안
             </div>
-            <h2 className="text-3xl font-bold leading-tight lg:text-3xl">비즈니스 영어, 하루 10분이라도 꾸준히 말해야 실력이 됩니다</h2>
+            <h2 className="text-3xl font-bold leading-tight lg:text-3xl">하루 10분, 꾸준히 말해야 실력이 됩니다</h2>
           </div>
 
           <div className="grid lg:grid-cols-3 gap-8">
@@ -17,11 +17,12 @@ export const Solution = () => {
                 <MessageSquare className="w-8 h-8" />
               </div>
               <div className="space-y-3">
-                <h3 className="text-xl font-semibold">나의 실무 상황을 선택</h3>
+                <h3 className="text-xl font-semibold">내 실무 상황 선택</h3>
                 <p className="text-muted-foreground leading-relaxed text-base">
-                  직무 / 대화 상대 / 주제 / 상황 선택<br />
-                  자유 프롬프트 입력 가능해,<br />
-                  내가 미래 커리어에서 원하는, 또는 곧 사용해야 할 중요한 일정을 위한 가장 효과적인 영어 회화 환경을 조성합니다.
+                  직무·대화 상대·주제·상황 선택<br />
+                  또는 자유 프롬프트 입력 가능<br />
+                  내 미래 커리어에 필요한 Case Study를<br />
+                  가장 효과적으로 연습합니다.
                 </p>
               </div>
             </div>
@@ -31,9 +32,8 @@ export const Solution = () => {
                 <MessageSquare className="w-8 h-8" />
               </div>
               <div className="space-y-3">
-                <h3 className="text-xl font-semibold">AI가 대화를 리드해주고</h3>
-                <p className="text-muted-foreground leading-relaxed">자연스러운 롤플레이로, 내가 어떤 준비도 하지 않아도 돼요. 
-AI 롤플레이 코치가 음성으로 말하고, 내 업무 표현 중 개선이 필요한 부분을 자연스럽게 리프레이즈 해줘요.</p>
+                <h3 className="text-xl font-semibold">AI가 대화를 리드</h3>
+                <p className="text-muted-foreground leading-relaxed">자연스러운 Role-play로 별도 준비 불필요<br />AI 코치가 음성 대화하며,<br />더 나은 표현을 자연스럽게 제안합니다.</p>
               </div>
             </div>
 
@@ -42,9 +42,8 @@ AI 롤플레이 코치가 음성으로 말하고, 내 업무 표현 중 개선�
                 <FileText className="w-8 h-8" />
               </div>
               <div className="space-y-3">
-                <h3 className="text-xl font-semibold">다 끝나면?</h3>
-                <p className="text-muted-foreground leading-relaxed">대화 로그 + 표현 카드가 자동으로 정리되어, 필요한 때에 꺼내볼 수 있어요. 또 암기하고자 하는 문장
-위주로 복습 가능합니다.</p>
+                <h3 className="text-xl font-semibold">다 끝나면 복습 자료 완성</h3>
+                <p className="text-muted-foreground leading-relaxed">대화 로그와 표현 카드가 자동 정리되어<br />필요할 때 꺼내보고,<br />원하는 문장 위주로 복습 가능합니다.</p>
               </div>
             </div>
           </div>

@@ -2,8 +2,8 @@ import { Card } from "@/components/ui/card";
 import { Check, X } from "lucide-react";
 const comparisonData = [{
   category: "회화 방식",
-  existing: "전화영어, 일반 튜터",
-  ours: "AI 음성 시뮬레이션",
+  existing: "일반 전화영어·튜터",
+  ours: "고급 실무형 AI Role-play",
   isAdvantage: true
 }, {
   category: "표현 교정",
@@ -13,7 +13,7 @@ const comparisonData = [{
 }, {
   category: "상황 적합성",
   existing: "일반 회화 위주",
-  ours: "실무 상황 시나리오",
+  ours: "Case Study 기반 실무 시나리오",
   isAdvantage: true
 }, {
   category: "시간 제약",
@@ -40,7 +40,7 @@ export const Comparison = () => {
               기존 서비스와 차별점
             </h2>
             <p className="text-lg text-muted-foreground">
-              실무 중심, 루틴 중심, 피드백을 통한 내 직무용 말하기 훈련 도구
+              실무 중심·루틴 중심, AI 피드백으로 내 직무용 말하기 완성
             </p>
           </div>
 

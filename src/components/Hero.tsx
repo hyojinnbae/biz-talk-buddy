@@ -10,10 +10,11 @@ export const Hero = () => {
             <div className="space-y-4">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-subtle text-primary text-sm font-medium">
                 <Mic className="w-4 h-4" />
-                실무 영어 리허설 AI 코치
+                고급 실무형 AI Role-play 코치
               </div>
               <h1 className="text-4xl lg:text-6xl font-bold leading-tight bg-gradient-hero bg-clip-text text-transparent">
-                현장에서 바로 통하는 실무 영어 시뮬레이션
+                현장에서 바로 통하는<br />
+                실무 영어 Role-play 연습
               </h1>
                <div className="space-y-3 text-muted-foreground">
                  <div className="flex items-center gap-3">
@@ -24,14 +25,14 @@ export const Hero = () => {
                    <div className="w-2 h-2 rounded-full bg-primary"></div>
                    <span>내 직무에 맞춘 시나리오 제공</span>
                  </div>
-                  <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 rounded-full bg-primary"></div>
-                    <span>Fortune 500 미팅 수준 대화</span>
-                  </div>
+                   <div className="flex items-center gap-3">
+                     <div className="w-2 h-2 rounded-full bg-primary"></div>
+                     <span>실전 Case Study 기반 대화</span>
+                   </div>
               </div>
                <p className="text-lg leading-relaxed text-slate-700">
-                 매일 내 상황 맞춤 시나리오 연습으로<br />
-                 자신감과 전문성을 함께 성장시키세요.
+                 매일 내 상황에 맞춘 Case Study로<br />
+                 자신감과 전문성을 동시에 성장시키세요.
                </p>
             </div>
             
@@ -56,7 +57,7 @@ export const Hero = () => {
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-success"></div>
-                협상, 조율, 발표 등 맞춤 시나리오
+                협상·조율·발표 등 맞춤 시나리오
               </div>
             </div>
           </div>

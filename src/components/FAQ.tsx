@@ -1,10 +1,10 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 const faqs = [{
   question: "영어 회화 못해도 쓸 수 있나요?",
-  answer: "네. 오히려 실수할수록 더 빨리 늘 수 있어요. AI는 틀려도 평가하지 않아요."
+  answer: "네. 오히려 실수할수록 빨리 늡니다. AI는 틀려도 평가하지 않습니다."
 }, {
   question: "AI와의 대화는 부자연스럽지 않나요?",
-  answer: "최신 AI 기술을 활용해 매우 자연스러운 대화가 가능합니다. 실제 업무 상황을 기반으로 한 시나리오로 진행되어 현실감 있는 연습이 됩니다."
+  answer: "최신 AI 기술로 매우 자연스러운 대화가 가능합니다. 실제 업무 Case Study 기반 시나리오로 현실감 있는 연습이 됩니다."
 }, {
   question: "실전처럼 말하는 연습이 될까요?",
   answer: "실제 업무 시나리오 기반으로 설계돼 있어 '내가 진짜로 회의 들어가는 느낌'이 납니다."

@@ -11,22 +11,22 @@ import {
 const features = [
   {
     icon: Target,
-    title: "프롬프트 기반 대화 시나리오 생성",
-    description: "직무 / 대화 상대 / 주제 선택 또는 자유 프롬프트 입력도 가능 → 실제 업무 미팅처럼 연습 가능",
+    title: "Case Study 기반 시나리오 생성",
+    description: "직무·대화 상대·주제 선택 또는 자유 프롬프트 입력 가능 → 실제 업무 미팅처럼 연습",
     color: "text-primary",
     badge: "MVP"
   },
   {
     icon: Mic2,
-    title: "실시간 음성 대화 + 리프레이즈",
-    description: "AI가 상대 역할, 내가 말한 문장을 더 자연스럽게 바꿔줌 → 실수에서 배우는 영어 루틴",
+    title: "실시간 음성 Role-play + 표현 개선",
+    description: "AI가 상대 역할로 대화하며, 더 자연스러운 표현을 즉시 제안 → 실수에서 배우는 영어 루틴",
     color: "text-accent",
     badge: "MVP"
   },
   {
     icon: BookOpen,
     title: "대화 후 복습 자료 자동 생성",
-    description: "스크립트 저장 + 표현 카드 생성, 자주 틀리는 문장 위주로 복습 가능 → 업무에 바로 쓰는 회화 노트 완성",
+    description: "스크립트 저장과 표현 카드 자동 생성, 자주 틀리는 문장 위주 복습 → 실무용 회화 노트 완성",
     color: "text-success",
     badge: "MVP"
   }
@@ -41,7 +41,7 @@ export const Features = () => {
             핵심 기능
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            글로벌 비즈니스를 책임지는 실무자·관리자가 실제로 필요한 핵심 기능에만 집중했습니다.
+            실무자·관리자에게 필요한 핵심 기능에만 집중했습니다.
           </p>
           <div className="w-24 h-1 bg-gradient-primary mx-auto rounded-full"></div>
         </div>

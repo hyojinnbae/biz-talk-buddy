@@ -58,7 +58,7 @@ export const Pricing = () => {
           <div className="space-y-6">
             <h2 className="text-3xl lg:text-4xl font-bold">가격</h2>
             <p className="text-lg text-muted-foreground">
-              합리적인 가격으로 무제한 영어 리허설을 경험하세요
+              합리적인 가격으로 고급 실무형 Role-play 연습을 경험하세요
             </p>
           </div>
 
